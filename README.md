@@ -6,19 +6,19 @@
 
 在根目录下启动docker容器：
 
-```
+```shell
 docker-compose up --build
 ```
 
 访问以下地址，通过HAL-Browser查看数据模型，进行增删改查。
 
-```
+```shell
 http://localhost:10010
 ```
 
 关闭所有容器：
 
-```
+```shell
 docker-compose down
 ```
 
@@ -26,7 +26,7 @@ docker-compose down
 
 在各个工程目录下，执行以下命令：
 
-```
+```shell
 ./gradlew clean build
 ```
 
