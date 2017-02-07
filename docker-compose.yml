@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+
+  mariadb:
+    image: mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: mariadb
+      MYSQL_PASSWORD: mariadb
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: investmentdb
+  
+  fund-service:
+    build: FundService
+    command: /bin/bash -c "wait-for-it -t 0 mariadb:3306 && java -jar /app/fund-service-latest.jar"
+    links:
+      - mariadb:mariadb
+    ports:
+      - "10010:10010"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - mariadb
+

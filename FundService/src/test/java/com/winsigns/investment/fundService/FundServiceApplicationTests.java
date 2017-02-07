@@ -1,4 +1,4 @@
-package com.winsigns.investment;
+package com.winsigns.investment.fundService;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
