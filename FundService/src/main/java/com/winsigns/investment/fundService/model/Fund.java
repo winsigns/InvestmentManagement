@@ -15,6 +15,10 @@ import java.util.List;
 public class Fund {
 
 
+	public Long getId(){
+		return id;
+	}
+	
     public String getCode() {
         return code;
     }

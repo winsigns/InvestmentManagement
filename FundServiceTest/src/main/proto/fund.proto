@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package com.winsigns.investment.grpc;
+
+message ResponseHeader{
+	int32 errorId = 1;
+	string errorMsg = 2;
+}
+
+message FundMessage {
+	string code = 1;
+	string name = 2;
+	string shortName = 3;
+}
+
+message AddFundResponse{
+	ResponseHeader header = 1;
+	FundMessage fund = 2;
+}
+
+message GetFundsRequest{
+	string code = 1;
+}
+
+message GetFundsResponse{
+	ResponseHeader header = 1;
+	repeated FundMessage funds = 2;
+}
+
+service Fund{
+	rpc AddFund(FundMessage) returns (AddFundResponse);
+	rpc GetFunds(GetFundsRequest) returns (GetFundsResponse);
+}

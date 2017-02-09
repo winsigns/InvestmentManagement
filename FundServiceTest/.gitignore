@@ -24,12 +24,3 @@ dist/
 nbdist/
 .nb-gradle/
 /bin/
-
-#Eclipse
-.metadata
-.recommenders
-src/generated/
-
-*.tmp
-*.sw?
-*.bak
