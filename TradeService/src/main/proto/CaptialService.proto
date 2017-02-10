@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package com.winsigns.investment.grpc;
+
+option java_package = "com.winsigns.investment.grpc";
+
+import "Header.proto";
+import "Capital.proto";
+
+message OneCapital {
+	Header header = 1;
+
+	Capital body = 2;
+}
+
+message MutilCapital {
+	Header header = 1;
+
+	repeated Capital body = 2;
+}
+
+service capital {
+	rpc queryCapital(OneCapital) returns (MutilCapital) {};
+}

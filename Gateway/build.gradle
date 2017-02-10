@@ -1,0 +1,97 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.1.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+  		classpath 'com.google.gradle:osdetector-gradle-plugin:1.4.0'
+		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'com.google.protobuf'
+apply plugin: "com.google.osdetector"
+
+jar {
+	baseName = 'Gateway'
+	version = '0.0.1-SNAPSHOT'
+}
+
+protobuf {
+	protoc{
+		artifact = 'com.google.protobuf:protoc:3.0.2'
+	}
+	plugins {
+		grpc {
+			artifact = 'io.grpc:protoc-gen-grpc-java:1.0.3'
+		}
+	}
+	
+	generateProtoTasks {
+		all().each {task ->
+			task.plugins {
+			  // Add grpc output without any option.  grpc must have been defined in the
+			  // protobuf.plugins block.
+			  grpc { }
+			}		
+		}
+		
+		ofSourceSet('main').each{ task ->
+			task.builtins{
+				java {
+					outputSubDir = ''
+				}
+			}
+			task.plugins{
+				grpc{
+					outputSubDir = ''
+				}
+			}
+		}
+	}
+	
+	
+	generatedFilesBaseDir = "$projectDir/src/generated"
+}
+
+sourceSets {
+	main{
+		java {
+			srcDir 'src/generated/main'
+		}
+	}
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	jcenter()
+}
+
+def tcnative_classifier = osdetector.classifier;
+// Fedora variants use a different soname for OpenSSL than other linux distributions
+// (see http://netty.io/wiki/forked-tomcat-native.html).
+if (osdetector.os == "linux" && osdetector.release.isLike("fedora")) {
+  tcnative_classifier += "-fedora";
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-web')
+
+	compile('org.lognet:grpc-spring-boot-starter:1.0.0')
+	
+	compile('io.grpc:grpc-netty:1.0.3')
+	compile('io.grpc:grpc-protobuf:1.0.3')
+	compile('io.grpc:grpc-stub:1.0.3')
+
+	compile 'io.netty:netty-tcnative-boringssl-static:1.1.33.Fork26'
+
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}

@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package com.winsigns.investment.grpc;
+
+option java_package = "com.winsigns.investment.grpc";
+
+message Capital
+{
+	//资金服务
+	string capital_svc = 2;
+
+	//外部资金账户
+	string ext_capitalacc_id = 3;
+
+	//产品账户
+	string fundacc_id = 4;
+
+	//币种
+	string currency = 5;
+
+	//指标名
+	repeated string capital_quota_name = 6;
+
+	//指标
+	map<string, double> capital_quota = 7;
+}
+
+

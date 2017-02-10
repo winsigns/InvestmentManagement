@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package com.winsigns.investment.grpc;
+
+option java_package = "com.winsigns.investment.grpc";
+
+import "Header.proto";
+import "Instruction.proto";
+import "InstructionCommit.proto";
+
+service invest {
+	rpc createInstruction(Instruction) returns (Instruction) {};
+	rpc commitInstruction(InstructionCommit) returns (InstructionCommit) {};
+}

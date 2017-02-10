@@ -1,0 +1,66 @@
+/*********************************************************************************
+  *FileName:     Instruction.proto
+  *Author:       yiming.jin
+  *Version:      V0.01
+  *Date:         2016/12/26 11:34
+  *Description:  指令的结构体
+
+  *Others:
+  *History:
+     1.Date:
+       Author:
+       Modification:
+     2.…………
+**********************************************************************************/
+syntax = "proto3";
+
+package com.winsigns.investment.grpc;
+
+option java_package = "com.winsigns.investment.grpc";
+
+import "Header.proto";
+
+message Instruction {
+	Header header = 1;
+	//指令序号
+	string instruct_id = 2;
+
+	//投资组合
+	string portfolio_id = 3;
+
+	//投资服务
+	string invest_svc = 4;
+
+	//投资方向
+	string invest_direction = 5;
+
+	//投资标的
+	string security_id = 6;
+
+	//对手方
+	string counterparty = 7;
+
+	//币种
+	string currency = 8;
+
+	//是否限制价格
+	bool limit_price = 9;
+
+	//成本价
+	double cost_price = 10;
+
+	enum InstructionVolumeType
+	{
+		FixedType = 0;                //固定数量类型
+		AmountType = 1;               //金额数量类型
+	};
+
+	//数量类型
+	InstructionVolumeType volume_type = 11;
+
+	//指令数量
+	double quantity = 12;
+
+	//指令金额
+	double amount = 13;
+}

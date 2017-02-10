@@ -1,0 +1,31 @@
+/*********************************************************************************
+  *FileName:     InstructionCommit.proto
+  *Author:       yiming.jin
+  *Version:      V0.01
+  *Date:         2016/12/26 11:34
+  *Description:  指令的结构体
+
+  *Others:
+  *History:
+     1.Date:
+       Author:
+       Modification:
+     2.…………
+**********************************************************************************/
+syntax = "proto3";
+
+package com.winsigns.investment.grpc;
+
+option java_package = "com.winsigns.investment.grpc";
+
+import "Header.proto";
+
+message InstructionCommit {
+
+	Header header = 1;
+	//指令序号
+	string instruct_id = 2;
+
+	//交易员
+	string trader = 3;
+}

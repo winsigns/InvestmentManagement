@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package com.winsigns.investment.grpc;
+
+option java_package = "com.winsigns.investment.grpc";
+
+import "Header.proto";
+
+message Capital {
+	Header header = 1;
+
+}

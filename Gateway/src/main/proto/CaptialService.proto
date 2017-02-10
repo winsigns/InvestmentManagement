@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package com.winsigns.investment.grpc;
+
+option java_package = "com.winsigns.investment.grpc";
+
+import "Capital.proto";
+
+service capital {
+	rpc virtualDone(Capital) returns (Capital) {};
+}

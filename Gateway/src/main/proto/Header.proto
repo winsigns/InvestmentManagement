@@ -1,0 +1,31 @@
+/*********************************************************************************
+  *FileName:     Header.proto
+  *Author:       yiming.jin
+  *Version:      V0.01
+  *Date:         2016/12/26 11:34
+  *Description:  指令的结构体
+
+  *Others:
+  *History:
+     1.Date:
+       Author:
+       Modification:
+     2.…………
+**********************************************************************************/
+syntax = "proto3";
+
+package com.winsigns.investment.grpc;
+
+option java_package = "com.winsigns.investment.grpc";
+
+message Header {
+
+	enum Status
+	{
+		SUCCESS = 0;
+		FAIL = 1;
+	}
+
+	Status status = 1;
+
+}
