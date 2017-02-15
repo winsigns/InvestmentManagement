@@ -100,4 +100,9 @@ dependencies {
 	
 	compile 'io.netty:netty-tcnative-boringssl-static:1.1.33.Fork26'
 	
+	compile('org.springframework.boot:spring-boot-starter-hateoas')
+	compile('org.springframework.boot:spring-boot-starter-data-rest')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.data:spring-data-rest-hal-browser')
+	
 }

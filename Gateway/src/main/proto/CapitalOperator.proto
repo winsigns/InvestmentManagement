@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package com.winsigns.investment.grpc;
+
+option java_package = "com.winsigns.investment.grpc.model";
+
+message CapitalOperator
+{
+	enum CapitalOperatorType
+	{
+		//从资金封闭圈外转入到外部资金账户
+		IN = 0;
+		//从外部资金账户转出到资金封闭圈外
+		OUT = 1;
+		//从A外部资金账户调拨入到B外部资金账户
+		ALLOCATE_IN = 2;
+		//从A外部资金账户调拨出到B外部资金账户
+		ALLOCATE_OUT = 3;
+		//从外部资金账户分配入到产品账户
+		ASSIGN_IN = 4;
+		//从产品账户归还到外部资金账户
+		ASSIGN_OUT = 5;
+		//产品账户之间的让渡
+		TRANSFER = 6;
+	};
+
+	//操作类别
+	CapitalOperatorType capital_operator = 1;
+
+	//源账户
+	string source_account = 2;
+
+	//对手账户
+	string match_account = 3;
+
+	//币种
+	string currency = 4;
+
+	//资金变动
+	double capital_change = 5;
+}

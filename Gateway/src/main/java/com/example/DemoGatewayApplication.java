@@ -6,8 +6,12 @@ import org.springframework.web.bind.annotation.*;
 
 import com.winsigns.investment.grpc.InstructionCommitOuterClass.InstructionCommit;
 import com.winsigns.investment.grpc.InstructionOuterClass.Instruction;
+import com.winsigns.investment.grpc.capitalGrpc;
+import com.winsigns.investment.grpc.capitalGrpc.capitalBlockingStub;
 import com.winsigns.investment.grpc.investGrpc;
+import com.winsigns.investment.grpc.CaptialService.CapitalOperatorMsg;
 import com.winsigns.investment.grpc.investGrpc.investBlockingStub;
+import com.winsigns.investment.grpc.model.CapitalOperatorOuterClass.CapitalOperator;
 
 import io.grpc.*;
 
@@ -56,6 +60,41 @@ public class DemoGatewayApplication {
 			
 			//String result = String.format(template, reply.getPortfolio());
 			return  String.valueOf(reply.getHeader().getStatus());
+		}
+		
+		@RequestMapping("/OperatorCapital")
+		public String OperatorCapital_Request(
+				@RequestParam(value="capital_operator", defaultValue="IN") CapitalOperator.CapitalOperatorType capital_operator,
+				@RequestParam(value="source_account", required=true) String source_account,
+				@RequestParam(value="match_account", required=false) String match_account,
+				@RequestParam(value="currency", required=true) String currency,
+				@RequestParam(value="capital_change", required=true) Double capital_change){
+			
+			ManagedChannel channel = ManagedChannelBuilder.forAddress("127.0.0.1", 30002).usePlaintext(true).build();
+			capitalBlockingStub stub = capitalGrpc.newBlockingStub(channel);
+			
+			CapitalOperatorMsg request = null;
+			
+			if (match_account != null ){
+				request = CapitalOperatorMsg.newBuilder().setBody(CapitalOperator.newBuilder()
+						.setCapitalOperator(capital_operator)
+						.setSourceAccount(source_account)
+						.setMatchAccount(match_account)
+						.setCurrency(currency)
+						.setCapitalChange(capital_change)).build();
+			}
+			else{
+				request = CapitalOperatorMsg.newBuilder().setBody(CapitalOperator.newBuilder()
+						.setCapitalOperator(capital_operator)
+						.setSourceAccount(source_account)
+						.setCurrency(currency)
+						.setCapitalChange(capital_change)).build();			
+			}
+			
+			CapitalOperatorMsg reply = stub.operatorCapital(request);
+			
+			//String result = String.format(template, reply.getPortfolio());
+			return  String.valueOf(reply.getHeader().getStatus()) + ":" + reply.getHeader().getMessage();
 		}
 	}
 

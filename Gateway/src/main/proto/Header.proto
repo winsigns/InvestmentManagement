@@ -28,4 +28,6 @@ message Header {
 
 	Status status = 1;
 
+	string message = 2;
+
 }

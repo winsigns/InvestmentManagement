@@ -121,10 +121,10 @@ public class SHAStockTradeService extends TradeServiceBase {
 				}
 			}
 			
-			while(restNeedCapital > 0 )
-			{
-				
-			}
+//			while(restNeedCapital > 0 )
+//			{
+//				
+//			}
 			
 			
 			//quota_.put("td_buy_amout", value)

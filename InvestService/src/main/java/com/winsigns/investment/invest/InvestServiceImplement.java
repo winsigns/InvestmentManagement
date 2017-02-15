@@ -79,7 +79,7 @@ public class InvestServiceImplement extends investGrpc.investImplBase{
 			ManagedChannel channel = ManagedChannelBuilder.forAddress("127.0.0.1", 30001).usePlaintext(true).build();
 			tradeBlockingStub stub = tradeGrpc.newBlockingStub(channel);
 			Instruction reply = stub.virtualDone(instruction.build());
-			channel.shutdownNow();
+			//channel.shutdownNow();
 			
 			if (reply.getHeader().getStatus() == Header.Status.SUCCESS)
 			{

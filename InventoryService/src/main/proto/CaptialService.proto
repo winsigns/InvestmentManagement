@@ -6,19 +6,27 @@ option java_package = "com.winsigns.investment.grpc";
 
 import "Header.proto";
 import "Capital.proto";
+import "CapitalOperator.proto";
 
-message OneCapital {
+message OneCapitalMsg {
 	Header header = 1;
 
 	Capital body = 2;
 }
 
-message MutilCapital {
+message MutilCapitalMsg {
 	Header header = 1;
 
 	repeated Capital body = 2;
 }
 
+message CapitalOperatorMsg{
+	Header header = 1;
+
+	CapitalOperator body = 2;
+}
+
 service capital {
-	rpc queryCapital(OneCapital) returns (MutilCapital) {};
+	rpc queryCapital(OneCapitalMsg) returns (MutilCapitalMsg) {};
+	rpc operatorCapital(CapitalOperatorMsg) returns (CapitalOperatorMsg) {};
 }

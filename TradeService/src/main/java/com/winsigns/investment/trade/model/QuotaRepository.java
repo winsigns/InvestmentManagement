@@ -1,7 +1,5 @@
 package com.winsigns.investment.trade.model;
 
-import java.util.List;
-
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;

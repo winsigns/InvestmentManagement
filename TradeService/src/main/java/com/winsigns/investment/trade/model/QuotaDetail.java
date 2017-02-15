@@ -16,10 +16,10 @@ public class QuotaDetail {
     @GeneratedValue
 	private Long id;
 
-	//@Column(name = "name", nullable = false, length = 20)
+	@Column(name = "name", nullable = false, length = 20)
     private String name;
     
-	//@Column(name = "value", nullable = false, precision = 22,scale = 6)
+	@Column(name = "value", nullable = false, precision = 22,scale = 6)
     private Double value;
     
 	public void setName(String name){

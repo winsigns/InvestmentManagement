@@ -48,10 +48,11 @@ public class TradeServiceImplement extends tradeGrpc.tradeImplBase{
 			
 			service.calcQuota();
 			
-			service.checkInstruction();
+			service.checkInstruction();			
 			
-			responseObserver.onNext(Instruction.newBuilder().setInstructId("").build());
-			responseObserver.onCompleted();
-		}		
+		}	
+		
+		responseObserver.onNext(Instruction.newBuilder().setInstructId("").build());
+		responseObserver.onCompleted();
 	}
 }
