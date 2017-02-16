@@ -7,9 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.winsigns.investment.inventory.capital.model.ExtCapitalAccountCapital;
-import com.winsigns.investment.inventory.capital.model.ExtCapitalAccountCapitalId;
-import com.winsigns.investment.inventory.capital.model.ExtCapitalAccountRepository;
+import com.winsigns.investment.inventory.model.capital.ExtCapitalAccountCapital;
+import com.winsigns.investment.inventory.model.capital.ExtCapitalAccountCapitalId;
+import com.winsigns.investment.inventory.model.capital.ExtCapitalAccountRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
