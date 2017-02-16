@@ -1,8 +1,16 @@
 package com.example;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import com.winsigns.investment.grpc.InstructionCommitOuterClass.InstructionCommit;
 import com.winsigns.investment.grpc.InstructionOuterClass.Instruction;
@@ -20,6 +28,7 @@ public class DemoGatewayApplication {
 	
 	@RestController
 	public class Gateway{
+		
 		@RequestMapping("/InstructionCreate")
 		public String InstructionCreate_Request(@RequestParam(value="name", defaultValue="Noname") String name){
 			final String template = "Pass Request through grpc.<br/>\nResponse from demo: %s<br>\n";
@@ -70,31 +79,26 @@ public class DemoGatewayApplication {
 				@RequestParam(value="currency", required=true) String currency,
 				@RequestParam(value="capital_change", required=true) Double capital_change){
 			
-			ManagedChannel channel = ManagedChannelBuilder.forAddress("127.0.0.1", 30002).usePlaintext(true).build();
-			capitalBlockingStub stub = capitalGrpc.newBlockingStub(channel);
+			Map<String, String> test = new HashMap<String, String>();
+			test.put("capital_operator", capital_operator.toString());
+			test.put("source_account", source_account);
+			test.put("match_account", match_account);
+			test.put("currency", currency);
+			test.put("capital_change", capital_change.toString());
+			ResponseEntity<String> reponse = new RestTemplate().getForEntity(
+			        "http://localhost:20002/OperatorCapital?capital_operator={capital_operator}&source_account={source_account}&match_account={match_account}&currency={currency}&capital_change={capital_change}",
+			        String.class, test);
+
+			    if(reponse.getStatusCode() == HttpStatus.NOT_MODIFIED) {
+			       return "FAIL";
+			    }
+			    
+			    Double reponse2 = (Double) new RestTemplate().getForObject(
+				        "http://localhost:20002/OperatorCapital?capital_operator={capital_operator}&source_account={source_account}&match_account={match_account}&currency={currency}&capital_change={capital_change}",
+				        Double.class, capital_operator, source_account, match_account, currency, capital_change);
+			    	
 			
-			CapitalOperatorMsg request = null;
-			
-			if (match_account != null ){
-				request = CapitalOperatorMsg.newBuilder().setBody(CapitalOperator.newBuilder()
-						.setCapitalOperator(capital_operator)
-						.setSourceAccount(source_account)
-						.setMatchAccount(match_account)
-						.setCurrency(currency)
-						.setCapitalChange(capital_change)).build();
-			}
-			else{
-				request = CapitalOperatorMsg.newBuilder().setBody(CapitalOperator.newBuilder()
-						.setCapitalOperator(capital_operator)
-						.setSourceAccount(source_account)
-						.setCurrency(currency)
-						.setCapitalChange(capital_change)).build();			
-			}
-			
-			CapitalOperatorMsg reply = stub.operatorCapital(request);
-			
-			//String result = String.format(template, reply.getPortfolio());
-			return  String.valueOf(reply.getHeader().getStatus()) + ":" + reply.getHeader().getMessage();
+			return "SUCCESS";
 		}
 	}
 
