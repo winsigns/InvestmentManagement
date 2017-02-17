@@ -7,17 +7,18 @@ import com.winsigns.investment.fundService.model.Portfolio;
 
 public class PortfolioResourceAssembler extends ResourceAssemblerSupport<Portfolio, PortfolioResource> {
 
-    public PortfolioResourceAssembler() {
-        super(PortfolioController.class, PortfolioResource.class);
-    }
+	public PortfolioResourceAssembler() {
+		super(PortfolioController.class, PortfolioResource.class);
+	}
 
-    @Override
-    public PortfolioResource toResource(Portfolio portfolio) {
-        return createResourceWithId(portfolio.getId(), portfolio, portfolio.getFundAccount().getId(), portfolio.getFundAccount().getFund().getId());
-    }
+	@Override
+	public PortfolioResource toResource(Portfolio portfolio) {
+		return createResourceWithId(portfolio.getId(), portfolio, portfolio.getFundAccount().getId(),
+				portfolio.getFundAccount().getFund().getId());
+	}
 
-    @Override
-    protected PortfolioResource instantiateResource(Portfolio entity) {
-        return new PortfolioResource(entity);
-    }
+	@Override
+	protected PortfolioResource instantiateResource(Portfolio entity) {
+		return new PortfolioResource(entity);
+	}
 }

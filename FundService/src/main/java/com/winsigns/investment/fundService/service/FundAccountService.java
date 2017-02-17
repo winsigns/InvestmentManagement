@@ -22,39 +22,35 @@ public class FundAccountService {
 	FundRepository fundRepository;
 
 	public Collection<FundAccount> findByFundId(Long fundId) {
-		// TODO Auto-generated method stub
 		return fundAccountRepository.findByFundId(fundId);
 	}
 
 	@Transactional
 	public FundAccount addFundAccount(Long fundId, FundAccountCommand fundAccountCommand) {
-		
+
 		Fund fund = fundRepository.findOne(fundId);
-		
+
 		FundAccount newFundAccount = new FundAccount();
-		newFundAccount.setFund(fund)
-			.setName(fundAccountCommand.getName())
-			.setInvestmentManager(fundAccountCommand.getInvestmentManager());
-		
-		return fundAccountRepository.save(newFundAccount);		
+		newFundAccount.setFund(fund);
+		newFundAccount.setName(fundAccountCommand.getName());
+
+		return fundAccountRepository.save(newFundAccount);
 	}
 
 	public FundAccount updateFundAccount(Long fundAccountId, FundAccountCommand fundAccountCommand) {
 		FundAccount fundAccount = fundAccountRepository.findOne(fundAccountId);
-		
-		fundAccount
-			.setName(fundAccountCommand.getName())
-			.setInvestmentManager(fundAccountCommand.getInvestmentManager());
-		
+
+		fundAccount.setName(fundAccountCommand.getName());
+
 		return fundAccountRepository.save(fundAccount);
 	}
 
 	public void deleteFundAccount(Long fundAccountId) {
-		
+
 		fundAccountRepository.delete(fundAccountId);
 	}
-	
-	public FundAccount findOne(Long fundAccountId){
+
+	public FundAccount findOne(Long fundAccountId) {
 		return fundAccountRepository.findOne(fundAccountId);
 	}
 

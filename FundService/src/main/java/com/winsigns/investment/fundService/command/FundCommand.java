@@ -1,59 +1,49 @@
 package com.winsigns.investment.fundService.command;
 
-import java.lang.String;
+public class FundCommand {
 
-public class FundCommand{
-	
-	//编码
-    private String code;
-    
-    //名称
-    private String name;
+	// 编码
+	private String code;
 
-    //简称
-    private String shortName;
-    
-    //运作方式
-    
-    //份额
-    private Long fundUnit;
-    
-    //生命周期阶段
-    
-    public String getCode() {
-        return code;
-    }
+	// 名称
+	private String name;
 
-    public FundCommand setCode(String code) {
-        this.code = code;
-        return this;
-    }
+	// 简称
+	private String shortName;
 
-    public String getName() {
-        return name;
-    }
+	// 份额
+	private Long totalShares;
 
-    public FundCommand setName(String name) {
-        this.name = name;
-        return this;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public String getShortName() {
-        return shortName;
-    }
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-    public FundCommand setShortName(String shortName) {
-        this.shortName = shortName;
-        return this;
-    }
-    
-    public Long getFundUnit() {
-        return fundUnit;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public FundCommand setFundUnit(Long fundUnit) {
-        this.fundUnit = fundUnit;
-        return this;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+
+	public Long getTotalShares() {
+		return totalShares;
+	}
+
+	public void setTotalShares(Long totalShares) {
+		this.totalShares = totalShares;
+	}
 
 }

@@ -1,5 +1,7 @@
 package com.winsigns.investment.fundService.controller;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.Link;
@@ -19,49 +21,43 @@ import com.winsigns.investment.fundService.resource.FundResource;
 import com.winsigns.investment.fundService.resource.FundResourceAssembler;
 import com.winsigns.investment.fundService.service.FundService;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-
 @RestController
 @RequestMapping("/funds")
 public class FundController {
-	
+
 	@Autowired
 	private FundService fundService;
-	
+
 	@Autowired
 	private EntityLinks entityLinks;
-	 
+
 	@RequestMapping(method = RequestMethod.GET)
-    public Resources<FundResource> readFunds() {
-        Link link = linkTo(FundController.class).withSelfRel();
-        return new Resources<FundResource>(new FundResourceAssembler().toResources(fundService.findAllFunds()), link);
-    }
-	
+	public Resources<FundResource> readFunds() {
+		Link link = linkTo(FundController.class).withSelfRel();
+		return new Resources<FundResource>(new FundResourceAssembler().toResources(fundService.findAllFunds()), link);
+	}
+
 	@RequestMapping(value = "/{fundId}", method = RequestMethod.GET)
-    public FundResource readFund(@PathVariable Long fundId) {
-        return new FundResourceAssembler().toResource(fundService.findOne(fundId));
-    }
-	
+	public FundResource readFund(@PathVariable Long fundId) {
+		return new FundResourceAssembler().toResource(fundService.findOne(fundId));
+	}
+
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<?> createFund(
-			@RequestBody FundCommand fund){
-		
+	public ResponseEntity<?> createFund(@RequestBody FundCommand fund) {
+
 		HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.setLocation(entityLinks.linkForSingleResource(Fund.class, fundService.addFund(fund)).toUri());
-        return new ResponseEntity<Object>(responseHeaders, HttpStatus.CREATED);
+		responseHeaders.setLocation(entityLinks.linkForSingleResource(Fund.class, fundService.addFund(fund)).toUri());
+		return new ResponseEntity<Object>(responseHeaders, HttpStatus.CREATED);
 	}
-	
+
 	@RequestMapping(value = "/{fundId}", method = RequestMethod.PUT)
-	public FundResource updateFund(
-			@PathVariable("fundId") Long id,
-			@RequestBody FundCommand fund){		
-		return new FundResourceAssembler().toResource(fundService.updateFund(id, fund));
+	public FundResource updateFund(@PathVariable("fundId") Long fundId, @RequestBody FundCommand fund) {
+		return new FundResourceAssembler().toResource(fundService.updateFund(fundId, fund));
 	}
-	
+
 	@RequestMapping(value = "/{fundId}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteFund(
-			@PathVariable("fundId") Long id){
+	public ResponseEntity<?> deleteFund(@PathVariable("fundId") Long id) {
 		fundService.deleteFund(id);
-	    return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
 }

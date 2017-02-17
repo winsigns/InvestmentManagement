@@ -11,42 +11,40 @@ import javax.persistence.TemporalType;
  * Created by colin on 2017/2/6.
  */
 @Entity
-public class Portfolio extends AbstractEntity{
-	//组合名称
+public class Portfolio extends AbstractEntity {
+	// 组合名称
 	private String name;
-	
-	//创建日期
+
+	// 创建日期
 	@Temporal(TemporalType.DATE)
 	private Date createDate;
-	
-    //产品账户
-    @ManyToOne
-    private FundAccount fundAccount;
-    
-    public Portfolio setName(String name){
-    	this.name = name;
-    	return this;
-    }
-    
-    public String getName(){
-    	return this.name;
-    }
-    
-    public Portfolio setCreateDate(Date createDate){
-    	this.createDate = createDate;
-    	return this;
-    }
-    
-    public Date getCreateDate(){
-    	return this.createDate;
-    }
-    
-    public Portfolio setFundAccount(FundAccount fundAccount){
-    	this.fundAccount = fundAccount;
-    	return this;
-    }
-    
-    public FundAccount getFundAccount(){
-    	return this.fundAccount;
-    }
+
+	// 产品账户
+	@ManyToOne
+	private FundAccount fundAccount;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public FundAccount getFundAccount() {
+		return fundAccount;
+	}
+
+	public void setFundAccount(FundAccount fundAccount) {
+		this.fundAccount = fundAccount;
+	}
+
 }

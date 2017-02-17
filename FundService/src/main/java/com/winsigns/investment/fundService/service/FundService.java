@@ -15,45 +15,43 @@ public class FundService {
 
 	@Autowired
 	FundRepository fundRepository;
-	
+
 	@Transactional
-	public Fund addFund(FundCommand fund){
-		
+	public Fund addFund(FundCommand fund) {
+
 		Fund newFund = new Fund();
-		
-		newFund.setCode(fund.getCode())
-			.setFundUnit(fund.getFundUnit())
-			.setName(fund.getName())
-			.setShortName(fund.getShortName());
-		
+
+		newFund.setCode(fund.getCode());
+		newFund.setTotalShares(fund.getTotalShares());
+		newFund.setName(fund.getName());
+		newFund.setShortName(fund.getShortName());
+
 		return fundRepository.save(newFund);
 	}
-	
+
 	@Transactional
-	public Fund updateFund(Long fundId, FundCommand fund){
+	public Fund updateFund(Long fundId, FundCommand fund) {
 		Fund dstFund = fundRepository.findOne(fundId);
-		dstFund
-			.setCode(fund.getCode())
-			.setName(fund.getName())
-			.setFundUnit(fund.getFundUnit())
-			.setShortName(fund.getShortName());
-		return fundRepository.save(dstFund); 
+
+		dstFund.setCode(fund.getCode());
+		dstFund.setTotalShares(fund.getTotalShares());
+		dstFund.setName(fund.getName());
+		dstFund.setShortName(fund.getShortName());
+
+		return fundRepository.save(dstFund);
 	}
-	
+
 	@Transactional
-	public void deleteFund(Long fundId){
-		
-		//TODO other check
-		
+	public void deleteFund(Long fundId) {
 		fundRepository.delete(fundId);
 	}
-	
-	public Collection<Fund> findAllFunds(){
+
+	public Collection<Fund> findAllFunds() {
 		return fundRepository.findAll();
-		
+
 	}
-	
-	public Fund findOne(Long fundId){
+
+	public Fund findOne(Long fundId) {
 		return fundRepository.findOne(fundId);
 	}
 }

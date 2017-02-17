@@ -14,56 +14,40 @@ import javax.persistence.OneToMany;
  */
 
 @Entity
-public class FundAccount extends AbstractEntity{
-    //名称
-    private String name;
-    
-    //投资经理
-    private String investmentManager;
-    
-    //临时投资经理
-    
-    //投资组合
-    @OneToMany(mappedBy = "fundAccount", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Portfolio> portfolios = new HashSet<Portfolio>();
-    
-    //基金
-    @ManyToOne
-    private Fund fund;
-    
-    public String getName() {
-        return name;
-    }
+public class FundAccount extends AbstractEntity {
+	// 名称
+	private String name;
 
-    public FundAccount setName(String name) {
-        this.name = name;
-        return this;
-    }
-    
-    public String getInvestmentManager() {
-        return investmentManager;
-    }
+	// 投资组合
+	@OneToMany(mappedBy = "fundAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Portfolio> portfolios = new HashSet<Portfolio>();
 
-    public FundAccount setInvestmentManager(String investmentManager) {
-        this.investmentManager = investmentManager;
-        return this;
-    }
-    
-    public Set<Portfolio> getPortfolios() {
-        return portfolios;
-    }
+	// 基金
+	@ManyToOne
+	private Fund fund;
 
-    public FundAccount setPortfolios(Set<Portfolio> portfolios) {
-        this.portfolios = portfolios;
-        return this;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public Fund getFund() {
-        return fund;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public FundAccount setFund(Fund fund) {
-        this.fund = fund;
-        return this;
-    }    
+	public Set<Portfolio> getPortfolios() {
+		return portfolios;
+	}
+
+	public void setPortfolios(Set<Portfolio> portfolios) {
+		this.portfolios = portfolios;
+	}
+
+	public Fund getFund() {
+		return fund;
+	}
+
+	public void setFund(Fund fund) {
+		this.fund = fund;
+	}
+
 }

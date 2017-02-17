@@ -18,42 +18,40 @@ public class PortfolioService {
 
 	@Autowired
 	FundAccountRepository fundAccountRepository;
-	
+
 	@Autowired
 	PortfolioRepository portfolioRepository;
 
 	public Collection<Portfolio> findByFundAccountId(Long fundAccountId) {
-		// TODO Auto-generated method stub
 		return portfolioRepository.findByFundAccountId(fundAccountId);
 	}
 
 	@Transactional
 	public Portfolio addPortfolio(Long fundAccountId, PortfolioCommand portfolioCommand) {
-		
+
 		FundAccount fundAccount = fundAccountRepository.findOne(fundAccountId);
-		
+
 		Portfolio newPortfolio = new Portfolio();
-		newPortfolio.setFundAccount(fundAccount)
-			.setName(portfolioCommand.getName())
-			.setCreateDate(new Date());
-		return portfolioRepository.save(newPortfolio);		
+		newPortfolio.setFundAccount(fundAccount);
+		newPortfolio.setName(portfolioCommand.getName());
+		newPortfolio.setCreateDate(new Date());
+		return portfolioRepository.save(newPortfolio);
 	}
-	
+
 	@Transactional
 	public Portfolio updatePortfolio(Long portfolioId, PortfolioCommand portfolioCommand) {
 		Portfolio portfolio = portfolioRepository.findOne(portfolioId);
-		
-		portfolio
-			.setName(portfolioCommand.getName());
+
+		portfolio.setName(portfolioCommand.getName());
 		return portfolioRepository.save(portfolio);
 	}
 
 	public void deletePortfolio(Long portfolioId) {
-		
+
 		portfolioRepository.delete(portfolioId);
 	}
-	
-	public Portfolio findOne(Long portfolioId){
+
+	public Portfolio findOne(Long portfolioId) {
 		return portfolioRepository.findOne(portfolioId);
 	}
 
