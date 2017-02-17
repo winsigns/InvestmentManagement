@@ -40,12 +40,18 @@ public class FundAccountController {
         );
     }
 	
+	@RequestMapping(value = "/{fundAccountId}", method = RequestMethod.GET)
+    public FundAccountResource readFundAccount(@PathVariable Long fundAccountId) {
+		return new FundAccountResourceAssembler().toResource(fundAccountService.findOne(fundAccountId));
+    }
+	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> createFundAccount(
 			@PathVariable("fundId") Long fundId,
-			FundAccountCommand fundAccount){
+			@RequestBody FundAccountCommand fundAccount){
 		
 		HttpHeaders responseHeaders = new HttpHeaders();
+		fundAccountService.addFundAccount(fundId, fundAccount);
         responseHeaders.setLocation(entityLinks.linkForSingleResource(FundAccount.class, fundAccountService.addFundAccount(fundId, fundAccount)).toUri());
         return new ResponseEntity<Object>(responseHeaders, HttpStatus.CREATED);
 	}

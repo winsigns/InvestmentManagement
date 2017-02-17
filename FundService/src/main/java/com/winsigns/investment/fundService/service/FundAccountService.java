@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.winsigns.investment.fundService.command.FundAccountCommand;
 import com.winsigns.investment.fundService.model.Fund;
@@ -25,6 +26,7 @@ public class FundAccountService {
 		return fundAccountRepository.findByFundId(fundId);
 	}
 
+	@Transactional
 	public FundAccount addFundAccount(Long fundId, FundAccountCommand fundAccountCommand) {
 		
 		Fund fund = fundRepository.findOne(fundId);
@@ -52,6 +54,8 @@ public class FundAccountService {
 		fundAccountRepository.delete(fundAccountId);
 	}
 	
-	
+	public FundAccount findOne(Long fundAccountId){
+		return fundAccountRepository.findOne(fundAccountId);
+	}
 
 }
