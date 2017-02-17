@@ -5,9 +5,9 @@ spring:
   profiles: default
   datasource:
     driver-class-name: com.mysql.jdbc.Driver 
-    url: jdbc:mysql://localhost:3306/investmentdb
+    url: jdbc:mysql://192.168.99.100:3306/TEST?useSSL=true
     username: root
-    password: password
+    password: mysql
   jpa:
     hibernate:
       ddl-auto: update
@@ -24,9 +24,9 @@ spring:
   profiles: docker
   datasource:
     driver-class-name: com.mysql.jdbc.Driver 
-    url: jdbc:mysql://mariadb:3306/investmentdb
+    url: jdbc:mysql://192.168.99.100:3306/TEST?useSSL=true
     username: root
-    password: password
+    password: mysql
   jpa:
     hibernate:
       ddl-auto: update
