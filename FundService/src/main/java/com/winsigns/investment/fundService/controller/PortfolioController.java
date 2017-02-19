@@ -28,8 +28,8 @@ public class PortfolioController {
 	PortfolioService portfolioService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public Resources<PortfolioResource> readPortfolios(@PathVariable Long fundAccountId) {
-		Link link = linkTo(PortfolioController.class, fundAccountId).withSelfRel();
+	public Resources<PortfolioResource> readPortfolios(@PathVariable Long fundId, @PathVariable Long fundAccountId) {
+		Link link = linkTo(PortfolioController.class, fundId, fundAccountId).withSelfRel();
 		return new Resources<PortfolioResource>(
 				new PortfolioResourceAssembler().toResources(portfolioService.findByFundAccountId(fundAccountId)),
 				link);
