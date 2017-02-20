@@ -72,7 +72,7 @@ public class FundAccountCapitalService {
 			CapitalChangeCommand capitalChangeCommand) {
 
 		ExternalCapitalAccountCapital externalCapitalAccountCapital = externalCapitalAccountCapitalRepository
-				.findByExternalCapitalAccountIdAndCurrencyId(capitalChangeCommand.getExternalCapitalAccountTypeId(),
+				.findByExternalCapitalAccountIdAndCurrencyId(externalCapitalAccountId,
 						capitalChangeCommand.getCurrencyId());
 
 		externalCapitalAccountCapital.setUnassignedCapital(externalCapitalAccountCapital.getUnassignedCapital()

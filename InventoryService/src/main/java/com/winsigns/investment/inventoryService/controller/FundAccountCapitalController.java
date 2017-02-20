@@ -16,14 +16,14 @@ import com.winsigns.investment.inventoryService.service.FundAccountCapitalServic
 
 @RestController
 @ExposesResourceFor(FundAccountCapital.class)
-@RequestMapping("/fundAccounts/{fundAccountId}/fundAccountCapitals")
+@RequestMapping("/fundAccountCapitals")
 public class FundAccountCapitalController {
 
 	@Autowired
 	FundAccountCapitalService fundAccountCapitalService;
 
 	// 从资金账户分配资金到产品账户
-	@RequestMapping(value = "/assignFrom/{externalCapitalAccountId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/{fundAccountId}/assignFrom/{externalCapitalAccountId}", method = RequestMethod.POST)
 	public FundAccountCapitalResource assignToFundAccountFromCapitalAccount(@PathVariable Long fundAccountId,
 			@PathVariable Long externalCapitalAccountId, @RequestBody CapitalChangeCommand capitalChangeCommand) {
 		return new FundAccountCapitalResourceAssembler().toResource(fundAccountCapitalService
@@ -31,7 +31,7 @@ public class FundAccountCapitalController {
 	}
 
 	// 从产品账户归还资金到资金账户
-	@RequestMapping(value = "/assignTo/{externalCapitalAccountId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/{fundAccountId}/assignTo/{externalCapitalAccountId}", method = RequestMethod.POST)
 	public FundAccountCapitalResource assignToCapitalAccountFromFundAccount(@PathVariable Long fundAccountId,
 			@PathVariable Long externalCapitalAccountId, @RequestBody CapitalChangeCommand capitalChangeCommand) {
 		return new FundAccountCapitalResourceAssembler().toResource(fundAccountCapitalService
@@ -39,7 +39,7 @@ public class FundAccountCapitalController {
 	}
 
 	// 从产品账户让渡资金到产品账户
-	@RequestMapping(value = "/transfer/{matchfundAccountId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/{fundAccountId}/transfer/{matchfundAccountId}", method = RequestMethod.POST)
 	public FundAccountCapitalResource transfer(@PathVariable Long fundAccountId, @PathVariable Long matchfundAccountId,
 			@RequestBody CapitalChangeCommand capitalChangeCommand) {
 		return new FundAccountCapitalResourceAssembler().toResource(
