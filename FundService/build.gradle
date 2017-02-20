@@ -36,7 +36,8 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 
 	compile('org.springframework.boot:spring-boot-starter-actuator')
-    compile('mysql:mysql-connector-java')
+	compile('mysql:mysql-connector-java')
+	compile('com.h2database:h2')
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
