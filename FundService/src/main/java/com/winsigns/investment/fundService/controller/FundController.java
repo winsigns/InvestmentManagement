@@ -4,6 +4,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
+import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +23,7 @@ import com.winsigns.investment.fundService.resource.FundResourceAssembler;
 import com.winsigns.investment.fundService.service.FundService;
 
 @RestController
+@ExposesResourceFor(Fund.class)
 @RequestMapping("/funds")
 public class FundController {
 

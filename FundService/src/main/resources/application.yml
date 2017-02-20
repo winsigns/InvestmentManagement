@@ -4,8 +4,9 @@ server:
 spring:
   profiles: default
   datasource:
-    url: jdbc:h2:mem:investmentdb
-    username: sa
+    driver-class-name: com.mysql.jdbc.Driver 
+    url: jdbc:mysql://localhost:3306/investmentdb
+    username: root
     password: password
   jpa:
     hibernate:
@@ -13,8 +14,7 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-    
+        dialect: org.hibernate.dialect.MySQL5Dialect
 
 ---
 

@@ -1,13 +1,16 @@
 package com.winsigns.investment.fundService.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winsigns.investment.frame.model.AbstractEntity;
 
 /**
  * Created by colin on 2017/2/6.
@@ -19,11 +22,12 @@ public class FundAccount extends AbstractEntity {
 	private String name;
 
 	// 投资组合
-	@OneToMany(mappedBy = "fundAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Portfolio> portfolios = new HashSet<Portfolio>();
+	@OneToMany(mappedBy = "fundAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Portfolio> portfolios = new ArrayList<Portfolio>();
 
 	// 基金
 	@ManyToOne
+	@JsonIgnore
 	private Fund fund;
 
 	public String getName() {
@@ -34,11 +38,11 @@ public class FundAccount extends AbstractEntity {
 		this.name = name;
 	}
 
-	public Set<Portfolio> getPortfolios() {
+	public List<Portfolio> getPortfolios() {
 		return portfolios;
 	}
 
-	public void setPortfolios(Set<Portfolio> portfolios) {
+	public void setPortfolios(List<Portfolio> portfolios) {
 		this.portfolios = portfolios;
 	}
 

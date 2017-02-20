@@ -4,6 +4,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpHeaders;
@@ -16,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.fundService.command.PortfolioCommand;
+import com.winsigns.investment.fundService.model.Portfolio;
 import com.winsigns.investment.fundService.resource.PortfolioResource;
 import com.winsigns.investment.fundService.resource.PortfolioResourceAssembler;
 import com.winsigns.investment.fundService.service.PortfolioService;
 
 @RestController
+@ExposesResourceFor(Portfolio.class)
 @RequestMapping("/funds/{fundId}/fundAccounts/{fundAccountId}/portfolios")
 public class PortfolioController {
 
@@ -28,8 +31,8 @@ public class PortfolioController {
 	PortfolioService portfolioService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public Resources<PortfolioResource> readPortfolios(@PathVariable Long fundAccountId) {
-		Link link = linkTo(PortfolioController.class, fundAccountId).withSelfRel();
+	public Resources<PortfolioResource> readPortfolios(@PathVariable Long fundId, @PathVariable Long fundAccountId) {
+		Link link = linkTo(PortfolioController.class, fundId, fundAccountId).withSelfRel();
 		return new Resources<PortfolioResource>(
 				new PortfolioResourceAssembler().toResources(portfolioService.findByFundAccountId(fundAccountId)),
 				link);

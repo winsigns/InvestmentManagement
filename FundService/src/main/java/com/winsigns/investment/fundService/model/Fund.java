@@ -1,12 +1,15 @@
 package com.winsigns.investment.fundService.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winsigns.investment.frame.model.AbstractEntity;
 
 /**
  * Created by colin on 2017/2/6.
@@ -27,8 +30,13 @@ public class Fund extends AbstractEntity {
 	// 份额
 	private Long totalShares;
 
-	@OneToMany(mappedBy = "fund", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	private Set<FundAccount> accounts = new HashSet<FundAccount>();
+	@OneToMany(mappedBy = "fund", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<FundAccount> fundAccounts = new ArrayList<FundAccount>();
+
+	@OneToMany(mappedBy = "fund", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<ExternalCapitalAccount> externalCapitalAccounts = new ArrayList<ExternalCapitalAccount>();
 
 	public String getCode() {
 		return code;
@@ -62,12 +70,20 @@ public class Fund extends AbstractEntity {
 		this.totalShares = totalShares;
 	}
 
-	public Set<FundAccount> getAccounts() {
-		return accounts;
+	public List<FundAccount> getFundAccounts() {
+		return fundAccounts;
 	}
 
-	public void setAccounts(Set<FundAccount> accounts) {
-		this.accounts = accounts;
+	public void setFundAccounts(List<FundAccount> fundAccounts) {
+		this.fundAccounts = fundAccounts;
+	}
+
+	public List<ExternalCapitalAccount> getExternalCapitalAccounts() {
+		return externalCapitalAccounts;
+	}
+
+	public void setExternalCapitalAccounts(List<ExternalCapitalAccount> externalCapitalAccounts) {
+		this.externalCapitalAccounts = externalCapitalAccounts;
 	}
 
 }

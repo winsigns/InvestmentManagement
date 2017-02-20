@@ -6,6 +6,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.springframework.hateoas.Resource;
 
 import com.winsigns.investment.fundService.controller.FundController;
+import com.winsigns.investment.fundService.controller.PortfolioController;
 import com.winsigns.investment.fundService.model.FundAccount;
 
 public class FundAccountResource extends Resource<FundAccount> {
@@ -19,6 +20,8 @@ public class FundAccountResource extends Resource<FundAccount> {
 
 		Long fundId = fundAccount.getFund().getId();
 		add(linkTo(methodOn(FundController.class).readFund(fundId)).withRel("fund"));
+		add(linkTo(methodOn(PortfolioController.class).readPortfolios(fundId, fundAccount.getId()))
+				.withRel("portfolios"));
 	}
 
 	public String getName() {

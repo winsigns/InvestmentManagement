@@ -1,30 +1,67 @@
 package com.winsigns.investment.inventoryService.model;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity 
-//@IdClass(FundAccountCapitalId.class)
-@Table(name = "tb_fund_account_capital") 
-public class FundAccountCapital {
-	
-	@EmbeddedId 
-	private FundAccountCapitalId fundAccountCapitalId;
-	
-	@Column(name = "investment_limit", precision = 22,scale = 4)
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+
+import com.winsigns.investment.frame.model.AbstractEntity;
+
+@Entity
+public class FundAccountCapital extends AbstractEntity {
+
+	private Long fundAccountId;
+
+	private Long externalCapitalAccountTypeId;
+
+	private Long currencyId;
+
 	private Double investmentLimit;
-	
-	@Column(name = "occupy_investment_limit", precision = 22,scale = 4)
-	private Double occupyInvestmentLimit;
-	
-//	@Column(name = "capital", precision = 22,scale = 4)
-//	private Double capital;
-	
-//	@Column(name = "avail_capital", precision = 22,scale = 4)
-//	private Double availCapital;
-//	
-//	@Column(name = "desirable_capital", precision = 22,scale = 4)
-//	private Double desirableCapital;
+
+	@OneToMany(mappedBy = "fundAccountCapital", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<FundAccountCapitalDetail> fundAccountCapitalDetails = new ArrayList<FundAccountCapitalDetail>();
+
+	public Long getFundAccountId() {
+		return fundAccountId;
+	}
+
+	public void setFundAccountId(Long fundAccountId) {
+		this.fundAccountId = fundAccountId;
+	}
+
+	public Long getExternalCapitalAccountTypeId() {
+		return externalCapitalAccountTypeId;
+	}
+
+	public void setExternalCapitalAccountTypeId(Long externalCapitalAccountTypeId) {
+		this.externalCapitalAccountTypeId = externalCapitalAccountTypeId;
+	}
+
+	public Long getCurrencyId() {
+		return currencyId;
+	}
+
+	public void setCurrencyId(Long currencyId) {
+		this.currencyId = currencyId;
+	}
+
+	public Double getInvestmentLimit() {
+		return investmentLimit;
+	}
+
+	public void setInvestmentLimit(Double investmentLimit) {
+		this.investmentLimit = investmentLimit;
+	}
+
+	public List<FundAccountCapitalDetail> getFundAccountCapitalDetails() {
+		return fundAccountCapitalDetails;
+	}
+
+	public void setFundAccountCapitalDetails(List<FundAccountCapitalDetail> fundAccountCapitalDetails) {
+		this.fundAccountCapitalDetails = fundAccountCapitalDetails;
+	}
+
 }

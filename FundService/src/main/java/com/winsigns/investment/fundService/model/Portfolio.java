@@ -7,6 +7,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.winsigns.investment.frame.model.AbstractEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Created by colin on 2017/2/6.
  */
@@ -21,6 +24,7 @@ public class Portfolio extends AbstractEntity {
 
 	// 产品账户
 	@ManyToOne
+	@JsonIgnore
 	private FundAccount fundAccount;
 
 	public String getName() {
