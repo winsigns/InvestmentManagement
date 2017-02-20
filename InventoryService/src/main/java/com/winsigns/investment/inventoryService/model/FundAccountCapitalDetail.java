@@ -1,39 +1,44 @@
 package com.winsigns.investment.inventoryService.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.ManyToOne;
 
-@Entity 
-//@IdClass(FundAccountCapitalDetailId.class)
-@Table(name = "tb_fund_account_capital_detail") 
-public class FundAccountCapitalDetail {
-	
-	@EmbeddedId 
-	private FundAccountCapitalDetailId fundAccountCapitalDetailId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winsigns.investment.frame.model.AbstractEntity;
 
-    @OneToMany(mappedBy = "fundAccountCapitalDetail", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<FundAccountCapitalDetailQuota> quotas = new ArrayList<FundAccountCapitalDetailQuota>();
-    
-    public FundAccountCapitalDetailId getFundAccountCapitalDetailId(){
-		return this.fundAccountCapitalDetailId;
+@Entity
+public class FundAccountCapitalDetail extends AbstractEntity {
+
+	@ManyToOne
+	@JsonIgnore
+	private FundAccountCapital fundAccountCapital;
+
+	private Long externalCapitalAccountId;
+
+	private Double cash;
+
+	public FundAccountCapital getFundAccountCapital() {
+		return fundAccountCapital;
 	}
-	
-	public void setFundAccountCapitalDetailId(FundAccountCapitalDetailId fundAccountCapitalDetailId){
-		this.fundAccountCapitalDetailId = fundAccountCapitalDetailId;
-	}
-	
-	public List<FundAccountCapitalDetailQuota> getQuotas() {
-        return quotas;
-    }
 
-    public void setQuotas(List<FundAccountCapitalDetailQuota> quotas) {
-        this.quotas = quotas;
-    }
+	public void setFundAccountCapital(FundAccountCapital fundAccountCapital) {
+		this.fundAccountCapital = fundAccountCapital;
+	}
+
+	public Long getExternalCapitalAccountId() {
+		return externalCapitalAccountId;
+	}
+
+	public void setExternalCapitalAccountId(Long externalCapitalAccountId) {
+		this.externalCapitalAccountId = externalCapitalAccountId;
+	}
+
+	public Double getCash() {
+		return cash;
+	}
+
+	public void setCash(Double cash) {
+		this.cash = cash;
+	}
+
 }

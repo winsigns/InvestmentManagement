@@ -2,14 +2,15 @@ package com.winsigns.investment.inventoryService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.hateoas.config.EnableHypermediaSupport;
+import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType;
 
 @SpringBootApplication
-@EnableTransactionManagement
+@EnableHypermediaSupport(type = { HypermediaType.HAL })
 public class InventoryServiceApplication {
-	
+
 	public static void main(String[] args) {
-		
+
 		SpringApplication.run(InventoryServiceApplication.class, args);
 	}
 }
