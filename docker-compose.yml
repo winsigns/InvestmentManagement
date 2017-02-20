@@ -33,3 +33,11 @@ services:
     depends_on:
       - mariadb
 
+  inventory-service:
+    build: inventory-service
+    links:
+      - fund-service:fund-service
+    ports:
+      - "10011:10011"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
