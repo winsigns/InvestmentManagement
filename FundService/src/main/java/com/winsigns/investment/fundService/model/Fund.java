@@ -26,7 +26,6 @@ public class Fund extends AbstractEntity {
 
 	// 份额
 	private Long totalShares;
->>>>>>> 2e40b5a3a721b030250f2e20cc6c3096fc9de1db
 
 	@OneToMany(mappedBy = "fund", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<FundAccount> accounts = new HashSet<FundAccount>();
