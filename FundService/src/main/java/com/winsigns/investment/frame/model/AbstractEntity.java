@@ -1,4 +1,4 @@
-package com.winsigns.investment.fundService.model;
+package com.winsigns.investment.frame.model;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

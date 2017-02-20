@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
+import com.winsigns.investment.frame.model.AbstractEntity;
+
 /**
  * Created by colin on 2017/2/6.
  */

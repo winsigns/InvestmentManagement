@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.winsigns.investment.frame.model.AbstractEntity;
+
 /**
  * Created by colin on 2017/2/6.
  */
@@ -19,7 +21,7 @@ public class FundAccount extends AbstractEntity {
 	private String name;
 
 	// 投资组合
-	@OneToMany(mappedBy = "fundAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "fundAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Portfolio> portfolios = new HashSet<Portfolio>();
 
 	// 基金
