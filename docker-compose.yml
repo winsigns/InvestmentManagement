@@ -41,3 +41,12 @@ services:
       - "10011:10011"
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      
+  invest-service:
+    build: invest-service
+    links:
+      - fund-service:fund-service
+    ports:
+      - "10012:10012"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
