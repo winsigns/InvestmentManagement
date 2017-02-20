@@ -22,7 +22,7 @@ services:
       SPRING_PROFILES_ACTIVE: docker
   
   fund-service:
-    build: FundService
+    build: fund-service
     command: /bin/bash -c "wait-for-it -t 0 mariadb:3306 && java -jar /app/fund-service-latest.jar"
     links:
       - mariadb:mariadb
