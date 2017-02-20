@@ -1,39 +1,53 @@
 package com.winsigns.investment.fundService.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  * Created by colin on 2017/2/6.
  */
 
 @Entity
-public class FundAccount {
+public class FundAccount extends AbstractEntity {
+	// 名称
+	private String name;
 
-    @Id
-    @GeneratedValue
-    private Long id;
+	// 投资组合
+	@OneToMany(mappedBy = "fundAccount", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Portfolio> portfolios = new HashSet<Portfolio>();
 
-    private String name;
+	// 基金
+	@ManyToOne
+	private Fund fund;
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public Fund getFund() {
-        return fund;
-    }
+	public Set<Portfolio> getPortfolios() {
+		return portfolios;
+	}
 
-    public void setFund(Fund fund) {
-        this.fund = fund;
-    }
+	public void setPortfolios(Set<Portfolio> portfolios) {
+		this.portfolios = portfolios;
+	}
 
-    @OneToOne
-    private Fund fund;
+	public Fund getFund() {
+		return fund;
+	}
+
+	public void setFund(Fund fund) {
+		this.fund = fund;
+	}
+
 }

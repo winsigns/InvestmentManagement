@@ -1,66 +1,74 @@
 package com.winsigns.investment.fundService.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import java.lang.String;
-import java.util.List;
 
 /**
  * Created by colin on 2017/2/6.
  */
 
 @Entity
-public class Fund {
+public class Fund extends AbstractEntity {
 
+	// 编码
+	private String code;
 
-	public Long getId(){
-		return id;
+	// 名称
+	private String name;
+
+	// 简称
+	private String shortName;
+
+	// 份额
+	private Long totalShares;
+>>>>>>> 2e40b5a3a721b030250f2e20cc6c3096fc9de1db
+
+	@OneToMany(mappedBy = "fund", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	private Set<FundAccount> accounts = new HashSet<FundAccount>();
+
+	public String getCode() {
+		return code;
 	}
-	
-    public String getCode() {
-        return code;
-    }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+	public void setCode(String code) {
+		this.code = code;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getShortName() {
-        return shortName;
-    }
+	public String getShortName() {
+		return shortName;
+	}
 
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
 
-    @Id
-    @GeneratedValue
-    private Long id;
+	public Long getTotalShares() {
+		return totalShares;
+	}
 
-    private String code;
+	public void setTotalShares(Long totalShares) {
+		this.totalShares = totalShares;
+	}
 
-    private String name;
+	public Set<FundAccount> getAccounts() {
+		return accounts;
+	}
 
-    private String shortName;
+	public void setAccounts(Set<FundAccount> accounts) {
+		this.accounts = accounts;
+	}
 
-    public List<FundAccount> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(List<FundAccount> accounts) {
-        this.accounts = accounts;
-    }
-
-    @OneToMany(mappedBy = "fund")
-    private List<FundAccount> accounts;
 }
