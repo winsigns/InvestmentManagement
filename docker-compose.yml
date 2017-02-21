@@ -40,8 +40,7 @@ services:
     ports:
       - "10011:10011"
     environment:
-      SPRING_PROFILES_ACTIVE: default
-      
+ 
   invest-service:
     build: invest-service
     links:
@@ -50,3 +49,4 @@ services:
       - "10012:10012"
     environment:
       SPRING_PROFILES_ACTIVE: default
+
