@@ -40,4 +40,4 @@ services:
     ports:
       - "10011:10011"
     environment:
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: default

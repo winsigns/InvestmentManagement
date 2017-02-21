@@ -43,3 +43,5 @@ REST with HATEOAS and HAL browser
 actuator
 
 zuul(api gateway)
+
+slf4j on logback with logstash's JSON encoder
