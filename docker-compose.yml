@@ -40,4 +40,13 @@ services:
     ports:
       - "10011:10011"
     environment:
+ 
+  invest-service:
+    build: invest-service
+    links:
+      - fund-service:fund-service
+    ports:
+      - "10012:10012"
+    environment:
       SPRING_PROFILES_ACTIVE: default
+
