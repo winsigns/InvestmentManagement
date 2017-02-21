@@ -1,5 +1,7 @@
 package com.winsigns.investment.investService.resource;
 
+import java.util.Currency;
+
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
@@ -18,7 +20,7 @@ public class InstructionResource extends Resource<Instruction> {
 
 	private final String investDirection;
 
-	private final Long currencyId;
+	private final Currency currency;
 
 	private final Double costPrice;
 
@@ -35,7 +37,7 @@ public class InstructionResource extends Resource<Instruction> {
 		this.securityId = instruction.getSecurityId();
 		this.investSvc = instruction.getInvestSvc();
 		this.investDirection = instruction.getInvestDirection();
-		this.currencyId = instruction.getCurrencyId();
+		this.currency = instruction.getCurrency();
 		this.costPrice = instruction.getCostPrice();
 		this.volumeType = instruction.getVolumeType();
 		this.quantity = instruction.getQuantity();
@@ -58,8 +60,8 @@ public class InstructionResource extends Resource<Instruction> {
 		return investDirection;
 	}
 
-	public Long getCurrencyId() {
-		return currencyId;
+	public Currency getCurrency() {
+		return currency;
 	}
 
 	public Double getCostPrice() {

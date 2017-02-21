@@ -1,5 +1,7 @@
 package com.winsigns.investment.investService.model;
 
+import java.util.Currency;
+
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -22,7 +24,7 @@ public class Instruction extends AbstractEntity {
 	private String investDirection;
 
 	// 币种
-	private Long currencyId;
+	private Currency currency;
 
 	// 成本价
 	private Double costPrice;
@@ -69,12 +71,12 @@ public class Instruction extends AbstractEntity {
 		this.investDirection = investDirection;
 	}
 
-	public Long getCurrencyId() {
-		return currencyId;
+	public Currency getCurrency() {
+		return currency;
 	}
 
-	public void setCurrencyId(Long currencyId) {
-		this.currencyId = currencyId;
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
 	}
 
 	public Double getCostPrice() {

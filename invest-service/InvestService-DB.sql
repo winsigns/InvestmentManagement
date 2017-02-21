@@ -6,7 +6,7 @@ CREATE TABLE instruction
 	id BIGINT NOT NULL auto_increment, 
 	amount DOUBLE PRECISION, 
 	cost_price DOUBLE PRECISION, 
-	currency_id BIGINT, 
+	currency VARCHAR(255), 
 	invest_direction VARCHAR(255), 
 	invest_svc VARCHAR(255), 
 	portfolio_id BIGINT, 

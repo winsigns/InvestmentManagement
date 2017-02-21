@@ -19,7 +19,7 @@ public class InstructionCommand {
 	private String investDirection;
 
 	// 币种
-	private Long currencyId;
+	private String currency;
 
 	// 成本价
 	private Double costPrice;
@@ -66,12 +66,12 @@ public class InstructionCommand {
 		this.investDirection = investDirection;
 	}
 
-	public Long getCurrencyId() {
-		return currencyId;
+	public String getCurrency() {
+		return currency;
 	}
 
-	public void setCurrencyId(Long currencyId) {
-		this.currencyId = currencyId;
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
 	public Double getCostPrice() {

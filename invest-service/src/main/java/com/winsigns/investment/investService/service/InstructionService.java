@@ -1,5 +1,7 @@
 package com.winsigns.investment.investService.service;
 
+import java.util.Currency;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +25,7 @@ public class InstructionService {
 		newInstruction.setSecurityId(instructionCommand.getSecurityId());
 		newInstruction.setInvestSvc(instructionCommand.getInvestSvc());
 		newInstruction.setInvestDirection(instructionCommand.getInvestDirection());
-		newInstruction.setCurrencyId(instructionCommand.getCurrencyId());
+		newInstruction.setCurrency(Currency.getInstance(instructionCommand.getCurrency()));
 		newInstruction.setCostPrice(instructionCommand.getCostPrice());
 		newInstruction.setVolumeType(instructionCommand.getVolumeType());
 		newInstruction.setQuantity(instructionCommand.getQuantity());
@@ -40,7 +42,7 @@ public class InstructionService {
 		instruction.setSecurityId(instructionCommand.getSecurityId());
 		instruction.setInvestSvc(instructionCommand.getInvestSvc());
 		instruction.setInvestDirection(instructionCommand.getInvestDirection());
-		instruction.setCurrencyId(instructionCommand.getCurrencyId());
+		instruction.setCurrency(Currency.getInstance(instructionCommand.getCurrency()));
 		instruction.setCostPrice(instructionCommand.getCostPrice());
 		instruction.setVolumeType(instructionCommand.getVolumeType());
 		instruction.setQuantity(instructionCommand.getQuantity());
