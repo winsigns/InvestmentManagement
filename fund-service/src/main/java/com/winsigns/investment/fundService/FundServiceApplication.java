@@ -8,13 +8,7 @@ import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@EnableHypermediaSupport(type = { HypermediaType.HAL })
 public class FundServiceApplication {
-
-	@Bean
-	RestTemplate restTemplate() {
-		return new RestTemplate();
-	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(FundServiceApplication.class, args);
