@@ -24,7 +24,7 @@ import com.winsigns.investment.fundService.service.FundService;
 
 @RestController
 @ExposesResourceFor(Fund.class)
-@RequestMapping("/funds")
+@RequestMapping(path = "/funds", produces = {})
 public class FundController {
 
 	@Autowired

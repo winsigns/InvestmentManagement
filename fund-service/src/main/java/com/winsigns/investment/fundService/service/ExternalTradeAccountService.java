@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.winsigns.investment.fundService.command.ExternalTradeAccountCommand;
 import com.winsigns.investment.fundService.model.ExternalTradeAccount;
 import com.winsigns.investment.fundService.model.ExternalTradeAccountType;
-import com.winsigns.investment.fundService.model.InvestmentScope;
+import com.winsigns.investment.fundService.model.OpenedInvestmentScope;
 import com.winsigns.investment.fundService.repository.ExternalCapitalAccountRepository;
 import com.winsigns.investment.fundService.repository.ExternalTradeAccountRepository;
 import com.winsigns.investment.fundService.repository.ExternalTradeAccountTypeRepository;
@@ -53,7 +53,7 @@ public class ExternalTradeAccountService {
 				.findOne(externalTradeAccountCommand.getExtTradeAccountTypeId());
 		externalTradeAccount.setExternalTradeAccountType(externalTradeAccountType);
 
-		List<InvestmentScope> openedInvestmentScopes = new ArrayList<InvestmentScope>();
+		List<OpenedInvestmentScope> openedInvestmentScopes = new ArrayList<OpenedInvestmentScope>();
 		if (externalTradeAccountCommand.getOpenedInvestmentScopeIds() == null) {
 
 		} else {
@@ -77,7 +77,7 @@ public class ExternalTradeAccountService {
 				.findOne(externalTradeAccountCommand.getExtTradeAccountTypeId());
 		externalTradeAccount.setExternalTradeAccountType(externalTradeAccountType);
 
-		List<InvestmentScope> openedInvestmentScopes = new ArrayList<InvestmentScope>();
+		List<OpenedInvestmentScope> openedInvestmentScopes = new ArrayList<OpenedInvestmentScope>();
 		if (externalTradeAccountCommand.getOpenedInvestmentScopeIds() == null) {
 
 		} else {

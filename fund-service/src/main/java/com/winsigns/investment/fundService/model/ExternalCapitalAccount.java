@@ -11,7 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.frame.model.AbstractEntity;
@@ -19,12 +18,10 @@ import com.winsigns.investment.frame.model.AbstractEntity;
 @Entity
 public class ExternalCapitalAccount extends AbstractEntity {
 	// 外部资金账户类型
-	@OneToOne
-	private ExternalCapitalAccountType externalCapitalAccountType;
+	private int externalCapitalAccountTypeId;
 
 	// 外部开户机构
-	@OneToOne
-	private ExternalOpenOrganization externalOpenOrganization;
+	private int externalOpenOrganizationId;
 
 	// 基金
 	@ManyToOne
@@ -47,12 +44,20 @@ public class ExternalCapitalAccount extends AbstractEntity {
 		this.fund = fund;
 	}
 
-	public ExternalCapitalAccountType getExternalCapitalAccountType() {
-		return externalCapitalAccountType;
+	public int getExternalCapitalAccountTypeId() {
+		return externalCapitalAccountTypeId;
 	}
 
-	public void setExternalCapitalAccountType(ExternalCapitalAccountType externalCapitalAccountType) {
-		this.externalCapitalAccountType = externalCapitalAccountType;
+	public void setExternalCapitalAccountTypeId(int externalCapitalAccountTypeId) {
+		this.externalCapitalAccountTypeId = externalCapitalAccountTypeId;
+	}
+
+	public int getExternalOpenOrganizationId() {
+		return externalOpenOrganizationId;
+	}
+
+	public void setExternalOpenOrganizationId(int externalOpenOrganizationId) {
+		this.externalOpenOrganizationId = externalOpenOrganizationId;
 	}
 
 	public String getExternalCapitalAccount() {
@@ -61,14 +66,6 @@ public class ExternalCapitalAccount extends AbstractEntity {
 
 	public void setExternalCapitalAccount(String externalCapitalAccount) {
 		this.externalCapitalAccount = externalCapitalAccount;
-	}
-
-	public ExternalOpenOrganization getExternalOpenOrganization() {
-		return externalOpenOrganization;
-	}
-
-	public void setExternalOpenOrganization(ExternalOpenOrganization externalOpenOrganization) {
-		this.externalOpenOrganization = externalOpenOrganization;
 	}
 
 	public List<ExternalTradeAccount> getExternalTradeAccounts() {

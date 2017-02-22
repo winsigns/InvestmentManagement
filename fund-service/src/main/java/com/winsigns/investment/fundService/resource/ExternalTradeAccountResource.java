@@ -8,10 +8,10 @@ import java.util.List;
 import org.springframework.hateoas.Resource;
 
 import com.winsigns.investment.fundService.controller.ExternalCapitalAccountController;
+import com.winsigns.investment.fundService.dictionary.ExternalTradeAccountType;
 import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
 import com.winsigns.investment.fundService.model.ExternalTradeAccount;
-import com.winsigns.investment.fundService.model.ExternalTradeAccountType;
-import com.winsigns.investment.fundService.model.InvestmentScope;
+import com.winsigns.investment.fundService.model.OpenedInvestmentScope;
 
 public class ExternalTradeAccountResource extends Resource<ExternalTradeAccount> {
 
@@ -19,7 +19,7 @@ public class ExternalTradeAccountResource extends Resource<ExternalTradeAccount>
 
 	private final String externalTradeAccount;
 
-	private final List<InvestmentScope> openedInvestmentScopes;
+	private final List<OpenedInvestmentScope> openedInvestmentScopes;
 
 	private final ExternalCapitalAccount externalCapitalAccount;
 
@@ -44,7 +44,7 @@ public class ExternalTradeAccountResource extends Resource<ExternalTradeAccount>
 		return externalTradeAccount;
 	}
 
-	public List<InvestmentScope> getOpenedInvestmentScopes() {
+	public List<OpenedInvestmentScope> getOpenedInvestmentScopes() {
 		return openedInvestmentScopes;
 	}
 

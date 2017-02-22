@@ -6,11 +6,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.frame.model.AbstractEntity;
@@ -18,29 +15,25 @@ import com.winsigns.investment.frame.model.AbstractEntity;
 @Entity
 public class ExternalTradeAccount extends AbstractEntity {
 
-	@OneToOne
-	private ExternalTradeAccountType externalTradeAccountType;
+	private Long externalTradeAccountTypeId;
 
 	private String externalTradeAccount;
 
 	// 开通的投资范围
-	@JoinTable(name = "external_trade_account_to_investment_scope", joinColumns = {
-			@JoinColumn(name = "external_trade_account_id") }, inverseJoinColumns = {
-					@JoinColumn(name = "investment_scope_id") })
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "externalTradeAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
-	private List<InvestmentScope> openedInvestmentScopes = new ArrayList<InvestmentScope>();
+	private List<OpenedInvestmentScope> openedInvestmentScopes = new ArrayList<OpenedInvestmentScope>();
 
 	@ManyToOne
 	@JsonIgnore
 	private ExternalCapitalAccount externalCapitalAccount;
 
-	public ExternalTradeAccountType getExternalTradeAccountType() {
-		return externalTradeAccountType;
+	public Long getExternalTradeAccountTypeId() {
+		return externalTradeAccountTypeId;
 	}
 
-	public void setExternalTradeAccountType(ExternalTradeAccountType externalTradeAccountType) {
-		this.externalTradeAccountType = externalTradeAccountType;
+	public void setExternalTradeAccountTypeId(Long externalTradeAccountTypeId) {
+		this.externalTradeAccountTypeId = externalTradeAccountTypeId;
 	}
 
 	public String getExternalTradeAccount() {
@@ -51,11 +44,11 @@ public class ExternalTradeAccount extends AbstractEntity {
 		this.externalTradeAccount = externalTradeAccount;
 	}
 
-	public List<InvestmentScope> getOpenedInvestmentScopes() {
+	public List<OpenedInvestmentScope> getOpenedInvestmentScopes() {
 		return openedInvestmentScopes;
 	}
 
-	public void setOpenedInvestmentScopes(List<InvestmentScope> openedInvestmentScopes) {
+	public void setOpenedInvestmentScopes(List<OpenedInvestmentScope> openedInvestmentScopes) {
 		this.openedInvestmentScopes = openedInvestmentScopes;
 	}
 
