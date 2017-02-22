@@ -25,8 +25,7 @@ import com.winsigns.investment.fundService.resource.FundAccountResourceAssembler
 import com.winsigns.investment.fundService.service.FundAccountService;
 
 @RestController
-@RequestMapping(path = "/funds/{fundId}/fundAccounts", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE,
-		APPLICATION_JSON_UTF8_VALUE })
+@RequestMapping(path = "/funds/{fundId}/fundAccounts", produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
 public class FundAccountController {
 
 	@Autowired

@@ -25,8 +25,7 @@ import com.winsigns.investment.fundService.resource.PortfolioResourceAssembler;
 import com.winsigns.investment.fundService.service.PortfolioService;
 
 @RestController
-@RequestMapping(path = "/funds/{fundId}/fundAccounts/{fundAccountId}/portfolios", produces = { HAL_JSON_VALUE,
-		APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE })
+@RequestMapping(path = "/funds/{fundId}/fundAccounts/{fundAccountId}/portfolios", produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
 public class PortfolioController {
 
 	@Autowired

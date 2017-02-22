@@ -25,8 +25,7 @@ import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResour
 import com.winsigns.investment.fundService.service.ExternalCapitalAccountService;
 
 @RestController
-@RequestMapping(path = "/funds/{fundId}/externalCapitalAccounts", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE,
-		APPLICATION_JSON_UTF8_VALUE })
+@RequestMapping(path = "/funds/{fundId}/externalCapitalAccounts", produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
 public class ExternalCapitalAccountController {
 
 	@Autowired
