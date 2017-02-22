@@ -1,7 +1,10 @@
 package com.winsigns.investment.fundService.controller;
 
+import static org.springframework.hateoas.MediaTypes.HAL_JSON_VALUE;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
@@ -23,8 +26,7 @@ import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResour
 import com.winsigns.investment.fundService.service.ExternalCapitalAccountService;
 
 @RestController
-@ExposesResourceFor(ExternalCapitalAccount.class)
-@RequestMapping("/funds/{fundId}/externalCapitalAccounts")
+@RequestMapping(path = "/funds/{fundId}/externalCapitalAccounts", produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
 public class ExternalCapitalAccountController {
 
 	@Autowired
