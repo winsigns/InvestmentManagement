@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.fundService.command.ExternalTradeAccountCommand;
+import com.winsigns.investment.fundService.model.ExternalTradeAccount;
 import com.winsigns.investment.fundService.resource.ExternalTradeAccountResource;
 import com.winsigns.investment.fundService.resource.ExternalTradeAccountResourceAssembler;
 import com.winsigns.investment.fundService.service.ExternalTradeAccountService;
@@ -51,15 +52,12 @@ public class ExternalTradeAccountController {
 			@PathVariable Long externalCapitalAccountId,
 			@RequestBody ExternalTradeAccountCommand externalTradeAccountCommand) {
 
+		ExternalTradeAccount externalTradeAccount = externalTradeAccountService.addExternalTradeAccount(fundId,
+				externalCapitalAccountId, externalTradeAccountCommand);
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders
-				.setLocation(
-						linkTo(methodOn(ExternalTradeAccountController.class)
-								.readExternalTradeAccount(fundId, externalCapitalAccountId,
-										externalTradeAccountService.addExternalTradeAccount(fundId,
-												externalCapitalAccountId, externalTradeAccountCommand).getId()))
-														.toUri());
-		return new ResponseEntity<Object>(responseHeaders, HttpStatus.CREATED);
+		responseHeaders.setLocation(linkTo(methodOn(ExternalTradeAccountController.class)
+				.readExternalTradeAccount(fundId, externalCapitalAccountId, externalTradeAccount.getId())).toUri());
+		return new ResponseEntity<Object>(externalTradeAccount, responseHeaders, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/{externalTradeAccountId}", method = RequestMethod.PUT)

@@ -48,11 +48,12 @@ public class FundController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<?> createFund(@RequestBody FundCommand fund) {
+	public ResponseEntity<?> createFund(@RequestBody FundCommand fundCommand) {
 
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setLocation(entityLinks.linkForSingleResource(Fund.class, fundService.addFund(fund)).toUri());
-		return new ResponseEntity<Object>(responseHeaders, HttpStatus.CREATED);
+		Fund fund = fundService.addFund(fundCommand);
+		responseHeaders.setLocation(entityLinks.linkForSingleResource(Fund.class, fund).toUri());
+		return new ResponseEntity<Object>(fund, responseHeaders, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/{fundId}", method = RequestMethod.PUT)

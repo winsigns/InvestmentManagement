@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.fundService.command.FundAccountCommand;
+import com.winsigns.investment.fundService.model.FundAccount;
 import com.winsigns.investment.fundService.resource.FundAccountResource;
 import com.winsigns.investment.fundService.resource.FundAccountResourceAssembler;
 import com.winsigns.investment.fundService.service.FundAccountService;
@@ -44,12 +45,14 @@ public class FundAccountController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<?> createFundAccount(@PathVariable Long fundId, @RequestBody FundAccountCommand fundAccount) {
+	public ResponseEntity<?> createFundAccount(@PathVariable Long fundId,
+			@RequestBody FundAccountCommand fundAccountCommand) {
 
+		FundAccount fundAccount = fundAccountService.addFundAccount(fundId, fundAccountCommand);
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setLocation(linkTo(methodOn(FundAccountController.class).readFundAccount(fundId,
-				fundAccountService.addFundAccount(fundId, fundAccount).getId())).toUri());
-		return new ResponseEntity<Object>(responseHeaders, HttpStatus.CREATED);
+		responseHeaders.setLocation(
+				linkTo(methodOn(FundAccountController.class).readFundAccount(fundId, fundAccount.getId())).toUri());
+		return new ResponseEntity<Object>(fundAccount, responseHeaders, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/{fundAccountId}", method = RequestMethod.PUT)

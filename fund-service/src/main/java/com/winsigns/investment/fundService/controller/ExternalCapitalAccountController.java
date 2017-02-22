@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.fundService.command.ExternalCapitalAccountCommand;
+import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
 import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResource;
 import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResourceAssembler;
 import com.winsigns.investment.fundService.service.ExternalCapitalAccountService;
@@ -49,14 +50,12 @@ public class ExternalCapitalAccountController {
 	public ResponseEntity<?> crreateExternalCapitalAccount(@PathVariable Long fundId,
 			@RequestBody ExternalCapitalAccountCommand externalCapitalAccountCommand) {
 
+		ExternalCapitalAccount externalCapitalAccount = externalCapitalAccountService.addExternalCapitalAccount(fundId,
+				externalCapitalAccountCommand);
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders
-				.setLocation(
-						linkTo(methodOn(ExternalCapitalAccountController.class).readExternalCapitalAccount(fundId,
-								externalCapitalAccountService
-										.addExternalCapitalAccount(fundId, externalCapitalAccountCommand).getId()))
-												.toUri());
-		return new ResponseEntity<Object>(responseHeaders, HttpStatus.CREATED);
+		responseHeaders.setLocation(linkTo(methodOn(ExternalCapitalAccountController.class)
+				.readExternalCapitalAccount(fundId, externalCapitalAccount.getId())).toUri());
+		return new ResponseEntity<Object>(externalCapitalAccount, responseHeaders, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/{externalCapitalAccountId}", method = RequestMethod.PUT)

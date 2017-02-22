@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.fundService.command.PortfolioCommand;
+import com.winsigns.investment.fundService.model.Portfolio;
 import com.winsigns.investment.fundService.resource.PortfolioResource;
 import com.winsigns.investment.fundService.resource.PortfolioResourceAssembler;
 import com.winsigns.investment.fundService.service.PortfolioService;
@@ -49,10 +50,12 @@ public class PortfolioController {
 	public ResponseEntity<?> createPortfolio(@PathVariable Long fundId, @PathVariable Long fundAccountId,
 			@RequestBody PortfolioCommand portfolioCommand) {
 
+		Portfolio portfolio = portfolioService.addPortfolio(fundAccountId, portfolioCommand);
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setLocation(linkTo(methodOn(PortfolioController.class).readPortfolio(fundId, fundAccountId,
-				portfolioService.addPortfolio(fundAccountId, portfolioCommand).getId())).toUri());
-		return new ResponseEntity<Object>(responseHeaders, HttpStatus.CREATED);
+		responseHeaders.setLocation(
+				linkTo(methodOn(PortfolioController.class).readPortfolio(fundId, fundAccountId, portfolio.getId()))
+						.toUri());
+		return new ResponseEntity<Object>(portfolio, responseHeaders, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/{portfolioId}", method = RequestMethod.PUT)
