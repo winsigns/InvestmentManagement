@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.springframework.hateoas.core.Relation;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.frame.model.AbstractEntity;
 
@@ -17,12 +19,14 @@ import com.winsigns.investment.frame.model.AbstractEntity;
  */
 
 @Entity
+@Relation(value = "fundAccount", collectionRelation = "fundAccounts")
 public class FundAccount extends AbstractEntity {
 	// 名称
 	private String name;
 
 	// 投资组合
 	@OneToMany(mappedBy = "fundAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<Portfolio> portfolios = new ArrayList<Portfolio>();
 
 	// 基金

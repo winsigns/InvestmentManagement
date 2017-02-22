@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.hateoas.Resource;
 
 import com.winsigns.investment.fundService.controller.ExternalCapitalAccountController;
-import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
 import com.winsigns.investment.fundService.model.ExternalTradeAccount;
 import com.winsigns.investment.fundService.model.ExternalTradeAccountType;
 import com.winsigns.investment.fundService.model.InvestmentScope;
@@ -21,18 +20,15 @@ public class ExternalTradeAccountResource extends Resource<ExternalTradeAccount>
 
 	private final List<InvestmentScope> openedInvestmentScopes;
 
-	private final ExternalCapitalAccount externalCapitalAccount;
-
 	public ExternalTradeAccountResource(ExternalTradeAccount externalTradeAccount) {
 		super(externalTradeAccount);
-		this.externalCapitalAccount = externalTradeAccount.getExternalCapitalAccount();
 		this.externalTradeAccount = externalTradeAccount.getExternalTradeAccount();
 		this.externalTradeAccountType = externalTradeAccount.getExternalTradeAccountType();
 		this.openedInvestmentScopes = externalTradeAccount.getOpenedInvestmentScopes();
 
-		Long externalCapitalAccountId = externalCapitalAccount.getId();
-		add(linkTo(methodOn(ExternalCapitalAccountController.class)
-				.readExternalCapitalAccount(externalCapitalAccount.getFund().getId(), externalCapitalAccountId))
+		Long externalCapitalAccountId = externalTradeAccount.getExternalCapitalAccount().getId();
+		add(linkTo(methodOn(ExternalCapitalAccountController.class).readExternalCapitalAccount(
+				externalTradeAccount.getExternalCapitalAccount().getFund().getId(), externalCapitalAccountId))
 						.withRel("externalCapitalAccount"));
 	}
 
@@ -46,10 +42,6 @@ public class ExternalTradeAccountResource extends Resource<ExternalTradeAccount>
 
 	public List<InvestmentScope> getOpenedInvestmentScopes() {
 		return openedInvestmentScopes;
-	}
-
-	public ExternalCapitalAccount getExternalCapitalAccount() {
-		return externalCapitalAccount;
 	}
 
 }

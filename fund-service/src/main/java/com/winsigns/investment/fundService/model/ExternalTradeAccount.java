@@ -12,10 +12,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import org.springframework.hateoas.core.Relation;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.frame.model.AbstractEntity;
 
 @Entity
+@Relation(value = "externalTradeAccount", collectionRelation = "externalTradeAccounts")
 public class ExternalTradeAccount extends AbstractEntity {
 
 	@OneToOne

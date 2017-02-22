@@ -7,7 +7,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpHeaders;
@@ -20,13 +19,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.fundService.command.FundAccountCommand;
-import com.winsigns.investment.fundService.model.FundAccount;
 import com.winsigns.investment.fundService.resource.FundAccountResource;
 import com.winsigns.investment.fundService.resource.FundAccountResourceAssembler;
 import com.winsigns.investment.fundService.service.FundAccountService;
 
 @RestController
-@RequestMapping(path = "/funds/{fundId}/fundAccounts", produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
+@RequestMapping(path = "/funds/{fundId}/fundAccounts", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE,
+		APPLICATION_JSON_UTF8_VALUE })
 public class FundAccountController {
 
 	@Autowired
