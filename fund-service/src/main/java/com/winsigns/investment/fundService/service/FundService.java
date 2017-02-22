@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.winsigns.investment.fundService.command.FundCommand;
-import com.winsigns.investment.fundService.dictionary.Dictionaries;
 import com.winsigns.investment.fundService.model.Fund;
 import com.winsigns.investment.fundService.repository.FundRepository;
 
@@ -16,9 +15,6 @@ public class FundService {
 
 	@Autowired
 	FundRepository fundRepository;
-
-	@Autowired
-	Dictionaries dictionaries;
 
 	@Transactional
 	public Fund addFund(FundCommand fund) {
