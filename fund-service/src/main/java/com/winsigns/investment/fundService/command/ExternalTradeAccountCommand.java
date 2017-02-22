@@ -1,21 +1,19 @@
 package com.winsigns.investment.fundService.command;
 
-import java.util.List;
+import com.winsigns.investment.fundService.constant.ExternalTradeAccountType;
 
 public class ExternalTradeAccountCommand {
 
-	private Long extTradeAccountTypeId;
+	private ExternalTradeAccountType externalTradeAccountType;
 
 	private String externalTradeAccount;
 
-	private List<Long> openedInvestmentScopeIds;
-
-	public Long getExtTradeAccountTypeId() {
-		return extTradeAccountTypeId;
+	public ExternalTradeAccountType getExternalTradeAccountType() {
+		return externalTradeAccountType;
 	}
 
-	public void setExtTradeAccountTypeId(Long extTradeAccountTypeId) {
-		this.extTradeAccountTypeId = extTradeAccountTypeId;
+	public void setExternalTradeAccountType(ExternalTradeAccountType externalTradeAccountType) {
+		this.externalTradeAccountType = externalTradeAccountType;
 	}
 
 	public String getExternalTradeAccount() {
@@ -24,14 +22,6 @@ public class ExternalTradeAccountCommand {
 
 	public void setExternalTradeAccount(String externalTradeAccount) {
 		this.externalTradeAccount = externalTradeAccount;
-	}
-
-	public List<Long> getOpenedInvestmentScopeIds() {
-		return openedInvestmentScopeIds;
-	}
-
-	public void setOpenedInvestmentScopeIds(List<Long> openedInvestmentScopeIds) {
-		this.openedInvestmentScopeIds = openedInvestmentScopeIds;
 	}
 
 }

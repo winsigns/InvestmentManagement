@@ -28,6 +28,7 @@ import com.winsigns.investment.fundService.service.FundService;
 @RestController
 @ExposesResourceFor(Fund.class)
 @RequestMapping(path = "/funds", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE })
+
 public class FundController {
 
 	@Autowired
