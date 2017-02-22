@@ -5,11 +5,14 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 
+import org.springframework.hateoas.core.Relation;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.frame.model.AbstractEntity;
 import com.winsigns.investment.fundService.constant.ExternalTradeAccountType;
 
 @Entity
+@Relation(value = "externalTradeAccount", collectionRelation = "externalTradeAccounts")
 public class ExternalTradeAccount extends AbstractEntity {
 
 	@Enumerated(EnumType.STRING)

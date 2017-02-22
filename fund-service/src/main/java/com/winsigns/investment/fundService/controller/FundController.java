@@ -1,6 +1,9 @@
 package com.winsigns.investment.fundService.controller;
 
+import static org.springframework.hateoas.MediaTypes.HAL_JSON_VALUE;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
@@ -24,7 +27,8 @@ import com.winsigns.investment.fundService.service.FundService;
 
 @RestController
 @ExposesResourceFor(Fund.class)
-@RequestMapping(path = "/funds", produces = {})
+@RequestMapping(path = "/funds", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE })
+
 public class FundController {
 
 	@Autowired
@@ -45,11 +49,12 @@ public class FundController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<?> createFund(@RequestBody FundCommand fund) {
+	public ResponseEntity<?> createFund(@RequestBody FundCommand fundCommand) {
 
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setLocation(entityLinks.linkForSingleResource(Fund.class, fundService.addFund(fund)).toUri());
-		return new ResponseEntity<Object>(responseHeaders, HttpStatus.CREATED);
+		Fund fund = fundService.addFund(fundCommand);
+		responseHeaders.setLocation(entityLinks.linkForSingleResource(Fund.class, fund).toUri());
+		return new ResponseEntity<Object>(fund, responseHeaders, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/{fundId}", method = RequestMethod.PUT)

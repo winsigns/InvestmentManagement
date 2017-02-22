@@ -1,10 +1,12 @@
 package com.winsigns.investment.fundService.controller;
 
+import static org.springframework.hateoas.MediaTypes.HAL_JSON_VALUE;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpHeaders;
@@ -23,8 +25,8 @@ import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResour
 import com.winsigns.investment.fundService.service.ExternalCapitalAccountService;
 
 @RestController
-@ExposesResourceFor(ExternalCapitalAccount.class)
-@RequestMapping("/funds/{fundId}/externalCapitalAccounts")
+@RequestMapping(path = "/funds/{fundId}/externalCapitalAccounts", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE,
+		APPLICATION_JSON_UTF8_VALUE })
 public class ExternalCapitalAccountController {
 
 	@Autowired
@@ -48,14 +50,12 @@ public class ExternalCapitalAccountController {
 	public ResponseEntity<?> crreateExternalCapitalAccount(@PathVariable Long fundId,
 			@RequestBody ExternalCapitalAccountCommand externalCapitalAccountCommand) {
 
+		ExternalCapitalAccount externalCapitalAccount = externalCapitalAccountService.addExternalCapitalAccount(fundId,
+				externalCapitalAccountCommand);
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders
-				.setLocation(
-						linkTo(methodOn(ExternalCapitalAccountController.class).readExternalCapitalAccount(fundId,
-								externalCapitalAccountService
-										.addExternalCapitalAccount(fundId, externalCapitalAccountCommand).getId()))
-												.toUri());
-		return new ResponseEntity<Object>(responseHeaders, HttpStatus.CREATED);
+		responseHeaders.setLocation(linkTo(methodOn(ExternalCapitalAccountController.class)
+				.readExternalCapitalAccount(fundId, externalCapitalAccount.getId())).toUri());
+		return new ResponseEntity<Object>(externalCapitalAccount, responseHeaders, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/{externalCapitalAccountId}", method = RequestMethod.PUT)

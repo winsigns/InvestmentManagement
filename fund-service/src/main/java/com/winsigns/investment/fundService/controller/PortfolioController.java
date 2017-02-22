@@ -1,10 +1,12 @@
 package com.winsigns.investment.fundService.controller;
 
+import static org.springframework.hateoas.MediaTypes.HAL_JSON_VALUE;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpHeaders;
@@ -23,8 +25,8 @@ import com.winsigns.investment.fundService.resource.PortfolioResourceAssembler;
 import com.winsigns.investment.fundService.service.PortfolioService;
 
 @RestController
-@ExposesResourceFor(Portfolio.class)
-@RequestMapping("/funds/{fundId}/fundAccounts/{fundAccountId}/portfolios")
+@RequestMapping(path = "/funds/{fundId}/fundAccounts/{fundAccountId}/portfolios", produces = { HAL_JSON_VALUE,
+		APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE })
 public class PortfolioController {
 
 	@Autowired
@@ -48,10 +50,12 @@ public class PortfolioController {
 	public ResponseEntity<?> createPortfolio(@PathVariable Long fundId, @PathVariable Long fundAccountId,
 			@RequestBody PortfolioCommand portfolioCommand) {
 
+		Portfolio portfolio = portfolioService.addPortfolio(fundAccountId, portfolioCommand);
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setLocation(linkTo(methodOn(PortfolioController.class).readPortfolio(fundId, fundAccountId,
-				portfolioService.addPortfolio(fundAccountId, portfolioCommand).getId())).toUri());
-		return new ResponseEntity<Object>(responseHeaders, HttpStatus.CREATED);
+		responseHeaders.setLocation(
+				linkTo(methodOn(PortfolioController.class).readPortfolio(fundId, fundAccountId, portfolio.getId()))
+						.toUri());
+		return new ResponseEntity<Object>(portfolio, responseHeaders, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/{portfolioId}", method = RequestMethod.PUT)

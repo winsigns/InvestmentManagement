@@ -1,10 +1,12 @@
 package com.winsigns.investment.fundService.controller;
 
+import static org.springframework.hateoas.MediaTypes.HAL_JSON_VALUE;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpHeaders;
@@ -23,8 +25,8 @@ import com.winsigns.investment.fundService.resource.ExternalTradeAccountResource
 import com.winsigns.investment.fundService.service.ExternalTradeAccountService;
 
 @RestController
-@ExposesResourceFor(ExternalTradeAccount.class)
-@RequestMapping("/funds/{fundId}/externalCapitalAccounts/{externalCapitalAccountId}/externalTradeAccounts")
+@RequestMapping(path = "/funds/{fundId}/externalCapitalAccounts/{externalCapitalAccountId}/externalTradeAccounts", produces = {
+		HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE })
 public class ExternalTradeAccountController {
 
 	@Autowired
@@ -50,15 +52,12 @@ public class ExternalTradeAccountController {
 			@PathVariable Long externalCapitalAccountId,
 			@RequestBody ExternalTradeAccountCommand externalTradeAccountCommand) {
 
+		ExternalTradeAccount externalTradeAccount = externalTradeAccountService.addExternalTradeAccount(fundId,
+				externalCapitalAccountId, externalTradeAccountCommand);
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders
-				.setLocation(
-						linkTo(methodOn(ExternalTradeAccountController.class)
-								.readExternalTradeAccount(fundId, externalCapitalAccountId,
-										externalTradeAccountService.addExternalTradeAccount(fundId,
-												externalCapitalAccountId, externalTradeAccountCommand).getId()))
-														.toUri());
-		return new ResponseEntity<Object>(responseHeaders, HttpStatus.CREATED);
+		responseHeaders.setLocation(linkTo(methodOn(ExternalTradeAccountController.class)
+				.readExternalTradeAccount(fundId, externalCapitalAccountId, externalTradeAccount.getId())).toUri());
+		return new ResponseEntity<Object>(externalTradeAccount, responseHeaders, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/{externalTradeAccountId}", method = RequestMethod.PUT)

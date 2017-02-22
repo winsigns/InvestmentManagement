@@ -14,12 +14,15 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.springframework.hateoas.core.Relation;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.frame.model.AbstractEntity;
 import com.winsigns.investment.fundService.constant.ExternalCapitalAccountType;
 import com.winsigns.investment.fundService.constant.ExternalOpenOrganization;
 
 @Entity
+@Relation(value = "externalCapitalAccount", collectionRelation = "externalCapitalAccounts")
 public class ExternalCapitalAccount extends AbstractEntity {
 	// 外部资金账户类型
 	@Enumerated(EnumType.STRING)
