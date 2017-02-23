@@ -1,5 +1,7 @@
 package com.winsigns.investment.fundService.constant;
 
+import com.winsigns.investment.fundService.framework.i18nHelper;
+
 public enum ExternalOpenOrganizationType {
 
 	// 核心机构
@@ -12,5 +14,9 @@ public enum ExternalOpenOrganizationType {
 	FUTURES_COMPANY,
 
 	// 基金公司
-	FUND_COMPANY
+	FUND_COMPANY;
+
+	public String i18n() {
+		return i18nHelper.i18n(this);
+	}
 }

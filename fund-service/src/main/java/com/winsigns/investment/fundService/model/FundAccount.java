@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import org.springframework.hateoas.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winsigns.investment.frame.model.AbstractEntity;
+import com.winsigns.investment.fundService.framework.AbstractEntity;
 
 /**
  * Created by colin on 2017/2/6.

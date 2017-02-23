@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 import org.springframework.hateoas.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winsigns.investment.frame.model.AbstractEntity;
+import com.winsigns.investment.fundService.framework.AbstractEntity;
 import com.winsigns.investment.fundService.constant.ExternalTradeAccountType;
 
 @Entity
