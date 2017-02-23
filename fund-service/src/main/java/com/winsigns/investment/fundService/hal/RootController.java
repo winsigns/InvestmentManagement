@@ -22,7 +22,7 @@ import com.winsigns.investment.fundService.controller.FundController;
 public class RootController {
 	@GetMapping(path = "/", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE })
 	public HttpEntity<HALResponse<String>> root() {
-		HALResponse<String> halResponse = new HALResponse<String>(null);
+		HALResponse<String> halResponse = new HALResponse<String>("");
 		halResponse.add(linkTo(methodOn((FundController.class)).readFunds()).withRel("funds"));
 		return new ResponseEntity<>(halResponse, HttpStatus.OK);
 	}

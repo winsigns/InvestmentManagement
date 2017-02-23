@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
 import org.springframework.hateoas.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winsigns.investment.frame.model.AbstractEntity;
+import com.winsigns.investment.fundService.framework.AbstractEntity;
 import com.winsigns.investment.fundService.constant.ExternalCapitalAccountType;
 import com.winsigns.investment.fundService.constant.ExternalOpenOrganization;
 
