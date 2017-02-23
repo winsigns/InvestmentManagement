@@ -20,10 +20,19 @@ import com.winsigns.investment.fundService.controller.FundController;
 
 @RestController
 public class RootController {
+<<<<<<< HEAD
     @GetMapping(path = "/", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE })
     public HttpEntity<HALResponse<String>> root() {
         HALResponse<String> halResponse = new HALResponse<String>("");
         halResponse.add(linkTo(methodOn((FundController.class)).readFunds()).withRel("funds"));
         return new ResponseEntity<>(halResponse, HttpStatus.OK);
     }
+=======
+	@GetMapping(path = "/", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE })
+	public HttpEntity<HALResponse<String>> root() {
+		HALResponse<String> halResponse = new HALResponse<String>("");
+		halResponse.add(linkTo(methodOn((FundController.class)).readFunds()).withRel("funds"));
+		return new ResponseEntity<>(halResponse, HttpStatus.OK);
+	}
+>>>>>>> a12a71ef5f1295c334953d8be11275a6fa4c9fc4
 }
