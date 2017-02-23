@@ -8,22 +8,28 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+
+import org.springframework.hateoas.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.frame.model.AbstractEntity;
+import com.winsigns.investment.fundService.constant.ExternalCapitalAccountType;
+import com.winsigns.investment.fundService.constant.ExternalOpenOrganization;
 
 @Entity
+@Relation(value = "externalCapitalAccount", collectionRelation = "externalCapitalAccounts")
 public class ExternalCapitalAccount extends AbstractEntity {
 	// 外部资金账户类型
-	@OneToOne
+	@Enumerated(EnumType.STRING)
 	private ExternalCapitalAccountType externalCapitalAccountType;
 
 	// 外部开户机构
-	@OneToOne
+	@Enumerated(EnumType.STRING)
 	private ExternalOpenOrganization externalOpenOrganization;
 
 	// 基金
@@ -39,28 +45,12 @@ public class ExternalCapitalAccount extends AbstractEntity {
 	@JsonIgnore
 	private List<ExternalTradeAccount> externalTradeAccounts = new ArrayList<ExternalTradeAccount>();
 
-	public Fund getFund() {
-		return fund;
-	}
-
-	public void setFund(Fund fund) {
-		this.fund = fund;
-	}
-
 	public ExternalCapitalAccountType getExternalCapitalAccountType() {
 		return externalCapitalAccountType;
 	}
 
 	public void setExternalCapitalAccountType(ExternalCapitalAccountType externalCapitalAccountType) {
 		this.externalCapitalAccountType = externalCapitalAccountType;
-	}
-
-	public String getExternalCapitalAccount() {
-		return externalCapitalAccount;
-	}
-
-	public void setExternalCapitalAccount(String externalCapitalAccount) {
-		this.externalCapitalAccount = externalCapitalAccount;
 	}
 
 	public ExternalOpenOrganization getExternalOpenOrganization() {
@@ -71,6 +61,22 @@ public class ExternalCapitalAccount extends AbstractEntity {
 		this.externalOpenOrganization = externalOpenOrganization;
 	}
 
+	public Fund getFund() {
+		return fund;
+	}
+
+	public void setFund(Fund fund) {
+		this.fund = fund;
+	}
+
+	public String getExternalCapitalAccount() {
+		return externalCapitalAccount;
+	}
+
+	public void setExternalCapitalAccount(String externalCapitalAccount) {
+		this.externalCapitalAccount = externalCapitalAccount;
+	}
+
 	public List<ExternalTradeAccount> getExternalTradeAccounts() {
 		return externalTradeAccounts;
 	}
@@ -78,4 +84,5 @@ public class ExternalCapitalAccount extends AbstractEntity {
 	public void setExternalTradeAccounts(List<ExternalTradeAccount> externalTradeAccounts) {
 		this.externalTradeAccounts = externalTradeAccounts;
 	}
+
 }

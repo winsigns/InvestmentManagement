@@ -7,7 +7,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpHeaders;
@@ -52,15 +51,12 @@ public class ExternalTradeAccountController {
 			@PathVariable Long externalCapitalAccountId,
 			@RequestBody ExternalTradeAccountCommand externalTradeAccountCommand) {
 
+		ExternalTradeAccount externalTradeAccount = externalTradeAccountService.addExternalTradeAccount(fundId,
+				externalCapitalAccountId, externalTradeAccountCommand);
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders
-				.setLocation(
-						linkTo(methodOn(ExternalTradeAccountController.class)
-								.readExternalTradeAccount(fundId, externalCapitalAccountId,
-										externalTradeAccountService.addExternalTradeAccount(fundId,
-												externalCapitalAccountId, externalTradeAccountCommand).getId()))
-														.toUri());
-		return new ResponseEntity<Object>(responseHeaders, HttpStatus.CREATED);
+		responseHeaders.setLocation(linkTo(methodOn(ExternalTradeAccountController.class)
+				.readExternalTradeAccount(fundId, externalCapitalAccountId, externalTradeAccount.getId())).toUri());
+		return new ResponseEntity<Object>(externalTradeAccount, responseHeaders, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/{externalTradeAccountId}", method = RequestMethod.PUT)
