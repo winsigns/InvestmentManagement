@@ -22,6 +22,7 @@ import com.winsigns.investment.fundService.command.ExternalCapitalAccountCommand
 import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
 import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResource;
 import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResourceAssembler;
+import com.winsigns.investment.fundService.resource.ExternalTradeAccountResourceAssembler;
 import com.winsigns.investment.fundService.service.ExternalCapitalAccountService;
 
 @RestController
@@ -41,8 +42,14 @@ public class ExternalCapitalAccountController {
 	@RequestMapping(value = "/{externalCapitalAccountId}", method = RequestMethod.GET)
 	public ExternalCapitalAccountResource readExternalCapitalAccount(@PathVariable Long fundId,
 			@PathVariable Long externalCapitalAccountId) {
-		return new ExternalCapitalAccountResourceAssembler()
+		ExternalCapitalAccount externalCapitalAccount = externalCapitalAccountService.findOne(externalCapitalAccountId);
+		ExternalCapitalAccountResource externalCapitalAccountResource = new ExternalCapitalAccountResourceAssembler()
 				.toResource(externalCapitalAccountService.findOne(externalCapitalAccountId));
+
+		externalCapitalAccountResource.add("externalTradeAccounts", new ExternalTradeAccountResourceAssembler()
+				.toResources(externalCapitalAccount.getExternalTradeAccounts()));
+
+		return externalCapitalAccountResource;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)

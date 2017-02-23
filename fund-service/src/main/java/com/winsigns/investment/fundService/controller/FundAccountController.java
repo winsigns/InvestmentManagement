@@ -22,6 +22,7 @@ import com.winsigns.investment.fundService.command.FundAccountCommand;
 import com.winsigns.investment.fundService.model.FundAccount;
 import com.winsigns.investment.fundService.resource.FundAccountResource;
 import com.winsigns.investment.fundService.resource.FundAccountResourceAssembler;
+import com.winsigns.investment.fundService.resource.PortfolioResourceAssembler;
 import com.winsigns.investment.fundService.service.FundAccountService;
 
 @RestController
@@ -40,7 +41,14 @@ public class FundAccountController {
 
 	@RequestMapping(value = "/{fundAccountId}", method = RequestMethod.GET)
 	public FundAccountResource readFundAccount(@PathVariable Long fundId, @PathVariable Long fundAccountId) {
-		return new FundAccountResourceAssembler().toResource(fundAccountService.findOne(fundAccountId));
+
+		FundAccount fundAccount = fundAccountService.findOne(fundAccountId);
+		FundAccountResource fundAccountResource = new FundAccountResourceAssembler()
+				.toResource(fundAccountService.findOne(fundAccountId));
+
+		fundAccountResource.add("portfolios",
+				new PortfolioResourceAssembler().toResources(fundAccount.getPortfolios()));
+		return fundAccountResource;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)

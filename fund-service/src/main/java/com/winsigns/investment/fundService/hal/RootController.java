@@ -21,8 +21,8 @@ import com.winsigns.investment.fundService.controller.FundController;
 @RestController
 public class RootController {
 	@GetMapping(path = "/", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE })
-	public HttpEntity<HALResponse> root() {
-		HALResponse halResponse = new HALResponse();
+	public HttpEntity<HALResponse<String>> root() {
+		HALResponse<String> halResponse = new HALResponse<String>(null);
 		halResponse.add(linkTo(methodOn((FundController.class)).readFunds()).withRel("funds"));
 		return new ResponseEntity<>(halResponse, HttpStatus.OK);
 	}

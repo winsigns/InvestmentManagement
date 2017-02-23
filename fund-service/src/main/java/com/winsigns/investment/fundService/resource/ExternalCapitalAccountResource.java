@@ -3,21 +3,14 @@ package com.winsigns.investment.fundService.resource;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
-
-
 import com.winsigns.investment.fundService.constant.ExternalCapitalAccountType;
 import com.winsigns.investment.fundService.constant.ExternalOpenOrganization;
 import com.winsigns.investment.fundService.controller.ExternalTradeAccountController;
 import com.winsigns.investment.fundService.controller.FundController;
+import com.winsigns.investment.fundService.hal.HALResponse;
 import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
-import com.winsigns.investment.fundService.model.ExternalTradeAccount;
-import com.winsigns.investment.fundService.model.Fund;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
-
-public class ExternalCapitalAccountResource extends Resource<ExternalCapitalAccount> {
+public class ExternalCapitalAccountResource extends HALResponse<ExternalCapitalAccount> {
 
 	private final ExternalCapitalAccountType externalCapitalAccountType;
 
@@ -25,19 +18,12 @@ public class ExternalCapitalAccountResource extends Resource<ExternalCapitalAcco
 
 	private final ExternalOpenOrganization externalOpenOrganization;
 
-	@JsonUnwrapped
-	private final Resources<ExternalTradeAccountResource> externalTradeAccountResources;
-
 	public ExternalCapitalAccountResource(ExternalCapitalAccount externalCapitalAccount) {
 		super(externalCapitalAccount);
 
 		this.externalCapitalAccountType = externalCapitalAccount.getExternalCapitalAccountType();
 		this.externalCapitalAccount = externalCapitalAccount.getExternalCapitalAccount();
 		this.externalOpenOrganization = externalCapitalAccount.getExternalOpenOrganization();
-
-		this.externalTradeAccountResources = new Resources<ExternalTradeAccountResource>(
-				new ExternalTradeAccountResourceAssembler()
-						.toResources(externalCapitalAccount.getExternalTradeAccounts()));
 
 		add(linkTo(methodOn(ExternalTradeAccountController.class)
 				.readExternalTradeAccounts(externalCapitalAccount.getFund().getId(), externalCapitalAccount.getId()))

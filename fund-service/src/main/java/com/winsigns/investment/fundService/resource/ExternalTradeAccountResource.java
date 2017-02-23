@@ -3,18 +3,16 @@ package com.winsigns.investment.fundService.resource;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-import org.springframework.hateoas.Resource;
-
 import com.winsigns.investment.fundService.constant.ExternalTradeAccountType;
 import com.winsigns.investment.fundService.controller.ExternalCapitalAccountController;
+import com.winsigns.investment.fundService.hal.HALResponse;
 import com.winsigns.investment.fundService.model.ExternalTradeAccount;
 
-public class ExternalTradeAccountResource extends Resource<ExternalTradeAccount> {
+public class ExternalTradeAccountResource extends HALResponse<ExternalTradeAccount> {
 
 	private final ExternalTradeAccountType externalTradeAccountType;
 
 	private final String externalTradeAccount;
-
 
 	public ExternalTradeAccountResource(ExternalTradeAccount externalTradeAccount) {
 		super(externalTradeAccount);

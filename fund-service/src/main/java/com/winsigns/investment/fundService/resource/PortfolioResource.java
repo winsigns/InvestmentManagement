@@ -3,12 +3,11 @@ package com.winsigns.investment.fundService.resource;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-import org.springframework.hateoas.Resource;
-
 import com.winsigns.investment.fundService.controller.FundAccountController;
+import com.winsigns.investment.fundService.hal.HALResponse;
 import com.winsigns.investment.fundService.model.Portfolio;
 
-public class PortfolioResource extends Resource<Portfolio> {
+public class PortfolioResource extends HALResponse<Portfolio> {
 
 	// 名称
 	private final String name;

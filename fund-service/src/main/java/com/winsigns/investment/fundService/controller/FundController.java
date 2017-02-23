@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.fundService.command.FundCommand;
 import com.winsigns.investment.fundService.model.Fund;
+import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResourceAssembler;
+import com.winsigns.investment.fundService.resource.FundAccountResourceAssembler;
 import com.winsigns.investment.fundService.resource.FundResource;
 import com.winsigns.investment.fundService.resource.FundResourceAssembler;
 import com.winsigns.investment.fundService.service.FundService;
@@ -40,7 +42,14 @@ public class FundController {
 
 	@RequestMapping(value = "/{fundId}", method = RequestMethod.GET)
 	public FundResource readFund(@PathVariable Long fundId) {
-		return new FundResourceAssembler().toResource(fundService.findOne(fundId));
+		Fund fund = fundService.findOne(fundId);
+		FundResource fundResource = new FundResourceAssembler().toResource(fund);
+
+		fundResource.add("fundAccounts", new FundAccountResourceAssembler().toResources(fund.getFundAccounts()));
+		fundResource.add("externalCapitalAccounts",
+				new ExternalCapitalAccountResourceAssembler().toResources(fund.getExternalCapitalAccounts()));
+
+		return fundResource;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
