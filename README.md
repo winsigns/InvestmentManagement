@@ -34,14 +34,14 @@ docker-compose down
 
 mariaDB
 
-docker
+docker/docker-compose
 
-docker-compose
-
-REST with HATEOAS and HAL browser
+REST with HAL and HAL browser
 
 actuator
 
 zuul(api gateway)
 
 slf4j on logback with logstash's JSON encoder
+
+i18n support
