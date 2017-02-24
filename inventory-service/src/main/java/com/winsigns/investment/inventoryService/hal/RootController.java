@@ -1,4 +1,4 @@
-package com.winsigns.investment.fundService.hal;
+package com.winsigns.investment.inventoryService.hal;
 
 import static org.springframework.hateoas.MediaTypes.HAL_JSON_VALUE;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -13,8 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winsigns.investment.fundService.controller.FundController;
-import com.winsigns.investment.fundService.model.Fund;
+import com.winsigns.investment.inventoryService.controller.ECACashPoolController;
+import com.winsigns.investment.inventoryService.controller.FundAccountCapitalController;
+import com.winsigns.investment.inventoryService.model.ECACashPool;
+import com.winsigns.investment.inventoryService.model.FundAccountCapital;
 
 /**
  * Created by colin on 2017/2/22.
@@ -23,10 +25,13 @@ import com.winsigns.investment.fundService.model.Fund;
 @RestController
 public class RootController {
     @GetMapping(path = "/", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE })
-    public HttpEntity<HALResponse<String>> root() {
+    public HttpEntity<HALResponse<String>> root(Long fundId, Long externalCapitalAccountId) {
         HALResponse<String> halResponse = new HALResponse<String>("");
-        halResponse.add(linkTo(methodOn((FundController.class)).readFunds())
-                .withRel(Fund.class.getAnnotation(Relation.class).collectionRelation()));
+        halResponse.add(linkTo(methodOn(ECACashPoolController.class)
+                .readExternalCapitalAccountCapitals(fundId, externalCapitalAccountId)).withRel(
+                        ECACashPool.class.getAnnotation(Relation.class).collectionRelation()));
+        halResponse.add(linkTo(FundAccountCapitalController.class)
+                .withRel(FundAccountCapital.class.getAnnotation(Relation.class).collectionRelation()));
         return new ResponseEntity<>(halResponse, HttpStatus.OK);
     }
 }

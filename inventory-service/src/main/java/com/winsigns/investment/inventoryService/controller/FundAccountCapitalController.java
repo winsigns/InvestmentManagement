@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winsigns.investment.inventoryService.command.CapitalChangeCommand;
+import com.winsigns.investment.inventoryService.command.CashChangeCommand;
 import com.winsigns.investment.inventoryService.model.FundAccountCapital;
 import com.winsigns.investment.inventoryService.resource.FundAccountCapitalResource;
 import com.winsigns.investment.inventoryService.resource.FundAccountCapitalResourceAssembler;
@@ -25,7 +25,7 @@ public class FundAccountCapitalController {
 	// 从资金账户分配资金到产品账户
 	@RequestMapping(value = "/{fundAccountId}/assignFrom/{externalCapitalAccountId}", method = RequestMethod.POST)
 	public FundAccountCapitalResource assignToFundAccountFromCapitalAccount(@PathVariable Long fundAccountId,
-			@PathVariable Long externalCapitalAccountId, @RequestBody CapitalChangeCommand capitalChangeCommand) {
+			@PathVariable Long externalCapitalAccountId, @RequestBody CashChangeCommand capitalChangeCommand) {
 		return new FundAccountCapitalResourceAssembler().toResource(fundAccountCapitalService
 				.assignToFundAccountFromCapitalAccount(fundAccountId, externalCapitalAccountId, capitalChangeCommand));
 	}
@@ -33,7 +33,7 @@ public class FundAccountCapitalController {
 	// 从产品账户归还资金到资金账户
 	@RequestMapping(value = "/{fundAccountId}/assignTo/{externalCapitalAccountId}", method = RequestMethod.POST)
 	public FundAccountCapitalResource assignToCapitalAccountFromFundAccount(@PathVariable Long fundAccountId,
-			@PathVariable Long externalCapitalAccountId, @RequestBody CapitalChangeCommand capitalChangeCommand) {
+			@PathVariable Long externalCapitalAccountId, @RequestBody CashChangeCommand capitalChangeCommand) {
 		return new FundAccountCapitalResourceAssembler().toResource(fundAccountCapitalService
 				.assignToCapitalAccountFromFundAccount(externalCapitalAccountId, fundAccountId, capitalChangeCommand));
 	}
@@ -41,7 +41,7 @@ public class FundAccountCapitalController {
 	// 从产品账户让渡资金到产品账户
 	@RequestMapping(value = "/{fundAccountId}/transfer/{matchfundAccountId}", method = RequestMethod.POST)
 	public FundAccountCapitalResource transfer(@PathVariable Long fundAccountId, @PathVariable Long matchfundAccountId,
-			@RequestBody CapitalChangeCommand capitalChangeCommand) {
+			@RequestBody CashChangeCommand capitalChangeCommand) {
 		return new FundAccountCapitalResourceAssembler().toResource(
 				fundAccountCapitalService.transfer(fundAccountId, matchfundAccountId, capitalChangeCommand));
 	}
