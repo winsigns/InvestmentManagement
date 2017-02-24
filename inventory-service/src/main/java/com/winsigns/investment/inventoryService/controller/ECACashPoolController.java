@@ -65,24 +65,6 @@ public class ECACashPoolController {
         return new ResponseEntity<Object>(eCACashPool, responseHeaders, HttpStatus.CREATED);
     }
 
-    // @PutMapping(value = "/{externalCapitalAccountId}")
-    // public ExternalCapitalAccountResource
-    // updateExternalCapitalAccount(@PathVariable Long externalCapitalAccountId,
-    // @RequestBody ExternalCapitalAccountCommand externalCapitalAccountCommand)
-    // {
-    // return new
-    // ExternalCapitalAccountResourceAssembler().toResource(externalCapitalAccountService
-    // .updateExternalCapitalAccount(externalCapitalAccountId,
-    // externalCapitalAccountCommand));
-    // }
-    //
-    // @DeleteMapping(value = "/{externalCapitalAccountId}")
-    // public ResponseEntity<?> deleteExternalCapitalAccount(@PathVariable Long
-    // externalCapitalAccountId) {
-    // externalCapitalAccountService.deleteExternalCapitalAccount(externalCapitalAccountId);
-    // return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
-    // }
-
     // 转入资金
     @RequestMapping(value = "/{eCACashPoolId}/transferTo", method = RequestMethod.POST)
     public ECACashPoolResource transferToExternalCapitalAccount(@PathVariable Long fundId,

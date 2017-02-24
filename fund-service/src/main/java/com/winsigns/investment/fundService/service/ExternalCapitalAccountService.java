@@ -62,7 +62,6 @@ public class ExternalCapitalAccountService {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        // 同时增加资金池
         String url = linkTo(ExternalCapitalAccountController.class, fundId)
                 .slash(externalCapitalAccount.getId() + "/eCACashPools").toUri().getPath();
         CashChangeCommand cashChangeCommand = new CashChangeCommand();
