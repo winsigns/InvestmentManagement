@@ -4,8 +4,8 @@ DROP TABLE IF EXISTS external_trade_account;
 DROP TABLE IF EXISTS external_capital_account;
 DROP TABLE IF EXISTS fund;
 
---寤鸿〃
---鍩洪噾浜у搧
+--建表
+--基金产品
 CREATE TABLE fund 
 (
 	id BIGINT NOT NULL auto_increment, 
@@ -16,7 +16,7 @@ CREATE TABLE fund
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 
---鍩洪噾浜у搧璐︽埛
+--基金产品账户
 CREATE TABLE fund_account 
 (
 	id BIGINT NOT NULL auto_increment, 
@@ -25,7 +25,7 @@ CREATE TABLE fund_account
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 
---鎶曡祫缁勫悎
+--投资组合
 CREATE TABLE portfolio 
 (
 	id BIGINT NOT NULL auto_increment, 
@@ -35,7 +35,7 @@ CREATE TABLE portfolio
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 
---澶栭儴璧勯噾璐︽埛
+--外部资金账户
 CREATE TABLE external_capital_account 
 (
 	id BIGINT NOT NULL auto_increment, 
@@ -46,7 +46,7 @@ CREATE TABLE external_capital_account
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 
---澶栭儴浜ゆ槗璐︽埛
+--外部交易账户
 CREATE TABLE external_trade_account 
 (
 	id BIGINT NOT NULL auto_increment, 
@@ -56,7 +56,7 @@ CREATE TABLE external_trade_account
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 
---澶栭敭
+--外键
 ALTER TABLE fund_account ADD CONSTRAINT fk_fund FOREIGN KEY (fund_id) REFERENCES fund (id);
 ALTER TABLE portfolio ADD CONSTRAINT fk_fund_account FOREIGN KEY (fund_account_id) REFERENCES fund_account (id);
 ALTER TABLE external_capital_account ADD CONSTRAINT fk_fund_for_extcapital FOREIGN KEY (fund_id) REFERENCES fund (id);
