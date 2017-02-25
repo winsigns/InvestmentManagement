@@ -1,6 +1,6 @@
 package com.winsigns.investment.fundService.command;
 
-public class FundAccountCommand {
+public class UpdateFundAccountCommand {
 	// 名称
 	private String name;
 

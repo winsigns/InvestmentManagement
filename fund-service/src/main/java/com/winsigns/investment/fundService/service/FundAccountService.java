@@ -4,9 +4,9 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.winsigns.investment.fundService.command.FundAccountCommand;
+import com.winsigns.investment.fundService.command.CreateFundAccountCommand;
+import com.winsigns.investment.fundService.command.UpdateFundAccountCommand;
 import com.winsigns.investment.fundService.model.Fund;
 import com.winsigns.investment.fundService.model.FundAccount;
 import com.winsigns.investment.fundService.repository.FundAccountRepository;
@@ -15,43 +15,52 @@ import com.winsigns.investment.fundService.repository.FundRepository;
 @Service
 public class FundAccountService {
 
-	@Autowired
-	FundAccountRepository fundAccountRepository;
+    @Autowired
+    FundAccountRepository fundAccountRepository;
 
-	@Autowired
-	FundRepository fundRepository;
+    @Autowired
+    FundRepository fundRepository;
 
-	public Collection<FundAccount> findByFundId(Long fundId) {
-		return fundAccountRepository.findByFundId(fundId);
-	}
+    public Collection<FundAccount> findByFundId(Long fundId) {
+        return fundAccountRepository.findByFundId(fundId);
+    }
 
-	@Transactional
-	public FundAccount addFundAccount(Long fundId, FundAccountCommand fundAccountCommand) {
+    public Collection<FundAccount> findAll() {
+        return fundAccountRepository.findAll();
+    }
 
-		Fund fund = fundRepository.findOne(fundId);
+    public FundAccount addFundAccount(CreateFundAccountCommand createFundAccountCommand) {
 
-		FundAccount newFundAccount = new FundAccount();
-		newFundAccount.setFund(fund);
-		newFundAccount.setName(fundAccountCommand.getName());
+        Fund fund = fundRepository.findOne(createFundAccountCommand.getFundId());
 
-		return fundAccountRepository.save(newFundAccount);
-	}
+        if (fund == null)
+            return null;
 
-	public FundAccount updateFundAccount(Long fundAccountId, FundAccountCommand fundAccountCommand) {
-		FundAccount fundAccount = fundAccountRepository.findOne(fundAccountId);
+        FundAccount newFundAccount = new FundAccount();
+        newFundAccount.setFund(fund);
+        newFundAccount.setName(createFundAccountCommand.getName());
 
-		fundAccount.setName(fundAccountCommand.getName());
+        return fundAccountRepository.save(newFundAccount);
+    }
 
-		return fundAccountRepository.save(fundAccount);
-	}
+    public FundAccount updateFundAccount(Long fundAccountId, UpdateFundAccountCommand fundAccountCommand) {
+        FundAccount fundAccount = fundAccountRepository.findOne(fundAccountId);
 
-	public void deleteFundAccount(Long fundAccountId) {
+        if (fundAccount == null)
+            return null;
 
-		fundAccountRepository.delete(fundAccountId);
-	}
+        fundAccount.setName(fundAccountCommand.getName());
 
-	public FundAccount findOne(Long fundAccountId) {
-		return fundAccountRepository.findOne(fundAccountId);
-	}
+        return fundAccountRepository.save(fundAccount);
+    }
+
+    public void deleteFundAccount(Long fundAccountId) {
+
+        fundAccountRepository.delete(fundAccountId);
+    }
+
+    public FundAccount findOne(Long fundAccountId) {
+        return fundAccountRepository.findOne(fundAccountId);
+    }
 
 }

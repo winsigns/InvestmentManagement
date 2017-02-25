@@ -5,9 +5,9 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.winsigns.investment.fundService.command.PortfolioCommand;
+import com.winsigns.investment.fundService.command.CreatePortfolioCommand;
+import com.winsigns.investment.fundService.command.UpdatePortfolioCommand;
 import com.winsigns.investment.fundService.model.FundAccount;
 import com.winsigns.investment.fundService.model.Portfolio;
 import com.winsigns.investment.fundService.repository.FundAccountRepository;
@@ -16,43 +16,51 @@ import com.winsigns.investment.fundService.repository.PortfolioRepository;
 @Service
 public class PortfolioService {
 
-	@Autowired
-	FundAccountRepository fundAccountRepository;
+    @Autowired
+    FundAccountRepository fundAccountRepository;
 
-	@Autowired
-	PortfolioRepository portfolioRepository;
+    @Autowired
+    PortfolioRepository portfolioRepository;
 
-	public Collection<Portfolio> findByFundAccountId(Long fundAccountId) {
-		return portfolioRepository.findByFundAccountId(fundAccountId);
-	}
+    public Collection<Portfolio> findByFundAccountId(Long fundAccountId) {
+        return portfolioRepository.findByFundAccountId(fundAccountId);
+    }
 
-	@Transactional
-	public Portfolio addPortfolio(Long fundAccountId, PortfolioCommand portfolioCommand) {
+    public Collection<Portfolio> findAll() {
+        return portfolioRepository.findAll();
+    }
 
-		FundAccount fundAccount = fundAccountRepository.findOne(fundAccountId);
+    public Portfolio addPortfolio(CreatePortfolioCommand createPortfolioCommand) {
 
-		Portfolio newPortfolio = new Portfolio();
-		newPortfolio.setFundAccount(fundAccount);
-		newPortfolio.setName(portfolioCommand.getName());
-		newPortfolio.setCreateDate(new Date());
-		return portfolioRepository.save(newPortfolio);
-	}
+        FundAccount fundAccount = fundAccountRepository.findOne(createPortfolioCommand.getFundAccountId());
 
-	@Transactional
-	public Portfolio updatePortfolio(Long portfolioId, PortfolioCommand portfolioCommand) {
-		Portfolio portfolio = portfolioRepository.findOne(portfolioId);
+        if (fundAccount == null)
+            return null;
 
-		portfolio.setName(portfolioCommand.getName());
-		return portfolioRepository.save(portfolio);
-	}
+        Portfolio newPortfolio = new Portfolio();
+        newPortfolio.setFundAccount(fundAccount);
+        newPortfolio.setName(createPortfolioCommand.getName());
+        newPortfolio.setCreateDate(new Date());
+        return portfolioRepository.save(newPortfolio);
+    }
 
-	public void deletePortfolio(Long portfolioId) {
+    public Portfolio updatePortfolio(Long portfolioId, UpdatePortfolioCommand portfolioCommand) {
+        Portfolio portfolio = portfolioRepository.findOne(portfolioId);
 
-		portfolioRepository.delete(portfolioId);
-	}
+        if (portfolio == null)
+            return null;
 
-	public Portfolio findOne(Long portfolioId) {
-		return portfolioRepository.findOne(portfolioId);
-	}
+        portfolio.setName(portfolioCommand.getName());
+        return portfolioRepository.save(portfolio);
+    }
+
+    public void deletePortfolio(Long portfolioId) {
+
+        portfolioRepository.delete(portfolioId);
+    }
+
+    public Portfolio findOne(Long portfolioId) {
+        return portfolioRepository.findOne(portfolioId);
+    }
 
 }
