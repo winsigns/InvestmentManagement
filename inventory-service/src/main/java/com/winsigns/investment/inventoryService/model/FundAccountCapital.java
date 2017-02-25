@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
-import com.winsigns.investment.frame.model.AbstractEntity;
+import com.winsigns.investment.inventoryService.framework.AbstractEntity;
 
 @Entity
 public class FundAccountCapital extends AbstractEntity {
