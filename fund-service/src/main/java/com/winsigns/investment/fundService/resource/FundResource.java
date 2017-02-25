@@ -14,11 +14,8 @@ import com.winsigns.investment.fundService.model.FundAccount;
 
 public class FundResource extends HALResponse<Fund> {
 
-    private final String name;
-
     public FundResource(Fund fund) {
         super(fund);
-        this.name = fund.getName();
 
         Long fundId = fund.getId();
         add(linkTo(methodOn(FundAccountController.class).readFundAccounts(fundId))
@@ -27,7 +24,4 @@ public class FundResource extends HALResponse<Fund> {
                 .withRel(ExternalCapitalAccount.class.getAnnotation(Relation.class).collectionRelation()));
     }
 
-    public String getName() {
-        return name;
-    }
 }

@@ -14,21 +14,12 @@ import com.winsigns.investment.fundService.model.Portfolio;
 
 public class FundAccountResource extends HALResponse<FundAccount> {
 
-    // 名称
-    private final String name;
-
     public FundAccountResource(FundAccount fundAccount) {
         super(fundAccount);
-        this.name = fundAccount.getName();
-
         Long fundId = fundAccount.getFund().getId();
         add(linkTo(methodOn(FundController.class).readFund(fundId))
                 .withRel(Fund.class.getAnnotation(Relation.class).value()));
         add(linkTo(methodOn(PortfolioController.class).readPortfolios(fundId, fundAccount.getId()))
                 .withRel(Portfolio.class.getAnnotation(Relation.class).collectionRelation()));
-    }
-
-    public String getName() {
-        return name;
     }
 }
