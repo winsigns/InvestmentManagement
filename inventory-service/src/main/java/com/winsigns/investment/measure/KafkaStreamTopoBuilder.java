@@ -11,41 +11,42 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.processor.TopologyBuilder;
 import org.apache.kafka.streams.state.Stores;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import com.winsigns.investment.measure.data.MeasureData;
 import com.winsigns.investment.measure.data.MeasureDataJsonSerde;
 import com.winsigns.investment.measure.data.MeasureDataJsonSerializer;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 
 @Component
 public class KafkaStreamTopoBuilder {
 	private KafkaStreams streams;
-	
-	@Value("${kafka.stream.application.id}")
-	private String KafkaStreamAppId;
-	
+
+	@Value("${kafka.stream.appid}")
+	private String appId;
+
 	@Value("${kafka.broker.host}")
-	private String KafkaBrokerHost;
-	
+    private String brokerHost;
+
 	@Value("${kafka.zookeeper.host}")
-	private String KafkaZookeeperHost;
-	
+	private String zookeeperHost;
+
 	private Logger log = Logger.getLogger(KafkaStreamTopoBuilder.class);
 
 	private Serde<MeasureData> jsonSerde;
-	
-	public void start(com.winsigns.investment.measure.MeasureManager measureManager){
-		final StringSerializer stringSerializer = new StringSerializer();
+
+    public void start(MeasureManager measureManager){
+        final StringSerializer stringSerializer = new StringSerializer();
 		final StringDeserializer stringDeserializer = new StringDeserializer();
 		final MeasureDataJsonSerializer jsonSerializer = MeasureDataJsonSerializer.defaultConfig();
 		final MeasureDataJsonSerializer jsonDeserializer = MeasureDataJsonSerializer.defaultConfig();
 		jsonSerde = new MeasureDataJsonSerde();
 		
 		Properties config = new Properties();
-		config.put(StreamsConfig.APPLICATION_ID_CONFIG, KafkaStreamAppId);
-		config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaBrokerHost);
-		config.put(StreamsConfig.ZOOKEEPER_CONNECT_CONFIG, KafkaZookeeperHost);
+		config.put(StreamsConfig.APPLICATION_ID_CONFIG, appId);
+		config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, brokerHost);
+		config.put(StreamsConfig.ZOOKEEPER_CONNECT_CONFIG, zookeeperHost);
 		config.put(StreamsConfig.KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 		//config.put(StreamsConfig.VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 		config.put(StreamsConfig.VALUE_SERDE_CLASS_CONFIG, jsonSerde.getClass().getName());

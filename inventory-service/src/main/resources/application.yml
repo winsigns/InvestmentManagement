@@ -3,8 +3,7 @@ server:
 
 kafka:
   stream:
-    application:
-      id: fund-service-kafka-stream
+    appid: fund-service-kafka-stream
   broker:
     host: 192.168.56.101:9092
   zookeeper:
@@ -22,6 +21,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
+
+management:
+  security:
+    enabled: false
+
 ---
 
 server:

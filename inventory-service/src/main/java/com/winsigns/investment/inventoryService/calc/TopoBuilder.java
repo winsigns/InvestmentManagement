@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
  * Created by jmx on 2017/2/25.
  */
 public class TopoBuilder {
+
     private MeasureManager build(){
         MeasureManager manager = new MeasureManager();
 
