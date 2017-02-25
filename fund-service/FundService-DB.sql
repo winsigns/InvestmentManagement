@@ -1,4 +1,4 @@
-﻿DROP TABLE IF EXISTS portfolio;
+DROP TABLE IF EXISTS portfolio;
 DROP TABLE IF EXISTS fund_account;
 DROP TABLE IF EXISTS external_trade_account;
 DROP TABLE IF EXISTS external_capital_account;
