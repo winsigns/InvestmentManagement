@@ -1,6 +1,6 @@
 ﻿DROP TABLE IF EXISTS fund_account_capital_detail;
 DROP TABLE IF EXISTS fund_account_capital;
-DROP TABLE IF EXISTS external_capital_account_cash_pool;
+DROP TABLE IF EXISTS external_capital_account_capital;
 
 --建表
 --产品账户资金
@@ -9,7 +9,7 @@ CREATE TABLE fund_account_capital
 	id BIGINT NOT NULL auto_increment, 
 	fund_account_id BIGINT NOT NULL, 
 	investment_limit DOUBLE PRECISION, 
-	currency VARCHAR(255) NOT NULL, 
+	currency_id BIGINT NOT NULL, 
 	external_capital_account_type_id BIGINT NOT NULL, 
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
@@ -25,13 +25,12 @@ CREATE TABLE fund_account_capital_detail
 )CHARACTER SET = utf8;
 
 --外部资金账户资金
-CREATE TABLE external_capital_account_cash_pool
+CREATE TABLE external_capital_account_capital 
 (
 	id BIGINT NOT NULL auto_increment, 
 	unassigned_capital DOUBLE PRECISION, 
-	currency VARCHAR(255)  NOT NULL,
+	currency_id BIGINT NOT NULL,
 	external_capital_account_id BIGINT NOT NULL, 
-	fund_id BIGINT NOT NULL, 
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 

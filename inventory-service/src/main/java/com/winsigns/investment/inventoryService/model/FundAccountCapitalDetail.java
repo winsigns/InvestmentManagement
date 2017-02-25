@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winsigns.investment.inventoryService.framework.AbstractEntity;
+import com.winsigns.investment.frame.model.AbstractEntity;
 
 @Entity
 public class FundAccountCapitalDetail extends AbstractEntity {

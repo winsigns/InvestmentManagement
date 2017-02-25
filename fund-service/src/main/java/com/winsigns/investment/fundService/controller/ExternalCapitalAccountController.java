@@ -6,15 +6,9 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resources;
-import org.springframework.hateoas.client.Traverson;
-import org.springframework.hateoas.client.Traverson.TraversalBuilder;
 import org.springframework.hateoas.core.Relation;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jayway.jsonpath.PathNotFoundException;
 import com.winsigns.investment.fundService.command.ExternalCapitalAccountCommand;
 import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
 import com.winsigns.investment.fundService.model.ExternalTradeAccount;
@@ -34,11 +27,8 @@ import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResour
 import com.winsigns.investment.fundService.resource.ExternalTradeAccountResourceAssembler;
 import com.winsigns.investment.fundService.service.ExternalCapitalAccountService;
 
-import net.minidev.json.JSONArray;
-
 @RestController
-@RequestMapping(path = "/funds/{fundId}/externalCapitalAccounts", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE,
-        APPLICATION_JSON_UTF8_VALUE })
+@RequestMapping(path = "/funds/{fundId}/externalCapitalAccounts", produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
 public class ExternalCapitalAccountController {
 
     @Autowired
@@ -63,26 +53,11 @@ public class ExternalCapitalAccountController {
                 new ExternalTradeAccountResourceAssembler()
                         .toResources(externalCapitalAccount.getExternalTradeAccounts()));
 
-        String url = linkTo(ExternalCapitalAccountController.class, fundId).slash(externalCapitalAccountId).toUri()
-                .getPath() + "/eCACashPools";
-        try {
-            Traverson traverson = new Traverson(new URI("http://localhost:10011" + url), MediaTypes.HAL_JSON);
-
-            TraversalBuilder newBuilder = traverson.follow();
-
-            JSONArray eCACashPools = newBuilder.toObject("$._embedded.eCACashPools");
-            externalCapitalAccountResource.add("eCACashPools", eCACashPools);
-
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (PathNotFoundException e) {
-            // 理论上不会存在
-        }
         return externalCapitalAccountResource;
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> createExternalCapitalAccount(@PathVariable Long fundId,
+    public ResponseEntity<?> crreateExternalCapitalAccount(@PathVariable Long fundId,
             @RequestBody ExternalCapitalAccountCommand externalCapitalAccountCommand) {
 
         ExternalCapitalAccount externalCapitalAccount = externalCapitalAccountService.addExternalCapitalAccount(fundId,
