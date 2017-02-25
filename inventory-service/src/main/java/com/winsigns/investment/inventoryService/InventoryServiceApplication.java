@@ -1,7 +1,9 @@
 package com.winsigns.investment.inventoryService;
 
+import com.winsigns.investment.inventoryService.calc.TopoBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType;
 
@@ -11,6 +13,9 @@ public class InventoryServiceApplication {
 
 	public static void main(String[] args) {
 
-		SpringApplication.run(InventoryServiceApplication.class, args);
+		ApplicationContext context = SpringApplication.run(InventoryServiceApplication.class, args);
+
+		TopoBuilder builder = new TopoBuilder();
+		builder.init(context);
 	}
 }
