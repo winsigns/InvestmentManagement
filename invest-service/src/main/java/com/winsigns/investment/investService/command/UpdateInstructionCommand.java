@@ -3,9 +3,9 @@ package com.winsigns.investment.investService.command;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import com.winsigns.investment.investService.model.InstructionType;
+import com.winsigns.investment.investService.constant.InstructionType;
 
-public class InstructionCommand {
+public class UpdateInstructionCommand {
 	// 投资组合
 	private Long portfolioId;
 
