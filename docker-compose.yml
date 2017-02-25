@@ -12,26 +12,18 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: investmentdb
 
-  consul:
-    image: gliderlabs/consul-server:latest
-    command: -advertise=${MYHOST} -server -bootstrap
-    container_name: consul
-    hostname: ${MYHOST}
+  edge-service:
+    build: edge-service
+    links:
+      - fund-service:fund-service
     ports:
-      - 8500:8500
-
-  registrator:
-    image: gliderlabs/registrator:latest
-    command: -ip ${MYHOST} consul://${MYHOST}:8500
-    container_name: registrator
-    hostname: ${MYHOST}
-    depends_on:
-      - consul
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock
-
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+  
   fund-service:
-    image: zs_server/fund-service
+    build: fund-service
+    command: /bin/bash -c "wait-for-it -t 0 mariadb:3306 && java -jar /app/fund-service-latest.jar"
     links:
       - mariadb:mariadb
     ports:
@@ -41,4 +33,21 @@ services:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
       - mariadb
+
+  inventory-service:
+    build: inventory-service
+    links:
+      - fund-service:fund-service
+    ports:
+      - "10011:10011"
+    environment:
+ 
+  invest-service:
+    build: invest-service
+    links:
+      - fund-service:fund-service
+    ports:
+      - "10012:10012"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
 
