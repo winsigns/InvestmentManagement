@@ -3,12 +3,12 @@ package com.winsigns.investment.fundService.command;
 import com.winsigns.investment.fundService.constant.ExternalCapitalAccountType;
 import com.winsigns.investment.fundService.constant.ExternalOpenOrganization;
 
-public class ExternalCapitalAccountCommand {
+public class UpdateExternalCapitalAccountCommand {
 	// 外部资金账户类型序号
 	private ExternalCapitalAccountType externalCapitalAccountType;
 
 	// 账号
-	private String externalCapitalAccount;
+	private String accountNo;
 
 	// 开户经纪商序号
 	private ExternalOpenOrganization externalOpenOrganization;
@@ -21,12 +21,12 @@ public class ExternalCapitalAccountCommand {
 		this.externalCapitalAccountType = externalCapitalAccountType;
 	}
 
-	public String getExternalCapitalAccount() {
-		return externalCapitalAccount;
+	public String getAccountNo() {
+		return accountNo;
 	}
 
-	public void setExternalCapitalAccount(String externalCapitalAccount) {
-		this.externalCapitalAccount = externalCapitalAccount;
+	public void setAccountNo(String externalCapitalAccount) {
+		this.accountNo = externalCapitalAccount;
 	}
 
 	public ExternalOpenOrganization getExternalOpenOrganization() {
