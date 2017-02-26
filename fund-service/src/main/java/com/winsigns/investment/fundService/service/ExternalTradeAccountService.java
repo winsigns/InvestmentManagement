@@ -46,7 +46,7 @@ public class ExternalTradeAccountService {
 
         externalTradeAccount.setExternalCapitalAccount(externalCapitalAccount);
 
-        externalTradeAccount.setExternalTradeAccount(createExternalTradeAccountCommand.getExternalTradeAccount());
+        externalTradeAccount.setAccountNo(createExternalTradeAccountCommand.getAccountNo());
         externalTradeAccount
                 .setExternalTradeAccountType(createExternalTradeAccountCommand.getExternalTradeAccountType());
 
@@ -61,7 +61,7 @@ public class ExternalTradeAccountService {
         if (externalTradeAccount == null)
             return null;
 
-        externalTradeAccount.setExternalTradeAccount(externalTradeAccountCommand.getExternalTradeAccount());
+        externalTradeAccount.setAccountNo(externalTradeAccountCommand.getAccountNo());
         externalTradeAccount.setExternalTradeAccountType(externalTradeAccountCommand.getExternalTradeAccountType());
 
         return externalTradeAccountRepository.save(externalTradeAccount);
