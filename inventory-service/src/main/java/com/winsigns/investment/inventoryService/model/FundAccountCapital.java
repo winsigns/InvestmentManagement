@@ -11,21 +11,23 @@ import javax.persistence.OneToMany;
 
 import org.springframework.hateoas.core.Relation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.inventoryService.framework.AbstractEntity;
 
 @Entity
-@Relation(value = "fundAccountCapital", collectionRelation = "fundAccountCapitals")
+@Relation(value = "fa-capital", collectionRelation = "fa-capitals")
 public class FundAccountCapital extends AbstractEntity {
 
     private Long fundAccountId;
 
-    private Long externalCapitalAccountTypeId;
+    private String externalCapitalAccountType;
 
     private Currency currency;
 
     private Double investmentLimit;
 
     @OneToMany(mappedBy = "fundAccountCapital", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<FundAccountCapitalDetail> fundAccountCapitalDetails = new ArrayList<FundAccountCapitalDetail>();
 
     public Long getFundAccountId() {
@@ -36,12 +38,12 @@ public class FundAccountCapital extends AbstractEntity {
         this.fundAccountId = fundAccountId;
     }
 
-    public Long getExternalCapitalAccountTypeId() {
-        return externalCapitalAccountTypeId;
+    public String getExternalCapitalAccountType() {
+        return externalCapitalAccountType;
     }
 
-    public void setExternalCapitalAccountTypeId(Long externalCapitalAccountTypeId) {
-        this.externalCapitalAccountTypeId = externalCapitalAccountTypeId;
+    public void setExternalCapitalAccountType(String externalCapitalAccountType) {
+        this.externalCapitalAccountType = externalCapitalAccountType;
     }
 
     public Currency getCurrency() {

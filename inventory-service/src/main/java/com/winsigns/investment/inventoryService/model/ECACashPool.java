@@ -14,7 +14,7 @@ import com.winsigns.investment.inventoryService.framework.AbstractEntity;
 
 @Entity
 @Table(name = "external_capital_account_cash_pool")
-@Relation(value = "ecaCashPool", collectionRelation = "ecaCashPools")
+@Relation(value = "eca-cash-pool", collectionRelation = "eca-cash-pools")
 public class ECACashPool extends AbstractEntity {
 
     private Long fundId;

@@ -23,17 +23,17 @@ public class ECACashPoolResourceAssembler extends ResourceAssemblerSupport<ECACa
 
         ecaCashPoolResource.add(linkTo(
                 methodOn(ECACashPoolController.class).transferTo(ecaCashPool.getId(), new TransferAccountCommand()))
-                        .withRel("transferTo"));
+                        .withRel("transfer-to"));
         ecaCashPoolResource.add(linkTo(
                 methodOn(ECACashPoolController.class).transferFrom(ecaCashPool.getId(), new TransferAccountCommand()))
-                        .withRel("transferFrom"));
+                        .withRel("transfer-from"));
 
         ecaCashPoolResource.add(
                 linkTo(methodOn(ECACashPoolController.class).allotIn(ecaCashPool.getId(), new AllotAccountCommand()))
-                        .withRel("allotIn"));
+                        .withRel("allot-in"));
         ecaCashPoolResource.add(
                 linkTo(methodOn(ECACashPoolController.class).allotOut(ecaCashPool.getId(), new AllotAccountCommand()))
-                        .withRel("allotOut"));
+                        .withRel("allot-out"));
 
         return ecaCashPoolResource;
     }

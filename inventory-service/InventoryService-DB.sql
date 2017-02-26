@@ -10,7 +10,7 @@ CREATE TABLE fund_account_capital
 	fund_account_id BIGINT NOT NULL, 
 	investment_limit DOUBLE PRECISION, 
 	currency VARCHAR(3) NOT NULL, 
-	external_capital_account_type_id BIGINT NOT NULL, 
+	external_capital_account_type VARCHAR(255) NOT NULL, 
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 
