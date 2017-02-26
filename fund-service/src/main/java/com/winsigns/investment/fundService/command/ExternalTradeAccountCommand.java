@@ -2,7 +2,7 @@ package com.winsigns.investment.fundService.command;
 
 import com.winsigns.investment.fundService.constant.ExternalTradeAccountType;
 
-public class UpdateExternalTradeAccountCommand {
+public class ExternalTradeAccountCommand {
 
 	private ExternalTradeAccountType externalTradeAccountType;
 

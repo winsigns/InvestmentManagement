@@ -6,8 +6,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
@@ -15,17 +13,13 @@ import org.springframework.hateoas.core.Relation;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winsigns.investment.fundService.command.CreateFundAccountCommand;
-import com.winsigns.investment.fundService.command.UpdateFundAccountCommand;
+import com.winsigns.investment.fundService.command.FundAccountCommand;
 import com.winsigns.investment.fundService.model.FundAccount;
 import com.winsigns.investment.fundService.model.Portfolio;
 import com.winsigns.investment.fundService.resource.FundAccountResource;
@@ -34,52 +28,50 @@ import com.winsigns.investment.fundService.resource.PortfolioResourceAssembler;
 import com.winsigns.investment.fundService.service.FundAccountService;
 
 @RestController
-@RequestMapping(path = "/fund-accounts", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE,
-        APPLICATION_JSON_UTF8_VALUE })
+@RequestMapping(path = "/funds/{fundId}/fundAccounts", produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
 public class FundAccountController {
 
     @Autowired
     FundAccountService fundAccountService;
 
-    @GetMapping
-    public Resources<FundAccountResource> readFundAccounts() {
-        Link link = linkTo(FundAccountController.class).withSelfRel();
+    @RequestMapping(method = RequestMethod.GET)
+    public Resources<FundAccountResource> readFundAccounts(@PathVariable Long fundId) {
+        Link link = linkTo(FundAccountController.class, fundId).withSelfRel();
         return new Resources<FundAccountResource>(
-                new FundAccountResourceAssembler().toResources(fundAccountService.findAll()), link);
+                new FundAccountResourceAssembler().toResources(fundAccountService.findByFundId(fundId)), link);
     }
 
-    @GetMapping("/{fundAccountId}")
-    public FundAccountResource readFundAccount(@PathVariable Long fundAccountId) {
+    @RequestMapping(value = "/{fundAccountId}", method = RequestMethod.GET)
+    public FundAccountResource readFundAccount(@PathVariable Long fundId, @PathVariable Long fundAccountId) {
 
         FundAccount fundAccount = fundAccountService.findOne(fundAccountId);
         FundAccountResource fundAccountResource = new FundAccountResourceAssembler()
                 .toResource(fundAccountService.findOne(fundAccountId));
 
-        List<Portfolio> portfolios = fundAccount.getPortfolios();
-        if (portfolios.size() != 0)
-            fundAccountResource.add(Portfolio.class.getAnnotation(Relation.class).collectionRelation(),
-                    new PortfolioResourceAssembler().toResources(portfolios));
+        fundAccountResource.add(Portfolio.class.getAnnotation(Relation.class).collectionRelation(),
+                new PortfolioResourceAssembler().toResources(fundAccount.getPortfolios()));
         return fundAccountResource;
     }
 
-    @PostMapping
-    public ResponseEntity<?> createFundAccount(@RequestBody CreateFundAccountCommand createFundAccountCommand) {
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<?> createFundAccount(@PathVariable Long fundId,
+            @RequestBody FundAccountCommand fundAccountCommand) {
 
-        FundAccount fundAccount = fundAccountService.addFundAccount(createFundAccountCommand);
+        FundAccount fundAccount = fundAccountService.addFundAccount(fundId, fundAccountCommand);
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setLocation(
-                linkTo(methodOn(FundAccountController.class).readFundAccount(fundAccount.getId())).toUri());
+                linkTo(methodOn(FundAccountController.class).readFundAccount(fundId, fundAccount.getId())).toUri());
         return new ResponseEntity<Object>(fundAccount, responseHeaders, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{fundAccountId}")
+    @RequestMapping(value = "/{fundAccountId}", method = RequestMethod.PUT)
     public FundAccountResource updateFundAccount(@PathVariable Long fundAccountId,
-            @RequestBody UpdateFundAccountCommand updateFundAccountCommand) {
+            @RequestBody FundAccountCommand fundAccount) {
         return new FundAccountResourceAssembler()
-                .toResource(fundAccountService.updateFundAccount(fundAccountId, updateFundAccountCommand));
+                .toResource(fundAccountService.updateFundAccount(fundAccountId, fundAccount));
     }
 
-    @DeleteMapping("/{fundAccountId}")
+    @RequestMapping(value = "/{fundAccountId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteFundAccount(@PathVariable Long fundAccountId) {
         fundAccountService.deleteFundAccount(fundAccountId);
         return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);

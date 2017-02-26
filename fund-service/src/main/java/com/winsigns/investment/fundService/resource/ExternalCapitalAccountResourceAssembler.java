@@ -1,42 +1,25 @@
 package com.winsigns.investment.fundService.resource;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
-import org.springframework.hateoas.core.Relation;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
 import com.winsigns.investment.fundService.controller.ExternalCapitalAccountController;
-import com.winsigns.investment.fundService.controller.FundController;
 import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
-import com.winsigns.investment.fundService.model.ExternalTradeAccount;
-import com.winsigns.investment.fundService.model.Fund;
 
 public class ExternalCapitalAccountResourceAssembler
-        extends ResourceAssemblerSupport<ExternalCapitalAccount, ExternalCapitalAccountResource> {
+		extends ResourceAssemblerSupport<ExternalCapitalAccount, ExternalCapitalAccountResource> {
 
-    public ExternalCapitalAccountResourceAssembler() {
-        super(ExternalCapitalAccountController.class, ExternalCapitalAccountResource.class);
-    }
+	public ExternalCapitalAccountResourceAssembler() {
+		super(ExternalCapitalAccountController.class, ExternalCapitalAccountResource.class);
+	}
 
-    @Override
-    public ExternalCapitalAccountResource toResource(ExternalCapitalAccount externalCapitalAccount) {
+	@Override
+	public ExternalCapitalAccountResource toResource(ExternalCapitalAccount externalCapitalAccount) {
+		return createResourceWithId(externalCapitalAccount.getId(), externalCapitalAccount,
+				externalCapitalAccount.getFund().getId(), externalCapitalAccount.getId());
+	}
 
-        ExternalCapitalAccountResource externalCapitalAccountResource = createResourceWithId(
-                externalCapitalAccount.getId(), externalCapitalAccount);
-
-        externalCapitalAccountResource
-                .add(linkTo(methodOn(FundController.class).readFund(externalCapitalAccount.getFund().getId()))
-                        .withRel(Fund.class.getAnnotation(Relation.class).value()));
-        externalCapitalAccountResource.add(linkTo(methodOn(FundController.class)
-                .readExternalTradeAccounts(externalCapitalAccount.getFund().getId(), externalCapitalAccount.getId()))
-                        .withRel(ExternalTradeAccount.class.getAnnotation(Relation.class).collectionRelation()));
-
-        return externalCapitalAccountResource;
-    }
-
-    @Override
-    protected ExternalCapitalAccountResource instantiateResource(ExternalCapitalAccount entity) {
-        return new ExternalCapitalAccountResource(entity);
-    }
+	@Override
+	protected ExternalCapitalAccountResource instantiateResource(ExternalCapitalAccount entity) {
+		return new ExternalCapitalAccountResource(entity);
+	}
 }
