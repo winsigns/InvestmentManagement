@@ -1,6 +1,6 @@
 package com.winsigns.investment.fundService.command;
 
-public class UpdateFundCommand {
+public class FundCommand {
 
 	// 编码
 	private String code;

@@ -3,7 +3,7 @@ package com.winsigns.investment.fundService.command;
 import com.winsigns.investment.fundService.constant.ExternalCapitalAccountType;
 import com.winsigns.investment.fundService.constant.ExternalOpenOrganization;
 
-public class UpdateExternalCapitalAccountCommand {
+public class ExternalCapitalAccountCommand {
 	// 外部资金账户类型序号
 	private ExternalCapitalAccountType externalCapitalAccountType;
 

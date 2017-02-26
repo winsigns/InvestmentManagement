@@ -12,64 +12,61 @@ import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winsigns.investment.fundService.command.CreateExternalTradeAccountCommand;
-import com.winsigns.investment.fundService.command.UpdateExternalTradeAccountCommand;
+import com.winsigns.investment.fundService.command.ExternalTradeAccountCommand;
 import com.winsigns.investment.fundService.model.ExternalTradeAccount;
 import com.winsigns.investment.fundService.resource.ExternalTradeAccountResource;
 import com.winsigns.investment.fundService.resource.ExternalTradeAccountResourceAssembler;
 import com.winsigns.investment.fundService.service.ExternalTradeAccountService;
 
 @RestController
-@RequestMapping(path = "/external-trade-accounts", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE,
-        APPLICATION_JSON_UTF8_VALUE })
+@RequestMapping(path = "/funds/{fundId}/externalCapitalAccounts/{externalCapitalAccountId}/externalTradeAccounts", produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
 public class ExternalTradeAccountController {
 
     @Autowired
     ExternalTradeAccountService externalTradeAccountService;
 
-    @GetMapping
-    public Resources<ExternalTradeAccountResource> readExternalTradeAccounts() {
-        Link link = linkTo(ExternalTradeAccountController.class).withSelfRel();
-        return new Resources<ExternalTradeAccountResource>(
-                new ExternalTradeAccountResourceAssembler().toResources(externalTradeAccountService.findAll()), link);
+    @RequestMapping(method = RequestMethod.GET)
+    public Resources<ExternalTradeAccountResource> readExternalTradeAccounts(@PathVariable Long fundId,
+            @PathVariable Long externalCapitalAccountId) {
+        Link link = linkTo(ExternalTradeAccountController.class, fundId, externalCapitalAccountId).withSelfRel();
+        return new Resources<ExternalTradeAccountResource>(new ExternalTradeAccountResourceAssembler().toResources(
+                externalTradeAccountService.findByExternalCapitalAccountId(externalCapitalAccountId)), link);
     }
 
-    @GetMapping("/{externalTradeAccountId}")
-    public ExternalTradeAccountResource readExternalTradeAccount(@PathVariable Long externalTradeAccountId) {
+    @RequestMapping(value = "/{externalTradeAccountId}", method = RequestMethod.GET)
+    public ExternalTradeAccountResource readExternalTradeAccount(@PathVariable Long fundId,
+            @PathVariable Long externalCapitalAccountId, @PathVariable Long externalTradeAccountId) {
         return new ExternalTradeAccountResourceAssembler()
                 .toResource(externalTradeAccountService.findOne(externalTradeAccountId));
     }
 
-    @PostMapping
-    public ResponseEntity<?> crreateExternalTradeAccount(
-            @RequestBody CreateExternalTradeAccountCommand createExternalTradeAccountCommand) {
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<?> crreateExternalTradeAccount(@PathVariable Long fundId,
+            @PathVariable Long externalCapitalAccountId,
+            @RequestBody ExternalTradeAccountCommand externalTradeAccountCommand) {
 
-        ExternalTradeAccount externalTradeAccount = externalTradeAccountService
-                .addExternalTradeAccount(createExternalTradeAccountCommand);
+        ExternalTradeAccount externalTradeAccount = externalTradeAccountService.addExternalTradeAccount(fundId,
+                externalCapitalAccountId, externalTradeAccountCommand);
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.setLocation(linkTo(
-                methodOn(ExternalTradeAccountController.class).readExternalTradeAccount(externalTradeAccount.getId()))
-                        .toUri());
+        responseHeaders.setLocation(linkTo(methodOn(ExternalTradeAccountController.class)
+                .readExternalTradeAccount(fundId, externalCapitalAccountId, externalTradeAccount.getId())).toUri());
         return new ResponseEntity<Object>(externalTradeAccount, responseHeaders, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{externalTradeAccountId}")
+    @RequestMapping(value = "/{externalTradeAccountId}", method = RequestMethod.PUT)
     public ExternalTradeAccountResource updateExternalTradeAccount(@PathVariable Long externalTradeAccountId,
-            @RequestBody UpdateExternalTradeAccountCommand updateExternalTradeAccountCommand) {
+            @RequestBody ExternalTradeAccountCommand externalTradeAccountCommand) {
         return new ExternalTradeAccountResourceAssembler().toResource(externalTradeAccountService
-                .updateExternalTradeAccount(externalTradeAccountId, updateExternalTradeAccountCommand));
+                .updateExternalTradeAccount(externalTradeAccountId, externalTradeAccountCommand));
     }
 
-    @DeleteMapping("/{externalTradeAccountId}")
+    @RequestMapping(value = "/{externalTradeAccountId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteExternalTradeAccount(@PathVariable Long externalTradeAccountId) {
         externalTradeAccountService.deleteExternalTradeAccount(externalTradeAccountId);
         return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
