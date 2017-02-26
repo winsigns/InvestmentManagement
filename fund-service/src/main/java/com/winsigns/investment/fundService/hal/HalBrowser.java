@@ -15,6 +15,7 @@
  */
 package com.winsigns.investment.fundService.hal;
 
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,61 +25,54 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponents;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * Controller with a few convenience redirects to expose the HAL browser shipped as static content.
- * 
+ *
  * @author Oliver Gierke
  * @soundtrack Miles Davis - So what (Kind of blue)
  */
 @Controller
 public class HalBrowser {
 
-	private static String BROWSER = "/browser";
-	private static String INDEX = "/index.html";
+  private static String BROWSER = "/browser";
+  private static String INDEX = "/index.html";
 
-	/**
-	 * Redirects requests to the API root asking for HTML to the HAL browser.
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = { "/", "" }, method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-	public View index(HttpServletRequest request) {
-		return getRedirectView(request, false);
-	}
+  /**
+   * Redirects requests to the API root asking for HTML to the HAL browser.
+   */
+  @RequestMapping(value = {"/",
+      ""}, method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+  public View index(HttpServletRequest request) {
+    return getRedirectView(request, false);
+  }
 
-	/**
-	 * Redirects to the actual {@code index.html}.
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "/browser", method = RequestMethod.GET)
-	public View browser(HttpServletRequest request) {
-		return getRedirectView(request, request.getRequestURI().endsWith("/browser"));
-	}
+  /**
+   * Redirects to the actual {@code index.html}.
+   */
+  @RequestMapping(value = "/browser", method = RequestMethod.GET)
+  public View browser(HttpServletRequest request) {
+    return getRedirectView(request, request.getRequestURI().endsWith("/browser"));
+  }
 
-	/**
-	 * Returns the View to redirect to to access the HAL browser.
-	 * 
-	 * @param request must not be {@literal null}.
-	 * @param browserRelative
-	 * @return
-	 */
-	private View getRedirectView(HttpServletRequest request, boolean browserRelative) {
+  /**
+   * Returns the View to redirect to to access the HAL browser.
+   *
+   * @param request must not be {@literal null}.
+   */
+  private View getRedirectView(HttpServletRequest request, boolean browserRelative) {
 
-		ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromRequest(request);
+    ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromRequest(request);
 
-		UriComponents components = builder.build();
-		String path = components.getPath() == null ? "" : components.getPath();
+    UriComponents components = builder.build();
+    String path = components.getPath() == null ? "" : components.getPath();
 
-		if (!browserRelative) {
-			builder.path(BROWSER);
-		}
+    if (!browserRelative) {
+      builder.path(BROWSER);
+    }
 
-		builder.path(INDEX);
-		builder.fragment(browserRelative ? path.substring(0, path.lastIndexOf("/browser")) : path);
+    builder.path(INDEX);
+    builder.fragment(browserRelative ? path.substring(0, path.lastIndexOf("/browser")) : path);
 
-		return new RedirectView(builder.build().toUriString());
-	}
+    return new RedirectView(builder.build().toUriString());
+  }
 }
