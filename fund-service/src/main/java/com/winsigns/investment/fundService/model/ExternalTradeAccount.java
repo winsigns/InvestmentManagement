@@ -12,7 +12,7 @@ import com.winsigns.investment.fundService.constant.ExternalTradeAccountType;
 import com.winsigns.investment.fundService.framework.AbstractEntity;
 
 @Entity
-@Relation(value = "externalTradeAccount", collectionRelation = "externalTradeAccounts")
+@Relation(value = "external-trade-account", collectionRelation = "external-trade-accounts")
 public class ExternalTradeAccount extends AbstractEntity {
 
     @Enumerated(EnumType.STRING)

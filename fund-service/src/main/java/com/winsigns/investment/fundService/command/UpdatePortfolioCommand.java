@@ -1,10 +1,10 @@
 package com.winsigns.investment.fundService.command;
 
-public class PortfolioCommand {
+public class UpdatePortfolioCommand {
 	//组合名称
 	private String name;
     
-    public PortfolioCommand setName(String name){
+    public UpdatePortfolioCommand setName(String name){
     	this.name = name;
     	return this;
     }

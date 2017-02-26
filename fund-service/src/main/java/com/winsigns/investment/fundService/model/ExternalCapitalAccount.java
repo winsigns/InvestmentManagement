@@ -22,7 +22,7 @@ import com.winsigns.investment.fundService.constant.ExternalOpenOrganization;
 import com.winsigns.investment.fundService.framework.AbstractEntity;
 
 @Entity
-@Relation(value = "externalCapitalAccount", collectionRelation = "externalCapitalAccounts")
+@Relation(value = "external-capital-account", collectionRelation = "external-capital-accounts")
 public class ExternalCapitalAccount extends AbstractEntity {
     // 外部资金账户类型
     @Enumerated(EnumType.STRING)
