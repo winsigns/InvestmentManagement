@@ -5,7 +5,7 @@ import com.winsigns.investment.fundService.model.FundAccount;
 
 public class FundAccountResource extends HALResponse<FundAccount> {
 
-    public FundAccountResource(FundAccount fundAccount) {
-        super(fundAccount);
-    }
+  public FundAccountResource(FundAccount fundAccount) {
+    super(fundAccount);
+  }
 }

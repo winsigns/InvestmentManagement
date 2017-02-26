@@ -5,7 +5,7 @@ import com.winsigns.investment.fundService.model.ExternalTradeAccount;
 
 public class ExternalTradeAccountResource extends HALResponse<ExternalTradeAccount> {
 
-    public ExternalTradeAccountResource(ExternalTradeAccount externalTradeAccount) {
-        super(externalTradeAccount);
-    }
+  public ExternalTradeAccountResource(ExternalTradeAccount externalTradeAccount) {
+    super(externalTradeAccount);
+  }
 }

@@ -5,9 +5,9 @@ import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
 
 public class ExternalCapitalAccountResource extends HALResponse<ExternalCapitalAccount> {
 
-    public ExternalCapitalAccountResource(ExternalCapitalAccount externalCapitalAccount) {
+  public ExternalCapitalAccountResource(ExternalCapitalAccount externalCapitalAccount) {
 
-        super(externalCapitalAccount);
-    }
+    super(externalCapitalAccount);
+  }
 
 }
