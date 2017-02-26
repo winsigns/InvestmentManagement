@@ -13,47 +13,58 @@ import com.winsigns.investment.fundService.repository.ExternalTradeAccountReposi
 @Service
 public class ExternalTradeAccountService {
 
-	@Autowired
-	private ExternalCapitalAccountRepository externalCapitalAccountRepository;
+    @Autowired
+    private ExternalCapitalAccountRepository externalCapitalAccountRepository;
 
-	@Autowired
-	private ExternalTradeAccountRepository externalTradeAccountRepository;
+    @Autowired
+    private ExternalTradeAccountRepository externalTradeAccountRepository;
 
-	public ExternalTradeAccount findOne(Long externalTradeAccountId) {
-		return externalTradeAccountRepository.findOne(externalTradeAccountId);
-	}
+    public ExternalTradeAccount findOne(Long externalTradeAccountId) {
+        return externalTradeAccountRepository.findOne(externalTradeAccountId);
+    }
 
-	public Collection<ExternalTradeAccount> findByExternalCapitalAccountId(Long externalCapitalAccountId) {
-		return externalTradeAccountRepository.findByExternalCapitalAccountId(externalCapitalAccountId);
-	}
+    public Collection<ExternalTradeAccount> findByExternalCapitalAccountId(Long externalCapitalAccountId) {
+        return externalTradeAccountRepository.findByExternalCapitalAccountId(externalCapitalAccountId);
+    }
 
-	public ExternalTradeAccount addExternalTradeAccount(Long fundId, Long externalCapitalAccountId,
-			ExternalTradeAccountCommand externalTradeAccountCommand) {
+    public ExternalTradeAccount addExternalTradeAccount(Long fundId, Long externalCapitalAccountId,
+            ExternalTradeAccountCommand externalTradeAccountCommand) {
 
-		ExternalTradeAccount externalTradeAccount = new ExternalTradeAccount();
+        ExternalTradeAccount externalTradeAccount = new ExternalTradeAccount();
 
-		externalTradeAccount
-				.setExternalCapitalAccount(externalCapitalAccountRepository.findOne(externalCapitalAccountId));
+        externalTradeAccount
+                .setExternalCapitalAccount(externalCapitalAccountRepository.findOne(externalCapitalAccountId));
 
-		externalTradeAccount.setExternalTradeAccount(externalTradeAccountCommand.getExternalTradeAccount());
-		externalTradeAccount.setExternalTradeAccountType(externalTradeAccountCommand.getExternalTradeAccountType());
+        externalTradeAccount.setExternalTradeAccount(externalTradeAccountCommand.getExternalTradeAccount());
+        externalTradeAccount.setExternalTradeAccountType(externalTradeAccountCommand.getExternalTradeAccountType());
 
-		return externalTradeAccountRepository.save(externalTradeAccount);
-	}
+        return externalTradeAccountRepository.save(externalTradeAccount);
+    }
 
-	public ExternalTradeAccount updateExternalTradeAccount(Long externalTradeAccountId,
-			ExternalTradeAccountCommand externalTradeAccountCommand) {
+    public ExternalTradeAccount updateExternalTradeAccount(Long externalTradeAccountId,
+            ExternalTradeAccountCommand externalTradeAccountCommand) {
 
-		ExternalTradeAccount externalTradeAccount = externalTradeAccountRepository.findOne(externalTradeAccountId);
+        externalTradeAccount.setAccountNo(createExternalTradeAccountCommand.getAccountNo());
+        externalTradeAccount
+                .setExternalTradeAccountType(createExternalTradeAccountCommand.getExternalTradeAccountType());
 
-		externalTradeAccount.setExternalTradeAccount(externalTradeAccountCommand.getExternalTradeAccount());
-		externalTradeAccount.setExternalTradeAccountType(externalTradeAccountCommand.getExternalTradeAccountType());
+        externalTradeAccount.setExternalTradeAccount(externalTradeAccountCommand.getExternalTradeAccount());
+        externalTradeAccount.setExternalTradeAccountType(externalTradeAccountCommand.getExternalTradeAccountType());
 
-		return externalTradeAccountRepository.save(externalTradeAccount);
-	}
+        return externalTradeAccountRepository.save(externalTradeAccount);
+    }
 
-	public void deleteExternalTradeAccount(Long externalTradeAccountId) {
-		externalTradeAccountRepository.delete(externalTradeAccountId);
-	}
+    ExternalTradeAccount externalTradeAccount = externalTradeAccountRepository.findOne(externalTradeAccountId);
+
+    if(externalTradeAccount==null)return null;
+
+    externalTradeAccount.setAccountNo(externalTradeAccountCommand.getAccountNo());externalTradeAccount.setExternalTradeAccountType(externalTradeAccountCommand.getExternalTradeAccountType());
+
+    return externalTradeAccountRepository.save(externalTradeAccount);
+    }
+
+    public void deleteExternalTradeAccount(Long externalTradeAccountId) {
+        externalTradeAccountRepository.delete(externalTradeAccountId);
+    }
 
 }

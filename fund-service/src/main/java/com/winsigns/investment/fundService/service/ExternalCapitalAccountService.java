@@ -50,9 +50,9 @@ public class ExternalCapitalAccountService {
 		return externalCapitalAccountRepository.save(externalCapitalAccount);
 	}
 
-	public void deleteExternalCapitalAccount(Long externalCapitalAccountId) {
-		externalCapitalAccountRepository.delete(externalCapitalAccountId);
-	}
+        externalCapitalAccount.setExternalCapitalAccountType(externalCapitalAccountType);
+        externalCapitalAccount.setAccountNo(createExternalCapitalAccountCommand.getAccountNo());
+        externalCapitalAccount.setExternalOpenOrganization(externalOpenOrganization);
 
 	public ExternalCapitalAccount updateExternalCapitalAccount(Long externalCapitalAccountId,
 			ExternalCapitalAccountCommand externalCapitalAccountCommand) {
@@ -69,7 +69,17 @@ public class ExternalCapitalAccountService {
 		externalCapitalAccount.setExternalCapitalAccount(externalCapitalAccountCommand.getExternalCapitalAccount());
 		externalCapitalAccount.setExternalOpenOrganization(externalOpenOrganization);
 
-		return externalCapitalAccountRepository.save(externalCapitalAccount);
-	}
+        ExternalOpenOrganization externalOpenOrganization = externalCapitalAccountCommand.getExternalOpenOrganization();
+
+        externalCapitalAccount.setExternalCapitalAccountType(externalCapitalAccountType);
+        externalCapitalAccount.setAccountNo(externalCapitalAccountCommand.getAccountNo());
+        externalCapitalAccount.setExternalOpenOrganization(externalOpenOrganization);
+
+        return externalCapitalAccountRepository.save(externalCapitalAccount);
+    }
+
+    public void deleteExternalCapitalAccount(Long externalCapitalAccountId) {
+        externalCapitalAccountRepository.delete(externalCapitalAccountId);
+    }
 
 }

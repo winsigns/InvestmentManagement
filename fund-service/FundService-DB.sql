@@ -39,7 +39,7 @@ CREATE TABLE portfolio
 CREATE TABLE external_capital_account 
 (
 	id BIGINT NOT NULL auto_increment, 
-	external_capital_account VARCHAR(255), 
+	account_no VARCHAR(255), 
 	fund_id BIGINT NOT NULL, 
 	external_capital_account_type VARCHAR(255),
 	external_open_organization VARCHAR(255),
@@ -50,7 +50,7 @@ CREATE TABLE external_capital_account
 CREATE TABLE external_trade_account 
 (
 	id BIGINT NOT NULL auto_increment, 
-	external_trade_account VARCHAR(255), 
+	account_no VARCHAR(255), 
 	external_trade_account_type VARCHAR(255), 
 	external_capital_account_id BIGINT NOT NULL,
 	PRIMARY KEY (id)

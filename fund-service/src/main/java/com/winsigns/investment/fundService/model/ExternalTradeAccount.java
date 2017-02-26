@@ -8,44 +8,44 @@ import javax.persistence.ManyToOne;
 import org.springframework.hateoas.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winsigns.investment.fundService.framework.AbstractEntity;
 import com.winsigns.investment.fundService.constant.ExternalTradeAccountType;
+import com.winsigns.investment.fundService.framework.AbstractEntity;
 
 @Entity
 @Relation(value = "externalTradeAccount", collectionRelation = "externalTradeAccounts")
 public class ExternalTradeAccount extends AbstractEntity {
 
-	@Enumerated(EnumType.STRING)
-	private ExternalTradeAccountType externalTradeAccountType;
+    @Enumerated(EnumType.STRING)
+    private ExternalTradeAccountType externalTradeAccountType;
 
-	private String externalTradeAccount;
+    private String accountNo;
 
-	@ManyToOne
-	@JsonIgnore
-	private ExternalCapitalAccount externalCapitalAccount;
+    @ManyToOne
+    @JsonIgnore
+    private ExternalCapitalAccount externalCapitalAccount;
 
-	public ExternalTradeAccountType getExternalTradeAccountType() {
-		return externalTradeAccountType;
-	}
+    public ExternalTradeAccountType getExternalTradeAccountType() {
+        return externalTradeAccountType;
+    }
 
-	public void setExternalTradeAccountType(ExternalTradeAccountType externalTradeAccountType) {
-		this.externalTradeAccountType = externalTradeAccountType;
-	}
+    public void setExternalTradeAccountType(ExternalTradeAccountType externalTradeAccountType) {
+        this.externalTradeAccountType = externalTradeAccountType;
+    }
 
-	public String getExternalTradeAccount() {
-		return externalTradeAccount;
-	}
+    public String getAccountNo() {
+        return accountNo;
+    }
 
-	public void setExternalTradeAccount(String externalTradeAccount) {
-		this.externalTradeAccount = externalTradeAccount;
-	}
+    public void setAccountNo(String externalTradeAccount) {
+        this.accountNo = externalTradeAccount;
+    }
 
-	public ExternalCapitalAccount getExternalCapitalAccount() {
-		return externalCapitalAccount;
-	}
+    public ExternalCapitalAccount getExternalCapitalAccount() {
+        return externalCapitalAccount;
+    }
 
-	public void setExternalCapitalAccount(ExternalCapitalAccount externalCapitalAccount) {
-		this.externalCapitalAccount = externalCapitalAccount;
-	}
+    public void setExternalCapitalAccount(ExternalCapitalAccount externalCapitalAccount) {
+        this.externalCapitalAccount = externalCapitalAccount;
+    }
 
 }
