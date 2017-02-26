@@ -5,7 +5,7 @@ package com.winsigns.investment.inventoryService.model;
 
 import javax.persistence.Entity;
 
-import com.winsigns.investment.frame.model.AbstractEntity;
+import com.winsigns.investment.inventoryService.framework.AbstractEntity;
 
 @Entity
 public class ExternalCapitalAccountCapital extends AbstractEntity {
