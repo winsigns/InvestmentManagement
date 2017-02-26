@@ -54,7 +54,6 @@ public class ExternalCapitalAccountService {
 
         externalCapitalAccount.setExternalCapitalAccountType(externalCapitalAccountType);
         externalCapitalAccount
-                .setExternalCapitalAccount(createExternalCapitalAccountCommand.getExternalCapitalAccount());
         externalCapitalAccount.setExternalOpenOrganization(externalOpenOrganization);
 
         return externalCapitalAccountRepository.save(externalCapitalAccount);
@@ -75,7 +74,6 @@ public class ExternalCapitalAccountService {
         ExternalOpenOrganization externalOpenOrganization = externalCapitalAccountCommand.getExternalOpenOrganization();
 
         externalCapitalAccount.setExternalCapitalAccountType(externalCapitalAccountType);
-        externalCapitalAccount.setExternalCapitalAccount(externalCapitalAccountCommand.getExternalCapitalAccount());
         externalCapitalAccount.setExternalOpenOrganization(externalOpenOrganization);
 
         return externalCapitalAccountRepository.save(externalCapitalAccount);

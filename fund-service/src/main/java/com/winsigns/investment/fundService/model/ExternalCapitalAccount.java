@@ -38,7 +38,7 @@ public class ExternalCapitalAccount extends AbstractEntity {
     private Fund fund;
 
     // 账号
-    private String externalCapitalAccount;
+    private String accountNo;
 
     // 外部交易账户
     @OneToMany(mappedBy = "externalCapitalAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -69,12 +69,12 @@ public class ExternalCapitalAccount extends AbstractEntity {
         this.fund = fund;
     }
 
-    public String getExternalCapitalAccount() {
-        return externalCapitalAccount;
+    public String getAccountNo() {
+        return accountNo;
     }
 
-    public void setExternalCapitalAccount(String externalCapitalAccount) {
-        this.externalCapitalAccount = externalCapitalAccount;
+    public void setAccountNo(String externalCapitalAccount) {
+        this.accountNo = externalCapitalAccount;
     }
 
     public List<ExternalTradeAccount> getExternalTradeAccounts() {
