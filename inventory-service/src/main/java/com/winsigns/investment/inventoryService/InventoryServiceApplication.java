@@ -6,11 +6,11 @@ import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType;
 
 @SpringBootApplication
-@EnableHypermediaSupport(type = {HypermediaType.HAL})
+@EnableHypermediaSupport(type = { HypermediaType.HAL })
 public class InventoryServiceApplication {
 
-  public static void main(String[] args) {
+	public static void main(String[] args) {
 
-    SpringApplication.run(InventoryServiceApplication.class, args);
-  }
+		SpringApplication.run(InventoryServiceApplication.class, args);
+	}
 }
