@@ -1,23 +1,33 @@
 version: '2'
-
 services:
 
   mariadb:
     image: mariadb
+    container_name: mariadb
     ports:
-      - "3306:3306"
+      - 3306:3306
     environment:
       MYSQL_USER: mariadb
       MYSQL_PASSWORD: mariadb
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: investmentdb
 
+  kafka:
+    image: spotify/kafka
+    container_name: kafka
+    ports:
+      - 9092:9092
+      - 2181:2181
+    environment:
+      ADVERTISED_HOST=127.0.0.1
+      ADVERTISED_PORT=9092
+
   edge-service:
     build: edge-service
     links:
       - fund-service:fund-service
     ports:
-      - "8080:8080"
+      - 8080:8080
     environment:
       SPRING_PROFILES_ACTIVE: docker
   
@@ -27,7 +37,7 @@ services:
     links:
       - mariadb:mariadb
     ports:
-      - "10010:10010"
+      - 10010:10010
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
@@ -38,7 +48,7 @@ services:
     links:
       - fund-service:fund-service
     ports:
-      - "10011:10011"
+      - 10011:10011
     environment:
  
   invest-service:
@@ -46,7 +56,7 @@ services:
     links:
       - fund-service:fund-service
     ports:
-      - "10012:10012"
+      - 10012:10012
     environment:
       SPRING_PROFILES_ACTIVE: default
 

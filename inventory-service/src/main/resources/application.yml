@@ -1,6 +1,14 @@
 server:
   port: 10011
 
+kafka:
+  stream:
+    appid: fund-service-kafka-stream
+  broker:
+    host: kafka:9092
+  zookeeper:
+    host: kafka:2181
+
 spring:
   profiles: default
   datasource:
@@ -13,6 +21,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
+
+management:
+  security:
+    enabled: false
+
 ---
 
 server:
