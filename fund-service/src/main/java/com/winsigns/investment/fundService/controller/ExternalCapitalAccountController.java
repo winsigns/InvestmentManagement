@@ -112,7 +112,7 @@ public class ExternalCapitalAccountController {
 
   // 在指定外部资金账户下创建外部交易账户
   @PostMapping("/{externalCapitalAccountId}/external-trade-accounts")
-  public ResponseEntity<?> crreateExternalTradeAccount(@PathVariable Long externalCapitalAccountId,
+  public ResponseEntity<?> createExternalTradeAccount(@PathVariable Long externalCapitalAccountId,
       @RequestBody CreateExternalTradeAccountCommand createExternalTradeAccountCommand) {
 
     createExternalTradeAccountCommand.setExternalCapitalAccountId(externalCapitalAccountId);
