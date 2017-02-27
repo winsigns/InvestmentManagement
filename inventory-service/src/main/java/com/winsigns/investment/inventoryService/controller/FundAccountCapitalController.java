@@ -35,64 +35,69 @@ import com.winsigns.investment.inventoryService.service.FundAccountCapitalDetail
 import com.winsigns.investment.inventoryService.service.FundAccountCapitalService;
 
 @RestController
-@RequestMapping(path = "/fa-capitals", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE,
-        APPLICATION_JSON_UTF8_VALUE })
+@RequestMapping(path = "/fa-capitals",
+    produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
 public class FundAccountCapitalController {
 
-    @Autowired
-    FundAccountCapitalService fundAccountCapitalService;
+  @Autowired
+  FundAccountCapitalService fundAccountCapitalService;
 
-    @Autowired
-    FundAccountCapitalDetailService fundAccountCapitalDetailService;
+  @Autowired
+  FundAccountCapitalDetailService fundAccountCapitalDetailService;
 
-    @GetMapping
-    public Resources<FundAccountCapitalResource> readFundAccountCapitals() {
-        Link link = linkTo(FundAccountCapitalController.class).withSelfRel();
-        return new Resources<FundAccountCapitalResource>(
-                new FundAccountCapitalResourceAssembler().toResources(fundAccountCapitalService.findAll()), link);
-    }
+  @GetMapping
+  public Resources<FundAccountCapitalResource> readFundAccountCapitals() {
+    Link link = linkTo(FundAccountCapitalController.class).withSelfRel();
+    return new Resources<FundAccountCapitalResource>(
+        new FundAccountCapitalResourceAssembler().toResources(fundAccountCapitalService.findAll()),
+        link);
+  }
 
-    @GetMapping("/{faCapitalId}")
-    public FundAccountCapitalResource readFundAccountCapital(@PathVariable Long faCapitalId) {
-        FundAccountCapital fundAccountCapital = fundAccountCapitalService.findOne(faCapitalId);
-        FundAccountCapitalResource fundAccountCapitalResource = new FundAccountCapitalResourceAssembler()
-                .toResource(fundAccountCapital);
+  @GetMapping("/{faCapitalId}")
+  public FundAccountCapitalResource readFundAccountCapital(@PathVariable Long faCapitalId) {
+    FundAccountCapital fundAccountCapital = fundAccountCapitalService.findOne(faCapitalId);
+    FundAccountCapitalResource fundAccountCapitalResource =
+        new FundAccountCapitalResourceAssembler().toResource(fundAccountCapital);
 
-        List<FundAccountCapitalDetail> fundAccountCapitalDetails = fundAccountCapital.getFundAccountCapitalDetails();
-        if (fundAccountCapitalDetails.size() != 0)
-            fundAccountCapitalResource.add(
-                    FundAccountCapitalDetail.class.getAnnotation(Relation.class).collectionRelation(),
-                    new FundAccountCapitalDetailResourceAssembler().toResources(fundAccountCapitalDetails));
+    List<FundAccountCapitalDetail> fundAccountCapitalDetails =
+        fundAccountCapital.getFundAccountCapitalDetails();
+    if (fundAccountCapitalDetails.size() != 0)
+      fundAccountCapitalResource.add(
+          FundAccountCapitalDetail.class.getAnnotation(Relation.class).collectionRelation(),
+          new FundAccountCapitalDetailResourceAssembler().toResources(fundAccountCapitalDetails));
 
-        return fundAccountCapitalResource;
-    }
+    return fundAccountCapitalResource;
+  }
 
-    @GetMapping("/{faCapitalId}/fa-capital-details")
-    public Resources<FundAccountCapitalDetailResource> readFundAccountCapitalDetails(@PathVariable Long faCapitalId) {
-        Link link = linkTo(methodOn(FundAccountCapitalController.class).readFundAccountCapitalDetails(faCapitalId))
-                .withSelfRel();
-        return new Resources<FundAccountCapitalDetailResource>(new FundAccountCapitalDetailResourceAssembler()
-                .toResources(fundAccountCapitalDetailService.findByFACapitalId(faCapitalId)), link);
-    }
+  @GetMapping("/{faCapitalId}/fa-capital-details")
+  public Resources<FundAccountCapitalDetailResource> readFundAccountCapitalDetails(
+      @PathVariable Long faCapitalId) {
+    Link link = linkTo(
+        methodOn(FundAccountCapitalController.class).readFundAccountCapitalDetails(faCapitalId))
+            .withSelfRel();
+    return new Resources<FundAccountCapitalDetailResource>(
+        new FundAccountCapitalDetailResourceAssembler()
+            .toResources(fundAccountCapitalDetailService.findByFACapitalId(faCapitalId)),
+        link);
+  }
 
-    @PostMapping
-    public ResponseEntity<?> createFundAccountCapital(
-            @RequestBody CreateFundAccountCapitalCommand createFundAccountCapitalCommand) {
+  @PostMapping
+  public ResponseEntity<?> createFundAccountCapital(
+      @RequestBody CreateFundAccountCapitalCommand createFundAccountCapitalCommand) {
 
-        FundAccountCapital fundAccountCapital = fundAccountCapitalService
-                .addFundAccountCapital(createFundAccountCapitalCommand);
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.setLocation(
-                linkTo(methodOn(FundAccountCapitalController.class).readFundAccountCapital(fundAccountCapital.getId()))
-                        .toUri());
-        return new ResponseEntity<Object>(fundAccountCapital, responseHeaders, HttpStatus.CREATED);
-    }
+    FundAccountCapital fundAccountCapital =
+        fundAccountCapitalService.addFundAccountCapital(createFundAccountCapitalCommand);
+    HttpHeaders responseHeaders = new HttpHeaders();
+    responseHeaders.setLocation(linkTo(methodOn(FundAccountCapitalController.class)
+        .readFundAccountCapital(fundAccountCapital.getId())).toUri());
+    return new ResponseEntity<Object>(fundAccountCapital, responseHeaders, HttpStatus.CREATED);
+  }
 
-    @PutMapping("/{faCapitalId}/set-investment-limit")
-    public FundAccountCapitalResource setInvestmentLimit(@PathVariable Long faCapitalId,
-            @RequestBody SetInvestmentLimitCommand setInvestmentLimitCommand) {
-        FundAccountCapital fundAccountCapital = fundAccountCapitalService.setInvestmentLimit(faCapitalId,
-                setInvestmentLimitCommand);
-        return readFundAccountCapital(fundAccountCapital.getId());
-    }
+  @PutMapping("/{faCapitalId}/set-investment-limit")
+  public FundAccountCapitalResource setInvestmentLimit(@PathVariable Long faCapitalId,
+      @RequestBody SetInvestmentLimitCommand setInvestmentLimitCommand) {
+    FundAccountCapital fundAccountCapital =
+        fundAccountCapitalService.setInvestmentLimit(faCapitalId, setInvestmentLimitCommand);
+    return readFundAccountCapital(fundAccountCapital.getId());
+  }
 }

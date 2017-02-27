@@ -19,125 +19,134 @@ import com.winsigns.investment.inventoryService.repository.FundAccountCapitalRep
 
 @Service
 public class FundAccountCapitalDetailService {
+  @Autowired
+  private FundAccountCapitalDetailRepository fundAccountCapitalDetailRepository;
 
-    @Autowired
-    private FundAccountCapitalDetailRepository fundAccountCapitalDetailRepository;
+  @Autowired
+  private FundAccountCapitalRepository fundAccountCapitalRepository;
 
-    @Autowired
-    private FundAccountCapitalRepository fundAccountCapitalRepository;
+  @Autowired
+  private ECACashPoolRepository ecaCashPoolRepository;
 
-    @Autowired
-    private ECACashPoolRepository ecaCashPoolRepository;
+  public Collection<FundAccountCapitalDetail> findAll() {
+    return fundAccountCapitalDetailRepository.findAll();
+  }
 
-    public Collection<FundAccountCapitalDetail> findAll() {
-        return fundAccountCapitalDetailRepository.findAll();
+  public Collection<FundAccountCapitalDetail> findByFACapitalId(Long faCapitalId) {
+
+    FundAccountCapital fundAccountCapital = fundAccountCapitalRepository.findOne(faCapitalId);
+    if (fundAccountCapital == null)
+      return null;
+
+    return fundAccountCapitalDetailRepository.findByFundAccountCapital(fundAccountCapital);
+  }
+
+  public FundAccountCapitalDetail findOne(Long fundAccountCapitalDetailId) {
+    return fundAccountCapitalDetailRepository.findOne(fundAccountCapitalDetailId);
+  }
+
+  public FundAccountCapitalDetail addFundAccountCapitalDetail(
+      CreateFundAccountCapitalDetailCommand crtFundAccountCapitalDetailCmd) {
+
+    FundAccountCapital fundAccountCapital = fundAccountCapitalRepository
+        .findOne(crtFundAccountCapitalDetailCmd.getFundAccountCapitalId());
+    if (fundAccountCapital == null)
+      return null;
+
+    FundAccountCapitalDetail fundAccountCapitalDetail =
+        fundAccountCapitalDetailRepository.findByFundAccountCapitalAndExternalCapitalAccountId(
+            fundAccountCapital, crtFundAccountCapitalDetailCmd.getExternalCapitalAccountId());
+
+    if (fundAccountCapitalDetail == null) {
+      fundAccountCapitalDetail = new FundAccountCapitalDetail();
+
+      fundAccountCapitalDetail.setFundAccountCapital(fundAccountCapital);
+      fundAccountCapitalDetail.setExternalCapitalAccountId(
+          crtFundAccountCapitalDetailCmd.getExternalCapitalAccountId());
+      fundAccountCapitalDetail.setCash(0.0);
+
+      fundAccountCapitalDetail = fundAccountCapitalDetailRepository.save(fundAccountCapitalDetail);
     }
+    return fundAccountCapitalDetail;
+  }
 
-    public Collection<FundAccountCapitalDetail> findByFACapitalId(Long faCapitalId) {
+  public FundAccountCapitalDetail assignFrom(Long faCapitalDetailId,
+      AssignAccountCommand assignAccountCommand) {
+    FundAccountCapitalDetail fundAccountCapitalDetail =
+        fundAccountCapitalDetailRepository.findOne(faCapitalDetailId);
+    if (fundAccountCapitalDetail == null)
+      return null;
 
-        FundAccountCapital fundAccountCapital = fundAccountCapitalRepository.findOne(faCapitalId);
-        if (fundAccountCapital == null)
-            return null;
+    fundAccountCapitalDetail
+        .setCash(fundAccountCapitalDetail.getCash() + assignAccountCommand.getAssignedCash());
+    fundAccountCapitalDetail = fundAccountCapitalDetailRepository.save(fundAccountCapitalDetail);
 
-        return fundAccountCapitalDetailRepository.findByFundAccountCapital(fundAccountCapital);
-    }
+    ECACashPool ecaCashPool =
+        ecaCashPoolRepository.findOne(assignAccountCommand.getEcaCashPoolId());
+    if (ecaCashPool == null)
+      return null;
 
-    public FundAccountCapitalDetail findOne(Long fundAccountCapitalDetailId) {
-        return fundAccountCapitalDetailRepository.findOne(fundAccountCapitalDetailId);
-    }
+    ecaCashPool.setUnassignedCapital(
+        ecaCashPool.getUnassignedCapital() - assignAccountCommand.getAssignedCash());
+    ecaCashPoolRepository.save(ecaCashPool);
 
-    public FundAccountCapitalDetail addFundAccountCapitalDetail(
-            CreateFundAccountCapitalDetailCommand crtFundAccountCapitalDetailCmd) {
+    return fundAccountCapitalDetail;
+  }
 
-        FundAccountCapital fundAccountCapital = fundAccountCapitalRepository
-                .findOne(crtFundAccountCapitalDetailCmd.getFundAccountCapitalId());
-        if (fundAccountCapital == null)
-            return null;
+  public FundAccountCapitalDetail assignTo(Long faCapitalDetailId,
+      AssignAccountCommand assignAccountCommand) {
+    FundAccountCapitalDetail fundAccountCapitalDetail =
+        fundAccountCapitalDetailRepository.findOne(faCapitalDetailId);
+    if (fundAccountCapitalDetail == null)
+      return null;
 
-        FundAccountCapitalDetail fundAccountCapitalDetail = fundAccountCapitalDetailRepository
-                .findByFundAccountCapitalAndExternalCapitalAccountId(fundAccountCapital,
-                        crtFundAccountCapitalDetailCmd.getExternalCapitalAccountId());
+    fundAccountCapitalDetail
+        .setCash(fundAccountCapitalDetail.getCash() - assignAccountCommand.getAssignedCash());
+    fundAccountCapitalDetail = fundAccountCapitalDetailRepository.save(fundAccountCapitalDetail);
 
-        if (fundAccountCapitalDetail == null) {
-            fundAccountCapitalDetail = new FundAccountCapitalDetail();
+    ECACashPool ecaCashPool =
+        ecaCashPoolRepository.findOne(assignAccountCommand.getEcaCashPoolId());
+    if (ecaCashPool == null)
+      return null;
 
-            fundAccountCapitalDetail.setFundAccountCapital(fundAccountCapital);
-            fundAccountCapitalDetail
-                    .setExternalCapitalAccountId(crtFundAccountCapitalDetailCmd.getExternalCapitalAccountId());
-            fundAccountCapitalDetail.setCash(0.0);
+    ecaCashPool.setUnassignedCapital(
+        ecaCashPool.getUnassignedCapital() + assignAccountCommand.getAssignedCash());
+    ecaCashPoolRepository.save(ecaCashPool);
 
-            fundAccountCapitalDetail = fundAccountCapitalDetailRepository.save(fundAccountCapitalDetail);
-        }
-        return fundAccountCapitalDetail;
-    }
+    return fundAccountCapitalDetail;
+  }
 
-    public FundAccountCapitalDetail assignFrom(Long faCapitalDetailId, AssignAccountCommand assignAccountCommand) {
-        FundAccountCapitalDetail fundAccountCapitalDetail = fundAccountCapitalDetailRepository
-                .findOne(faCapitalDetailId);
-        if (fundAccountCapitalDetail == null)
-            return null;
+  @Transactional
+  public Collection<FundAccountCapitalDetail> enfeoff(Long dstFACapitalDetailId,
+      Long srcFACapitalDetailId, Double assignedCash) {
 
-        fundAccountCapitalDetail.setCash(fundAccountCapitalDetail.getCash() + assignAccountCommand.getAssignedCash());
-        fundAccountCapitalDetail = fundAccountCapitalDetailRepository.save(fundAccountCapitalDetail);
+    List<FundAccountCapitalDetail> result = new ArrayList<FundAccountCapitalDetail>();
 
-        ECACashPool ecaCashPool = ecaCashPoolRepository.findOne(assignAccountCommand.getEcaCashPoolId());
-        if (ecaCashPool == null)
-            return null;
+    FundAccountCapitalDetail dstFundAccountCapitalDetail =
+        fundAccountCapitalDetailRepository.findOne(dstFACapitalDetailId);
+    if (dstFundAccountCapitalDetail == null)
+      return null;
 
-        ecaCashPool.setUnassignedCapital(ecaCashPool.getUnassignedCapital() - assignAccountCommand.getAssignedCash());
-        ecaCashPoolRepository.save(ecaCashPool);
+    FundAccountCapitalDetail srcFundAccountCapitalDetail =
+        fundAccountCapitalDetailRepository.findOne(srcFACapitalDetailId);
+    if (srcFundAccountCapitalDetail == null)
+      return null;
 
-        return fundAccountCapitalDetail;
-    }
+    if (dstFundAccountCapitalDetail.getFundAccountCapital()
+        .getCurrency() != srcFundAccountCapitalDetail.getFundAccountCapital().getCurrency())
+      return null;
 
-    public FundAccountCapitalDetail assignTo(Long faCapitalDetailId, AssignAccountCommand assignAccountCommand) {
-        FundAccountCapitalDetail fundAccountCapitalDetail = fundAccountCapitalDetailRepository
-                .findOne(faCapitalDetailId);
-        if (fundAccountCapitalDetail == null)
-            return null;
+    dstFundAccountCapitalDetail.setCash(dstFundAccountCapitalDetail.getCash() + assignedCash);
+    dstFundAccountCapitalDetail =
+        fundAccountCapitalDetailRepository.save(dstFundAccountCapitalDetail);
+    result.add(dstFundAccountCapitalDetail);
 
-        fundAccountCapitalDetail.setCash(fundAccountCapitalDetail.getCash() - assignAccountCommand.getAssignedCash());
-        fundAccountCapitalDetail = fundAccountCapitalDetailRepository.save(fundAccountCapitalDetail);
+    srcFundAccountCapitalDetail.setCash(srcFundAccountCapitalDetail.getCash() - assignedCash);
+    srcFundAccountCapitalDetail =
+        fundAccountCapitalDetailRepository.save(srcFundAccountCapitalDetail);
+    result.add(srcFundAccountCapitalDetail);
 
-        ECACashPool ecaCashPool = ecaCashPoolRepository.findOne(assignAccountCommand.getEcaCashPoolId());
-        if (ecaCashPool == null)
-            return null;
-
-        ecaCashPool.setUnassignedCapital(ecaCashPool.getUnassignedCapital() + assignAccountCommand.getAssignedCash());
-        ecaCashPoolRepository.save(ecaCashPool);
-
-        return fundAccountCapitalDetail;
-    }
-
-    @Transactional
-    public Collection<FundAccountCapitalDetail> enfeoff(Long dstFACapitalDetailId, Long srcFACapitalDetailId,
-            Double assignedCash) {
-
-        List<FundAccountCapitalDetail> result = new ArrayList<FundAccountCapitalDetail>();
-
-        FundAccountCapitalDetail dstFundAccountCapitalDetail = fundAccountCapitalDetailRepository
-                .findOne(dstFACapitalDetailId);
-        if (dstFundAccountCapitalDetail == null)
-            return null;
-
-        FundAccountCapitalDetail srcFundAccountCapitalDetail = fundAccountCapitalDetailRepository
-                .findOne(srcFACapitalDetailId);
-        if (srcFundAccountCapitalDetail == null)
-            return null;
-
-        if (dstFundAccountCapitalDetail.getFundAccountCapital().getCurrency() != srcFundAccountCapitalDetail
-                .getFundAccountCapital().getCurrency())
-            return null;
-
-        dstFundAccountCapitalDetail.setCash(dstFundAccountCapitalDetail.getCash() + assignedCash);
-        dstFundAccountCapitalDetail = fundAccountCapitalDetailRepository.save(dstFundAccountCapitalDetail);
-        result.add(dstFundAccountCapitalDetail);
-
-        srcFundAccountCapitalDetail.setCash(srcFundAccountCapitalDetail.getCash() - assignedCash);
-        srcFundAccountCapitalDetail = fundAccountCapitalDetailRepository.save(srcFundAccountCapitalDetail);
-        result.add(srcFundAccountCapitalDetail);
-
-        return result;
-    }
+    return result;
+  }
 
 }

@@ -3,34 +3,35 @@ package com.winsigns.investment.inventoryService.command;
 import java.util.Currency;
 
 public class CreateFundAccountCapitalCommand {
-    private Long fundAccountId;
 
-    private String externalCapitalAccountType;
+  private Long fundAccountId;
 
-    private Currency currency;
+  private String externalCapitalAccountType;
 
-    public Long getFundAccountId() {
-        return fundAccountId;
-    }
+  private Currency currency;
 
-    public void setFundAccountId(Long fundAccountId) {
-        this.fundAccountId = fundAccountId;
-    }
+  public Long getFundAccountId() {
+    return fundAccountId;
+  }
 
-    public String getExternalCapitalAccountType() {
-        return externalCapitalAccountType;
-    }
+  public void setFundAccountId(Long fundAccountId) {
+    this.fundAccountId = fundAccountId;
+  }
 
-    public void setExternalCapitalAccountTypeId(String externalCapitalAccountType) {
-        this.externalCapitalAccountType = externalCapitalAccountType;
-    }
+  public String getExternalCapitalAccountType() {
+    return externalCapitalAccountType;
+  }
 
-    public Currency getCurrency() {
-        return currency;
-    }
+  public void setExternalCapitalAccountTypeId(String externalCapitalAccountType) {
+    this.externalCapitalAccountType = externalCapitalAccountType;
+  }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
+  public Currency getCurrency() {
+    return currency;
+  }
+
+  public void setCurrency(Currency currency) {
+    this.currency = currency;
+  }
 
 }

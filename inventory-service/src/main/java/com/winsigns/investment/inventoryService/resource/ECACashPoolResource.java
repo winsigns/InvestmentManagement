@@ -5,8 +5,8 @@ import com.winsigns.investment.inventoryService.model.ECACashPool;
 
 public class ECACashPoolResource extends HALResponse<ECACashPool> {
 
-    public ECACashPoolResource(ECACashPool ecaCashPool) {
-        super(ecaCashPool);
-    }
+  public ECACashPoolResource(ECACashPool ecaCashPool) {
+    super(ecaCashPool);
+  }
 
 }

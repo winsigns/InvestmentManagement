@@ -5,8 +5,8 @@ import com.winsigns.investment.inventoryService.model.FundAccountCapital;
 
 public class FundAccountCapitalResource extends HALResponse<FundAccountCapital> {
 
-    public FundAccountCapitalResource(FundAccountCapital fundAccountCapital) {
-        super(fundAccountCapital);
-    }
+  public FundAccountCapitalResource(FundAccountCapital fundAccountCapital) {
+    super(fundAccountCapital);
+  }
 
 }

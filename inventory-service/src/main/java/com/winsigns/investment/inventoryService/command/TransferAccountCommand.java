@@ -3,34 +3,35 @@ package com.winsigns.investment.inventoryService.command;
 import java.util.Currency;
 
 public class TransferAccountCommand {
-    private Currency currency;
 
-    private Double changedCapital;
+  private Currency currency;
 
-    private Long matchEexternalCapitalAccountId;
+  private Double changedCapital;
 
-    public Currency getCurrency() {
-        return currency;
-    }
+  private Long matchEexternalCapitalAccountId;
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
+  public Currency getCurrency() {
+    return currency;
+  }
 
-    public Double getChangedCapital() {
-        return changedCapital;
-    }
+  public void setCurrency(Currency currency) {
+    this.currency = currency;
+  }
 
-    public void setChangedCapital(Double changedCapital) {
-        this.changedCapital = changedCapital;
-    }
+  public Double getChangedCapital() {
+    return changedCapital;
+  }
 
-    public Long getMatchEexternalCapitalAccountId() {
-        return matchEexternalCapitalAccountId;
-    }
+  public void setChangedCapital(Double changedCapital) {
+    this.changedCapital = changedCapital;
+  }
 
-    public void setMatchEexternalCapitalAccountId(Long matchEexternalCapitalAccountId) {
-        this.matchEexternalCapitalAccountId = matchEexternalCapitalAccountId;
-    }
+  public Long getMatchEexternalCapitalAccountId() {
+    return matchEexternalCapitalAccountId;
+  }
+
+  public void setMatchEexternalCapitalAccountId(Long matchEexternalCapitalAccountId) {
+    this.matchEexternalCapitalAccountId = matchEexternalCapitalAccountId;
+  }
 
 }

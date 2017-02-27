@@ -9,6 +9,6 @@ import com.winsigns.investment.inventoryService.model.FundAccountCapital;
 
 @Transactional
 public interface FundAccountCapitalRepository extends JpaRepository<FundAccountCapital, Long> {
-    public FundAccountCapital findByFundAccountIdAndExternalCapitalAccountTypeAndCurrency(Long fundAccountId,
-            String externalCapitalAccountType, Currency currency);
+  public FundAccountCapital findByFundAccountIdAndExternalCapitalAccountTypeAndCurrency(
+      Long fundAccountId, String externalCapitalAccountType, Currency currency);
 }

@@ -12,36 +12,36 @@ import com.winsigns.investment.inventoryService.framework.AbstractEntity;
 @Relation(value = "fa-capital-detail", collectionRelation = "fa-capital-details")
 public class FundAccountCapitalDetail extends AbstractEntity {
 
-    @ManyToOne
-    @JsonIgnore
-    private FundAccountCapital fundAccountCapital;
+  @ManyToOne
+  @JsonIgnore
+  private FundAccountCapital fundAccountCapital;
 
-    private Long externalCapitalAccountId;
+  private Long externalCapitalAccountId;
 
-    private Double cash;
+  private Double cash;
 
-    public FundAccountCapital getFundAccountCapital() {
-        return fundAccountCapital;
-    }
+  public FundAccountCapital getFundAccountCapital() {
+    return fundAccountCapital;
+  }
 
-    public void setFundAccountCapital(FundAccountCapital fundAccountCapital) {
-        this.fundAccountCapital = fundAccountCapital;
-    }
+  public void setFundAccountCapital(FundAccountCapital fundAccountCapital) {
+    this.fundAccountCapital = fundAccountCapital;
+  }
 
-    public Long getExternalCapitalAccountId() {
-        return externalCapitalAccountId;
-    }
+  public Long getExternalCapitalAccountId() {
+    return externalCapitalAccountId;
+  }
 
-    public void setExternalCapitalAccountId(Long externalCapitalAccountId) {
-        this.externalCapitalAccountId = externalCapitalAccountId;
-    }
+  public void setExternalCapitalAccountId(Long externalCapitalAccountId) {
+    this.externalCapitalAccountId = externalCapitalAccountId;
+  }
 
-    public Double getCash() {
-        return cash;
-    }
+  public Double getCash() {
+    return cash;
+  }
 
-    public void setCash(Double cash) {
-        this.cash = cash;
-    }
+  public void setCash(Double cash) {
+    this.cash = cash;
+  }
 
 }

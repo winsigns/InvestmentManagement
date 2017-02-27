@@ -17,44 +17,44 @@ import com.winsigns.investment.inventoryService.framework.AbstractEntity;
 @Relation(value = "eca-cash-pool", collectionRelation = "eca-cash-pools")
 public class ECACashPool extends AbstractEntity {
 
-    private Long fundId;
+  private Long fundId;
 
-    private Long externalCapitalAccountId;
+  private Long externalCapitalAccountId;
 
-    private Currency currency;
+  private Currency currency;
 
-    private Double unassignedCapital;
+  private Double unassignedCapital;
 
-    public Long getFundId() {
-        return fundId;
-    }
+  public Long getFundId() {
+    return fundId;
+  }
 
-    public void setFundId(Long fundId) {
-        this.fundId = fundId;
-    }
+  public void setFundId(Long fundId) {
+    this.fundId = fundId;
+  }
 
-    public Long getExternalCapitalAccountId() {
-        return externalCapitalAccountId;
-    }
+  public Long getExternalCapitalAccountId() {
+    return externalCapitalAccountId;
+  }
 
-    public void setExternalCapitalAccountId(Long externalCapitalAccountId) {
-        this.externalCapitalAccountId = externalCapitalAccountId;
-    }
+  public void setExternalCapitalAccountId(Long externalCapitalAccountId) {
+    this.externalCapitalAccountId = externalCapitalAccountId;
+  }
 
-    public Currency getCurrency() {
-        return currency;
-    }
+  public Currency getCurrency() {
+    return currency;
+  }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
+  public void setCurrency(Currency currency) {
+    this.currency = currency;
+  }
 
-    public Double getUnassignedCapital() {
-        return unassignedCapital;
-    }
+  public Double getUnassignedCapital() {
+    return unassignedCapital;
+  }
 
-    public void setUnassignedCapital(Double unassignedCapital) {
-        this.unassignedCapital = unassignedCapital;
-    }
+  public void setUnassignedCapital(Double unassignedCapital) {
+    this.unassignedCapital = unassignedCapital;
+  }
 
 }

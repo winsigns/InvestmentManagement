@@ -28,74 +28,76 @@ import com.winsigns.investment.inventoryService.resource.ECACashPoolResourceAsse
 import com.winsigns.investment.inventoryService.service.ECACashPoolService;
 
 @RestController
-@RequestMapping(path = "/eca-cash-pools", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE,
-        APPLICATION_JSON_UTF8_VALUE })
+@RequestMapping(path = "/eca-cash-pools",
+    produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
 public class ECACashPoolController {
 
-    @Autowired
-    ECACashPoolService ecaCashPoolService;
+  @Autowired
+  ECACashPoolService ecaCashPoolService;
 
-    @GetMapping
-    public Resources<ECACashPoolResource> readECACashPools() {
-        Link link = linkTo(ECACashPoolController.class).withSelfRel();
-        return new Resources<ECACashPoolResource>(
-                new ECACashPoolResourceAssembler().toResources(ecaCashPoolService.findAll()), link);
-    }
+  @GetMapping
+  public Resources<ECACashPoolResource> readECACashPools() {
+    Link link = linkTo(ECACashPoolController.class).withSelfRel();
+    return new Resources<ECACashPoolResource>(
+        new ECACashPoolResourceAssembler().toResources(ecaCashPoolService.findAll()), link);
+  }
 
-    @GetMapping("/{ecaCashPoolId}")
-    public ECACashPoolResource readECACashPool(@PathVariable Long ecaCashPoolId) {
-        ECACashPool ecaCashPool = ecaCashPoolService.findOne(ecaCashPoolId);
-        ECACashPoolResource ecaCashPoolResource = new ECACashPoolResourceAssembler().toResource(ecaCashPool);
+  @GetMapping("/{ecaCashPoolId}")
+  public ECACashPoolResource readECACashPool(@PathVariable Long ecaCashPoolId) {
+    ECACashPool ecaCashPool = ecaCashPoolService.findOne(ecaCashPoolId);
+    ECACashPoolResource ecaCashPoolResource =
+        new ECACashPoolResourceAssembler().toResource(ecaCashPool);
 
-        return ecaCashPoolResource;
-    }
+    return ecaCashPoolResource;
+  }
 
-    @PostMapping
-    public ResponseEntity<?> createECACashPool(@RequestBody CreateCashPoolCommand createCashPoolCommand) {
+  @PostMapping
+  public ResponseEntity<?> createECACashPool(
+      @RequestBody CreateCashPoolCommand createCashPoolCommand) {
 
-        ECACashPool ecaCashPool = ecaCashPoolService.addECACashPool(createCashPoolCommand);
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.setLocation(
-                linkTo(methodOn(ECACashPoolController.class).readECACashPool(ecaCashPool.getId())).toUri());
-        return new ResponseEntity<Object>(ecaCashPool, responseHeaders, HttpStatus.CREATED);
-    }
+    ECACashPool ecaCashPool = ecaCashPoolService.addECACashPool(createCashPoolCommand);
+    HttpHeaders responseHeaders = new HttpHeaders();
+    responseHeaders.setLocation(
+        linkTo(methodOn(ECACashPoolController.class).readECACashPool(ecaCashPool.getId())).toUri());
+    return new ResponseEntity<Object>(ecaCashPool, responseHeaders, HttpStatus.CREATED);
+  }
 
-    // 转入资金
-    @PostMapping("/{ecaCashPoolId}/transfer-to")
-    public ECACashPoolResource transferTo(@PathVariable Long ecaCashPoolId,
-            @RequestBody TransferAccountCommand capitalChangeCommand) {
-        return new ECACashPoolResourceAssembler()
-                .toResource(ecaCashPoolService.transferTo(ecaCashPoolId, capitalChangeCommand));
-    }
+  // 转入资金
+  @PostMapping("/{ecaCashPoolId}/transfer-to")
+  public ECACashPoolResource transferTo(@PathVariable Long ecaCashPoolId,
+      @RequestBody TransferAccountCommand capitalChangeCommand) {
+    return new ECACashPoolResourceAssembler()
+        .toResource(ecaCashPoolService.transferTo(ecaCashPoolId, capitalChangeCommand));
+  }
 
-    // 转出资金
-    @PostMapping("/{ecaCashPoolId}/transfer-from")
-    public ECACashPoolResource transferFrom(@PathVariable Long ecaCashPoolId,
-            @RequestBody TransferAccountCommand capitalChangeCommand) {
-        return new ECACashPoolResourceAssembler()
-                .toResource(ecaCashPoolService.transferFrom(ecaCashPoolId, capitalChangeCommand));
-    }
+  // 转出资金
+  @PostMapping("/{ecaCashPoolId}/transfer-from")
+  public ECACashPoolResource transferFrom(@PathVariable Long ecaCashPoolId,
+      @RequestBody TransferAccountCommand capitalChangeCommand) {
+    return new ECACashPoolResourceAssembler()
+        .toResource(ecaCashPoolService.transferFrom(ecaCashPoolId, capitalChangeCommand));
+  }
 
-    // 调拨入金
-    @PostMapping("/{ecaCashPoolId}/allot-in")
-    public Resources<ECACashPoolResource> allotIn(@PathVariable Long ecaCashPoolId,
-            @RequestBody AllotAccountCommand allotAccountCommand) {
-        Link link = linkTo(ECACashPoolController.class).withSelfRel();
-        return new Resources<ECACashPoolResource>(
-                new ECACashPoolResourceAssembler().toResources(ecaCashPoolService.allot(ecaCashPoolId,
-                        allotAccountCommand.getMatchECACashPoolId(), allotAccountCommand.getChangedCapital())),
-                link);
-    }
+  // 调拨入金
+  @PostMapping("/{ecaCashPoolId}/allot-in")
+  public Resources<ECACashPoolResource> allotIn(@PathVariable Long ecaCashPoolId,
+      @RequestBody AllotAccountCommand allotAccountCommand) {
+    Link link = linkTo(ECACashPoolController.class).withSelfRel();
+    return new Resources<ECACashPoolResource>(
+        new ECACashPoolResourceAssembler().toResources(ecaCashPoolService.allot(ecaCashPoolId,
+            allotAccountCommand.getMatchECACashPoolId(), allotAccountCommand.getChangedCapital())),
+        link);
+  }
 
-    // 调拨出金
-    @PostMapping("/{ecaCashPoolId}/allot-out")
-    public Resources<ECACashPoolResource> allotOut(@PathVariable Long ecaCashPoolId,
-            @RequestBody AllotAccountCommand allotAccountCommand) {
-        Link link = linkTo(ECACashPoolController.class).withSelfRel();
-        return new Resources<ECACashPoolResource>(new ECACashPoolResourceAssembler()
-                .toResources(ecaCashPoolService.allot(allotAccountCommand.getMatchECACashPoolId(), ecaCashPoolId,
-                        allotAccountCommand.getChangedCapital())),
-                link);
-    }
+  // 调拨出金
+  @PostMapping("/{ecaCashPoolId}/allot-out")
+  public Resources<ECACashPoolResource> allotOut(@PathVariable Long ecaCashPoolId,
+      @RequestBody AllotAccountCommand allotAccountCommand) {
+    Link link = linkTo(ECACashPoolController.class).withSelfRel();
+    return new Resources<ECACashPoolResource>(new ECACashPoolResourceAssembler()
+        .toResources(ecaCashPoolService.allot(allotAccountCommand.getMatchECACashPoolId(),
+            ecaCashPoolId, allotAccountCommand.getChangedCapital())),
+        link);
+  }
 
 }

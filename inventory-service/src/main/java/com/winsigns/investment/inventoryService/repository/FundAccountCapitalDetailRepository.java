@@ -9,10 +9,14 @@ import com.winsigns.investment.inventoryService.model.FundAccountCapital;
 import com.winsigns.investment.inventoryService.model.FundAccountCapitalDetail;
 
 @Transactional
-public interface FundAccountCapitalDetailRepository extends JpaRepository<FundAccountCapitalDetail, Long> {
-    public FundAccountCapitalDetail findByFundAccountCapitalAndExternalCapitalAccountId(
-            FundAccountCapital fundAccountCapital, Long externalCapitalAccountId);
+public interface FundAccountCapitalDetailRepository
+    extends JpaRepository<FundAccountCapitalDetail, Long> {
+  public FundAccountCapitalDetail findByFundAccountCapitalAndExternalCapitalAccountId(
+      FundAccountCapital fundAccountCapital, Long externalCapitalAccountId);
 
-    public List<FundAccountCapitalDetail> findByFundAccountCapital(FundAccountCapital fundAccountCapital);
+  public List<FundAccountCapitalDetail> findByFundAccountCapital(
+      FundAccountCapital fundAccountCapital);
 
 }
+
+

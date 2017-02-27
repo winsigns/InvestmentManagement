@@ -13,29 +13,29 @@ import com.winsigns.investment.inventoryService.model.FundAccountCapital;
 import com.winsigns.investment.inventoryService.model.FundAccountCapitalDetail;
 
 public class FundAccountCapitalResourceAssembler
-        extends ResourceAssemblerSupport<FundAccountCapital, FundAccountCapitalResource> {
+    extends ResourceAssemblerSupport<FundAccountCapital, FundAccountCapitalResource> {
 
-    public FundAccountCapitalResourceAssembler() {
-        super(FundAccountCapitalController.class, FundAccountCapitalResource.class);
-    }
+  public FundAccountCapitalResourceAssembler() {
+    super(FundAccountCapitalController.class, FundAccountCapitalResource.class);
+  }
 
-    @Override
-    public FundAccountCapitalResource toResource(FundAccountCapital fundAccountCapital) {
-        FundAccountCapitalResource fundAccountCapitalResource = createResourceWithId(fundAccountCapital.getId(),
-                fundAccountCapital);
+  @Override
+  public FundAccountCapitalResource toResource(FundAccountCapital fundAccountCapital) {
+    FundAccountCapitalResource fundAccountCapitalResource =
+        createResourceWithId(fundAccountCapital.getId(), fundAccountCapital);
 
-        fundAccountCapitalResource.add(linkTo(methodOn(FundAccountCapitalDetailController.class)
-                .readFundAccountCapitalDetail(fundAccountCapital.getId()))
-                        .withRel(FundAccountCapitalDetail.class.getAnnotation(Relation.class).collectionRelation()));
-        fundAccountCapitalResource
-                .add(linkTo(methodOn(FundAccountCapitalController.class).setInvestmentLimit(fundAccountCapital.getId(),
-                        new SetInvestmentLimitCommand())).withRel("set-investment-limit"));
+    fundAccountCapitalResource.add(linkTo(methodOn(FundAccountCapitalDetailController.class)
+        .readFundAccountCapitalDetail(fundAccountCapital.getId())).withRel(
+            FundAccountCapitalDetail.class.getAnnotation(Relation.class).collectionRelation()));
+    fundAccountCapitalResource.add(linkTo(methodOn(FundAccountCapitalController.class)
+        .setInvestmentLimit(fundAccountCapital.getId(), new SetInvestmentLimitCommand()))
+            .withRel("set-investment-limit"));
 
-        return fundAccountCapitalResource;
-    }
+    return fundAccountCapitalResource;
+  }
 
-    @Override
-    protected FundAccountCapitalResource instantiateResource(FundAccountCapital entity) {
-        return new FundAccountCapitalResource(entity);
-    }
+  @Override
+  protected FundAccountCapitalResource instantiateResource(FundAccountCapital entity) {
+    return new FundAccountCapitalResource(entity);
+  }
 }

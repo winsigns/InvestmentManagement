@@ -1,24 +1,25 @@
 package com.winsigns.investment.inventoryService.command;
 
 public class CreateFundAccountCapitalDetailCommand {
-    private Long fundAccountCapitalId;
 
-    private Long externalCapitalAccountId;
+  private Long fundAccountCapitalId;
 
-    public Long getFundAccountCapitalId() {
-        return fundAccountCapitalId;
-    }
+  private Long externalCapitalAccountId;
 
-    public void setFundAccountCapitalId(Long fundAccountCapitalId) {
-        this.fundAccountCapitalId = fundAccountCapitalId;
-    }
+  public Long getFundAccountCapitalId() {
+    return fundAccountCapitalId;
+  }
 
-    public Long getExternalCapitalAccountId() {
-        return externalCapitalAccountId;
-    }
+  public void setFundAccountCapitalId(Long fundAccountCapitalId) {
+    this.fundAccountCapitalId = fundAccountCapitalId;
+  }
 
-    public void setExternalCapitalAccountId(Long externalCapitalAccountId) {
-        this.externalCapitalAccountId = externalCapitalAccountId;
-    }
+  public Long getExternalCapitalAccountId() {
+    return externalCapitalAccountId;
+  }
+
+  public void setExternalCapitalAccountId(Long externalCapitalAccountId) {
+    this.externalCapitalAccountId = externalCapitalAccountId;
+  }
 
 }
