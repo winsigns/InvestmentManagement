@@ -17,21 +17,11 @@ import com.winsigns.investment.inventoryService.framework.AbstractEntity;
 @Relation(value = "eca-cash-pool", collectionRelation = "eca-cash-pools")
 public class ECACashPool extends AbstractEntity {
 
-  private Long fundId;
-
   private Long externalCapitalAccountId;
 
   private Currency currency;
 
   private Double unassignedCapital;
-
-  public Long getFundId() {
-    return fundId;
-  }
-
-  public void setFundId(Long fundId) {
-    this.fundId = fundId;
-  }
 
   public Long getExternalCapitalAccountId() {
     return externalCapitalAccountId;

@@ -1,4 +1,4 @@
-﻿DROP TABLE IF EXISTS fund_account_capital_detail;
+DROP TABLE IF EXISTS fund_account_capital_detail;
 DROP TABLE IF EXISTS fund_account_capital;
 DROP TABLE IF EXISTS external_capital_account_cash_pool;
 
