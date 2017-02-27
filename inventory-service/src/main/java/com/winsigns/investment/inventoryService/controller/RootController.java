@@ -29,7 +29,7 @@ public class RootController {
   public HttpEntity<HALResponse<String>> root() {
     HALResponse<String> halResponse = new HALResponse<String>("");
 
-    halResponse.add(linkTo(methodOn((ECACashPoolController.class)).readECACashPools())
+    halResponse.add(linkTo(methodOn((ECACashPoolController.class)).readECACashPools(null))
         .withRel(ECACashPool.class.getAnnotation(Relation.class).collectionRelation()));
 
     halResponse.add(linkTo(methodOn((FundAccountCapitalController.class)).readFundAccountCapitals())

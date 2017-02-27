@@ -19,11 +19,9 @@ public class ECACashPoolService {
   @Autowired
   private ECACashPoolRepository ecaCashPoolRepository;
 
-  public Collection<ECACashPool> findByFundIdAndExternalCapitalAccountId(Long fundId,
-      Long externalCapitalAccountId) {
+  public Collection<ECACashPool> findByExternalCapitalAccountId(Long externalCapitalAccountId) {
 
-    return ecaCashPoolRepository.findByFundIdAndExternalCapitalAccountId(fundId,
-        externalCapitalAccountId);
+    return ecaCashPoolRepository.findByExternalCapitalAccountId(externalCapitalAccountId);
   }
 
   public Collection<ECACashPool> findAll() {
@@ -36,21 +34,18 @@ public class ECACashPoolService {
   }
 
   public ECACashPool addECACashPool(CreateCashPoolCommand createCashPoolCommand) {
-    ECACashPool eCACashPool =
-        ecaCashPoolRepository.findByFundIdAndExternalCapitalAccountIdAndCurrency(
-            createCashPoolCommand.getFundId(), createCashPoolCommand.getExternalCapitalAccountId(),
-            createCashPoolCommand.getCurrency());
+    ECACashPool ecaCashPool = ecaCashPoolRepository.findByExternalCapitalAccountIdAndCurrency(
+        createCashPoolCommand.getExternalCapitalAccountId(), createCashPoolCommand.getCurrency());
 
-    if (eCACashPool == null) {
-      eCACashPool = new ECACashPool();
+    if (ecaCashPool == null) {
+      ecaCashPool = new ECACashPool();
 
-      eCACashPool.setExternalCapitalAccountId(createCashPoolCommand.getExternalCapitalAccountId());
-      eCACashPool.setCurrency(createCashPoolCommand.getCurrency());
-      eCACashPool.setFundId(createCashPoolCommand.getFundId());
-      eCACashPool.setUnassignedCapital(0.0);
-      eCACashPool = ecaCashPoolRepository.save(eCACashPool);
+      ecaCashPool.setExternalCapitalAccountId(createCashPoolCommand.getExternalCapitalAccountId());
+      ecaCashPool.setCurrency(createCashPoolCommand.getCurrency());
+      ecaCashPool.setUnassignedCapital(0.0);
+      ecaCashPool = ecaCashPoolRepository.save(ecaCashPool);
     }
-    return eCACashPool;
+    return ecaCashPool;
   }
 
   public ECACashPool transferTo(Long ecaCashPoolId, TransferAccountCommand transferAccountCommand) {

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.inventoryService.command.AllotAccountCommand;
@@ -36,10 +37,16 @@ public class ECACashPoolController {
   ECACashPoolService ecaCashPoolService;
 
   @GetMapping
-  public Resources<ECACashPoolResource> readECACashPools() {
-    Link link = linkTo(ECACashPoolController.class).withSelfRel();
-    return new Resources<ECACashPoolResource>(
-        new ECACashPoolResourceAssembler().toResources(ecaCashPoolService.findAll()), link);
+  public Resources<ECACashPoolResource> readECACashPools(
+      @RequestParam(required = false) Long externalCapitalAccountId) {
+    if (externalCapitalAccountId == null) {
+      Link link = linkTo(ECACashPoolController.class).withSelfRel();
+      return new Resources<ECACashPoolResource>(
+          new ECACashPoolResourceAssembler().toResources(ecaCashPoolService.findAll()), link);
+    } else {
+      return new Resources<ECACashPoolResource>(new ECACashPoolResourceAssembler().toResources(
+          ecaCashPoolService.findByExternalCapitalAccountId(externalCapitalAccountId)));
+    }
   }
 
   @PostMapping

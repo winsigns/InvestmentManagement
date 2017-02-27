@@ -10,9 +10,8 @@ import com.winsigns.investment.inventoryService.model.ECACashPool;
 
 @Transactional
 public interface ECACashPoolRepository extends JpaRepository<ECACashPool, Long> {
-  public ECACashPool findByFundIdAndExternalCapitalAccountIdAndCurrency(Long fundId,
-      Long externalCapitalAccountId, Currency currency);
+  public ECACashPool findByExternalCapitalAccountIdAndCurrency(Long externalCapitalAccountId,
+      Currency currency);
 
-  public List<ECACashPool> findByFundIdAndExternalCapitalAccountId(Long fundId,
-      Long externalCapitalAccountCapital);
+  public List<ECACashPool> findByExternalCapitalAccountId(Long externalCapitalAccountCapital);
 }
