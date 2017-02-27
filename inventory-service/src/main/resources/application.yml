@@ -3,7 +3,7 @@ server:
 
 kafka:
   stream:
-    appid: fund-service-kafka-stream
+    appid: inventory-service-kafka-stream
   broker:
     host: kafka:9092
   zookeeper:
