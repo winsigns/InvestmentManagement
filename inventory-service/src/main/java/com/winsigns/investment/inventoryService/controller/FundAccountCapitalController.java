@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.inventoryService.command.CreateFundAccountCapitalCommand;
+import com.winsigns.investment.inventoryService.command.CreateFundAccountCapitalDetailCommand;
 import com.winsigns.investment.inventoryService.command.SetInvestmentLimitCommand;
 import com.winsigns.investment.inventoryService.model.FundAccountCapital;
 import com.winsigns.investment.inventoryService.model.FundAccountCapitalDetail;
@@ -53,6 +54,18 @@ public class FundAccountCapitalController {
         link);
   }
 
+  @PostMapping
+  public ResponseEntity<?> createFundAccountCapital(
+      @RequestBody CreateFundAccountCapitalCommand createFundAccountCapitalCommand) {
+
+    FundAccountCapital fundAccountCapital =
+        fundAccountCapitalService.addFundAccountCapital(createFundAccountCapitalCommand);
+    HttpHeaders responseHeaders = new HttpHeaders();
+    responseHeaders.setLocation(linkTo(methodOn(FundAccountCapitalController.class)
+        .readFundAccountCapital(fundAccountCapital.getId())).toUri());
+    return new ResponseEntity<Object>(fundAccountCapital, responseHeaders, HttpStatus.CREATED);
+  }
+
   @GetMapping("/{faCapitalId}")
   public FundAccountCapitalResource readFundAccountCapital(@PathVariable Long faCapitalId) {
     FundAccountCapital fundAccountCapital = fundAccountCapitalService.findOne(faCapitalId);
@@ -69,6 +82,14 @@ public class FundAccountCapitalController {
     return fundAccountCapitalResource;
   }
 
+  @PutMapping("/{faCapitalId}/set-investment-limit")
+  public FundAccountCapitalResource setInvestmentLimit(@PathVariable Long faCapitalId,
+      @RequestBody SetInvestmentLimitCommand setInvestmentLimitCommand) {
+    FundAccountCapital fundAccountCapital =
+        fundAccountCapitalService.setInvestmentLimit(faCapitalId, setInvestmentLimitCommand);
+    return readFundAccountCapital(fundAccountCapital.getId());
+  }
+
   @GetMapping("/{faCapitalId}/fa-capital-details")
   public Resources<FundAccountCapitalDetailResource> readFundAccountCapitalDetails(
       @PathVariable Long faCapitalId) {
@@ -81,23 +102,16 @@ public class FundAccountCapitalController {
         link);
   }
 
-  @PostMapping
-  public ResponseEntity<?> createFundAccountCapital(
-      @RequestBody CreateFundAccountCapitalCommand createFundAccountCapitalCommand) {
+  @PostMapping("/{faCapitalId}/fa-capital-details")
+  public ResponseEntity<?> createFundAccountCapital(@PathVariable Long faCapitalId,
+      @RequestBody CreateFundAccountCapitalDetailCommand createFundAccountCapitalDetailCommand) {
 
-    FundAccountCapital fundAccountCapital =
-        fundAccountCapitalService.addFundAccountCapital(createFundAccountCapitalCommand);
+    FundAccountCapitalDetail fundAccountCapitalDetail = fundAccountCapitalDetailService
+        .addFundAccountCapitalDetail(faCapitalId, createFundAccountCapitalDetailCommand);
     HttpHeaders responseHeaders = new HttpHeaders();
-    responseHeaders.setLocation(linkTo(methodOn(FundAccountCapitalController.class)
-        .readFundAccountCapital(fundAccountCapital.getId())).toUri());
-    return new ResponseEntity<Object>(fundAccountCapital, responseHeaders, HttpStatus.CREATED);
-  }
-
-  @PutMapping("/{faCapitalId}/set-investment-limit")
-  public FundAccountCapitalResource setInvestmentLimit(@PathVariable Long faCapitalId,
-      @RequestBody SetInvestmentLimitCommand setInvestmentLimitCommand) {
-    FundAccountCapital fundAccountCapital =
-        fundAccountCapitalService.setInvestmentLimit(faCapitalId, setInvestmentLimitCommand);
-    return readFundAccountCapital(fundAccountCapital.getId());
+    responseHeaders.setLocation(linkTo(methodOn(FundAccountCapitalDetailController.class)
+        .readFundAccountCapitalDetail(fundAccountCapitalDetail.getId())).toUri());
+    return new ResponseEntity<Object>(fundAccountCapitalDetail, responseHeaders,
+        HttpStatus.CREATED);
   }
 }

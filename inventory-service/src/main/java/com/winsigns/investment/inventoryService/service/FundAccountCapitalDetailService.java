@@ -45,11 +45,11 @@ public class FundAccountCapitalDetailService {
     return fundAccountCapitalDetailRepository.findOne(fundAccountCapitalDetailId);
   }
 
-  public FundAccountCapitalDetail addFundAccountCapitalDetail(
+  public FundAccountCapitalDetail addFundAccountCapitalDetail(Long fundAccountCapitalId,
       CreateFundAccountCapitalDetailCommand crtFundAccountCapitalDetailCmd) {
 
-    FundAccountCapital fundAccountCapital = fundAccountCapitalRepository
-        .findOne(crtFundAccountCapitalDetailCmd.getFundAccountCapitalId());
+    FundAccountCapital fundAccountCapital =
+        fundAccountCapitalRepository.findOne(fundAccountCapitalId);
     if (fundAccountCapital == null)
       return null;
 

@@ -9,9 +9,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.inventoryService.command.AssignAccountCommand;
-import com.winsigns.investment.inventoryService.command.CreateFundAccountCapitalDetailCommand;
 import com.winsigns.investment.inventoryService.command.EnfeoffAccountCommand;
 import com.winsigns.investment.inventoryService.model.FundAccountCapitalDetail;
 import com.winsigns.investment.inventoryService.resource.FundAccountCapitalDetailResource;
@@ -53,19 +49,6 @@ public class FundAccountCapitalDetailController {
         new FundAccountCapitalDetailResourceAssembler().toResource(fundAccountCapitalDetail);
 
     return fundAccountCapitalResource;
-  }
-
-  @PostMapping
-  public ResponseEntity<?> createFundAccountCapital(
-      @RequestBody CreateFundAccountCapitalDetailCommand createFundAccountCapitalDetailCommand) {
-
-    FundAccountCapitalDetail fundAccountCapitalDetail = fundAccountCapitalDetailService
-        .addFundAccountCapitalDetail(createFundAccountCapitalDetailCommand);
-    HttpHeaders responseHeaders = new HttpHeaders();
-    responseHeaders.setLocation(linkTo(methodOn(FundAccountCapitalDetailController.class)
-        .readFundAccountCapitalDetail(fundAccountCapitalDetail.getId())).toUri());
-    return new ResponseEntity<Object>(fundAccountCapitalDetail, responseHeaders,
-        HttpStatus.CREATED);
   }
 
   @PostMapping("/{faCapitalDetailId}/assign-from")

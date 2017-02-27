@@ -42,15 +42,6 @@ public class ECACashPoolController {
         new ECACashPoolResourceAssembler().toResources(ecaCashPoolService.findAll()), link);
   }
 
-  @GetMapping("/{ecaCashPoolId}")
-  public ECACashPoolResource readECACashPool(@PathVariable Long ecaCashPoolId) {
-    ECACashPool ecaCashPool = ecaCashPoolService.findOne(ecaCashPoolId);
-    ECACashPoolResource ecaCashPoolResource =
-        new ECACashPoolResourceAssembler().toResource(ecaCashPool);
-
-    return ecaCashPoolResource;
-  }
-
   @PostMapping
   public ResponseEntity<?> createECACashPool(
       @RequestBody CreateCashPoolCommand createCashPoolCommand) {
@@ -60,6 +51,15 @@ public class ECACashPoolController {
     responseHeaders.setLocation(
         linkTo(methodOn(ECACashPoolController.class).readECACashPool(ecaCashPool.getId())).toUri());
     return new ResponseEntity<Object>(ecaCashPool, responseHeaders, HttpStatus.CREATED);
+  }
+
+  @GetMapping("/{ecaCashPoolId}")
+  public ECACashPoolResource readECACashPool(@PathVariable Long ecaCashPoolId) {
+    ECACashPool ecaCashPool = ecaCashPoolService.findOne(ecaCashPoolId);
+    ECACashPoolResource ecaCashPoolResource =
+        new ECACashPoolResourceAssembler().toResource(ecaCashPool);
+
+    return ecaCashPoolResource;
   }
 
   // 转入资金
