@@ -10,6 +10,7 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
 
 ---
+
 spring:
   profiles: docker
 
