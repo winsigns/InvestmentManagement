@@ -3,7 +3,7 @@ package com.winsigns.investment.tradeService.command;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import com.winsigns.investment.tradeService.model.InstructionType;
+import com.winsigns.investment.tradeService.constant.InstructionType;
 
 public class InstructionCommand {
 	// 投资组合

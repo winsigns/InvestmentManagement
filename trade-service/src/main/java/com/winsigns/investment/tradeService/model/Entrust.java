@@ -6,10 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import com.winsigns.investment.tradeService.constant.InstructionType;
 import com.winsigns.investment.tradeService.framework.AbstractEntity;
 
 @Entity
-public class Instruction extends AbstractEntity {
+public class Entrust extends AbstractEntity {
 
 	// 投资组合
 	private Long portfolioId;

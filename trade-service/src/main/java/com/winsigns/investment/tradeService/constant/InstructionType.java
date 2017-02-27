@@ -1,4 +1,4 @@
-package com.winsigns.investment.tradeService.model;
+package com.winsigns.investment.tradeService.constant;
 
 public enum InstructionType
 {
