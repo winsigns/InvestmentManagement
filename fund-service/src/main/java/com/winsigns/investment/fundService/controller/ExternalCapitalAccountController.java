@@ -63,8 +63,7 @@ public class ExternalCapitalAccountController {
     ExternalCapitalAccount externalCapitalAccount =
         externalCapitalAccountService.findOne(externalCapitalAccountId);
     ExternalCapitalAccountResource externalCapitalAccountResource =
-        new ExternalCapitalAccountResourceAssembler()
-            .toResource(externalCapitalAccountService.findOne(externalCapitalAccountId));
+        new ExternalCapitalAccountResourceAssembler().toResource(externalCapitalAccount);
 
     List<ExternalTradeAccount> externalTradeAccounts =
         externalCapitalAccount.getExternalTradeAccounts();
