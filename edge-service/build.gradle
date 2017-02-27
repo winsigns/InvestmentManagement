@@ -1,19 +1,19 @@
 buildscript {
-  ext {
-    springBootVersion = '1.5.1.RELEASE'
-    springCloudVersion = 'Brixton.SR6'
-  }
-  repositories {
-     mavenCentral()
-  }
-  dependencies {
-     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-  }
+    ext {
+        springBootVersion = '1.5.1.RELEASE'
+        springCloudVersion = 'Brixton.SR6'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 
 jar {
     baseName = 'edge-service'
@@ -24,20 +24,21 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-     mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-     compile("org.springframework.boot:spring-boot-starter-web")     
-     compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
 
-     compile('org.springframework.cloud:spring-cloud-starter-zuul')
+    compile('org.springframework.cloud:spring-cloud-starter-zuul')
+    compile('org.springframework.cloud:spring-cloud-starter-eureka')
 
-     testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
 dependencyManagement {
-     imports {
-          mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-     }
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
