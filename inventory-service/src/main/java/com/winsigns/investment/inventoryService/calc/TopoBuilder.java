@@ -11,18 +11,18 @@ import org.springframework.context.ApplicationContext;
  */
 public class TopoBuilder {
 
-    private MeasureManager build(){
-        MeasureManager manager = new MeasureManager();
+  private MeasureManager build() {
+    MeasureManager manager = new MeasureManager();
 
-        manager.addMeasure(new OpenPositionCost());
-        manager.addMeasure(new PositionVolume());
+    manager.addMeasure(new OpenPositionCost());
+    manager.addMeasure(new PositionVolume());
 
-        return manager;
-    }
+    return manager;
+  }
 
-    public void init(ApplicationContext context){
-        MeasureManager manager = build();
-        KafkaStreamTopoBuilder builder = context.getBean(KafkaStreamTopoBuilder.class);
-        builder.start(manager);
-    }
+  public void init(ApplicationContext context) {
+    MeasureManager manager = build();
+    KafkaStreamTopoBuilder builder = context.getBean(KafkaStreamTopoBuilder.class);
+    builder.start(manager);
+  }
 }
