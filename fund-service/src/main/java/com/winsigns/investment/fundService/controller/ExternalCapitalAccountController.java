@@ -113,11 +113,11 @@ public class ExternalCapitalAccountController {
 
   // 在指定外部资金账户下创建外部交易账户
   @PostMapping("/{externalCapitalAccountId}/external-trade-accounts")
-  public ResponseEntity<?> crreateExternalTradeAccount(
+  public ResponseEntity<?> crreateExternalTradeAccount(@PathVariable Long externalCapitalAccountId,
       @RequestBody CreateExternalTradeAccountCommand createExternalTradeAccountCommand) {
 
-    ExternalTradeAccount externalTradeAccount =
-        externalTradeAccountService.addExternalTradeAccount(createExternalTradeAccountCommand);
+    ExternalTradeAccount externalTradeAccount = externalTradeAccountService
+        .addExternalTradeAccount(externalCapitalAccountId, createExternalTradeAccountCommand);
     HttpHeaders responseHeaders = new HttpHeaders();
     responseHeaders.setLocation(linkTo(methodOn(ExternalTradeAccountController.class)
         .readExternalTradeAccount(externalTradeAccount.getId())).toUri());

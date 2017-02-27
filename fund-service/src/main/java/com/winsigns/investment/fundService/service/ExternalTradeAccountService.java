@@ -1,14 +1,16 @@
 package com.winsigns.investment.fundService.service;
 
+import java.util.Collection;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.winsigns.investment.fundService.command.CreateExternalTradeAccountCommand;
 import com.winsigns.investment.fundService.command.UpdateExternalTradeAccountCommand;
 import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
 import com.winsigns.investment.fundService.model.ExternalTradeAccount;
 import com.winsigns.investment.fundService.repository.ExternalCapitalAccountRepository;
 import com.winsigns.investment.fundService.repository.ExternalTradeAccountRepository;
-import java.util.Collection;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class ExternalTradeAccountService {
@@ -32,11 +34,11 @@ public class ExternalTradeAccountService {
     return externalTradeAccountRepository.findAll();
   }
 
-  public ExternalTradeAccount addExternalTradeAccount(
+  public ExternalTradeAccount addExternalTradeAccount(Long externalCapitalAccountId,
       CreateExternalTradeAccountCommand createExternalTradeAccountCommand) {
 
-    ExternalCapitalAccount externalCapitalAccount = externalCapitalAccountRepository
-        .findOne(createExternalTradeAccountCommand.getExternalCapitalAccountId());
+    ExternalCapitalAccount externalCapitalAccount =
+        externalCapitalAccountRepository.findOne(externalCapitalAccountId);
 
     if (externalCapitalAccount == null) {
       return null;
@@ -47,8 +49,7 @@ public class ExternalTradeAccountService {
     externalTradeAccount.setExternalCapitalAccount(externalCapitalAccount);
 
     externalTradeAccount.setAccountNo(createExternalTradeAccountCommand.getAccountNo());
-    externalTradeAccount
-        .setAccountType(createExternalTradeAccountCommand.getAccountType());
+    externalTradeAccount.setAccountType(createExternalTradeAccountCommand.getAccountType());
 
     return externalTradeAccountRepository.save(externalTradeAccount);
   }
@@ -56,8 +57,8 @@ public class ExternalTradeAccountService {
   public ExternalTradeAccount updateExternalTradeAccount(Long externalTradeAccountId,
       UpdateExternalTradeAccountCommand externalTradeAccountCommand) {
 
-    ExternalTradeAccount externalTradeAccount = externalTradeAccountRepository
-        .findOne(externalTradeAccountId);
+    ExternalTradeAccount externalTradeAccount =
+        externalTradeAccountRepository.findOne(externalTradeAccountId);
 
     if (externalTradeAccount == null) {
       return null;
