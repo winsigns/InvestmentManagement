@@ -5,9 +5,9 @@ kafka:
   stream:
     appid: fund-service-kafka-stream
   broker:
-    host: 192.168.56.101:9092
+    host: kafka:9092
   zookeeper:
-    host: 192.168.56.101:2181
+    host: kafka:2181
 
 spring:
   profiles: default
