@@ -60,7 +60,7 @@ public class FundAccountController {
 
     FundAccount fundAccount = fundAccountService.findOne(fundAccountId);
     FundAccountResource fundAccountResource =
-        new FundAccountResourceAssembler().toResource(fundAccountService.findOne(fundAccountId));
+        new FundAccountResourceAssembler().toResource(fundAccount);
 
     // 增加内嵌的投资组合
     List<Portfolio> portfolios = fundAccount.getPortfolios();
