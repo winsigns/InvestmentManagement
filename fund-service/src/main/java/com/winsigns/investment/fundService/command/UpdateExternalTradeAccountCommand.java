@@ -4,24 +4,24 @@ import com.winsigns.investment.fundService.constant.ExternalTradeAccountType;
 
 public class UpdateExternalTradeAccountCommand {
 
-	private ExternalTradeAccountType externalTradeAccountType;
+  private ExternalTradeAccountType accountType;
 
-	private String accountNo;
+  private String accountNo;
 
-	public ExternalTradeAccountType getExternalTradeAccountType() {
-		return externalTradeAccountType;
-	}
+  public ExternalTradeAccountType getAccountType() {
+    return accountType;
+  }
 
-	public void setExternalTradeAccountType(ExternalTradeAccountType externalTradeAccountType) {
-		this.externalTradeAccountType = externalTradeAccountType;
-	}
+  public void setAccountType(ExternalTradeAccountType accountType) {
+    this.accountType = accountType;
+  }
 
-	public String getAccountNo() {
-		return accountNo;
-	}
+  public String getAccountNo() {
+    return accountNo;
+  }
 
-	public void setAccountNo(String externalTradeAccount) {
-		this.accountNo = externalTradeAccount;
-	}
+  public void setAccountNo(String externalTradeAccount) {
+    this.accountNo = externalTradeAccount;
+  }
 
 }

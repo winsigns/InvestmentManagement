@@ -4,44 +4,34 @@ import com.winsigns.investment.fundService.constant.ExternalTradeAccountType;
 
 public class CreateExternalTradeAccountCommand {
 
-    private Long fundId;
+  private Long externalCapitalAccountId;
 
-    private Long externalCapitalAccountId;
+  private ExternalTradeAccountType accountType;
 
-    private ExternalTradeAccountType externalTradeAccountType;
+  private String accountNo;
 
-    private String accountNo;
+  public Long getExternalCapitalAccountId() {
+    return externalCapitalAccountId;
+  }
 
-    public Long getFundId() {
-        return fundId;
-    }
+  public void setExternalCapitalAccountId(Long externalCapitalAccountId) {
+    this.externalCapitalAccountId = externalCapitalAccountId;
+  }
 
-    public void setFundId(Long fundId) {
-        this.fundId = fundId;
-    }
+  public ExternalTradeAccountType getAccountType() {
+    return accountType;
+  }
 
-    public Long getExternalCapitalAccountId() {
-        return externalCapitalAccountId;
-    }
+  public void setAccountType(ExternalTradeAccountType accountType) {
+    this.accountType = accountType;
+  }
 
-    public void setExternalCapitalAccountId(Long externalCapitalAccountId) {
-        this.externalCapitalAccountId = externalCapitalAccountId;
-    }
+  public String getAccountNo() {
+    return accountNo;
+  }
 
-    public ExternalTradeAccountType getExternalTradeAccountType() {
-        return externalTradeAccountType;
-    }
-
-    public void setExternalTradeAccountType(ExternalTradeAccountType externalTradeAccountType) {
-        this.externalTradeAccountType = externalTradeAccountType;
-    }
-
-    public String getAccountNo() {
-        return accountNo;
-    }
-
-    public void setAccountNo(String externalTradeAccount) {
-        this.accountNo = externalTradeAccount;
-    }
+  public void setAccountNo(String externalTradeAccount) {
+    this.accountNo = externalTradeAccount;
+  }
 
 }

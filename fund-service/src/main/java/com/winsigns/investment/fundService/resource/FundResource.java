@@ -5,8 +5,8 @@ import com.winsigns.investment.fundService.model.Fund;
 
 public class FundResource extends HALResponse<Fund> {
 
-    public FundResource(Fund fund) {
-        super(fund);
-    }
+  public FundResource(Fund fund) {
+    super(fund);
+  }
 
 }

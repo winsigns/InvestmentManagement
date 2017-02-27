@@ -5,8 +5,8 @@ import com.winsigns.investment.fundService.model.Portfolio;
 
 public class PortfolioResource extends HALResponse<Portfolio> {
 
-    public PortfolioResource(Portfolio portfolio) {
-        super(portfolio);
-    }
+  public PortfolioResource(Portfolio portfolio) {
+    super(portfolio);
+  }
 
 }

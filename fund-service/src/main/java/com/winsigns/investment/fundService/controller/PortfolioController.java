@@ -6,6 +6,12 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import com.winsigns.investment.fundService.command.CreatePortfolioCommand;
+import com.winsigns.investment.fundService.command.UpdatePortfolioCommand;
+import com.winsigns.investment.fundService.model.Portfolio;
+import com.winsigns.investment.fundService.resource.PortfolioResource;
+import com.winsigns.investment.fundService.resource.PortfolioResourceAssembler;
+import com.winsigns.investment.fundService.service.PortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
@@ -21,54 +27,49 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winsigns.investment.fundService.command.CreatePortfolioCommand;
-import com.winsigns.investment.fundService.command.UpdatePortfolioCommand;
-import com.winsigns.investment.fundService.model.Portfolio;
-import com.winsigns.investment.fundService.resource.PortfolioResource;
-import com.winsigns.investment.fundService.resource.PortfolioResourceAssembler;
-import com.winsigns.investment.fundService.service.PortfolioService;
-
 @RestController
-@RequestMapping(path = "/portfolios", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE,
-        APPLICATION_JSON_UTF8_VALUE })
+@RequestMapping(path = "/portfolios", produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE,
+    APPLICATION_JSON_UTF8_VALUE})
 public class PortfolioController {
 
-    @Autowired
-    PortfolioService portfolioService;
+  @Autowired
+  PortfolioService portfolioService;
 
-    @GetMapping
-    public Resources<PortfolioResource> readPortfolios() {
-        Link link = linkTo(PortfolioController.class).withSelfRel();
-        return new Resources<PortfolioResource>(
-                new PortfolioResourceAssembler().toResources(portfolioService.findAll()), link);
-    }
+  @GetMapping
+  public Resources<PortfolioResource> readPortfolios() {
+    Link link = linkTo(PortfolioController.class).withSelfRel();
+    return new Resources<PortfolioResource>(
+        new PortfolioResourceAssembler().toResources(portfolioService.findAll()), link);
+  }
 
-    @GetMapping("/{portfolioId}")
-    public PortfolioResource readPortfolio(@PathVariable Long portfolioId) {
-        return new PortfolioResourceAssembler().toResource(portfolioService.findOne(portfolioId));
-    }
+  @GetMapping("/{portfolioId}")
+  public PortfolioResource readPortfolio(@PathVariable Long portfolioId) {
+    return new PortfolioResourceAssembler().toResource(portfolioService.findOne(portfolioId));
+  }
 
-    @PostMapping
-    public ResponseEntity<?> createPortfolio(@RequestBody CreatePortfolioCommand createPortfolioCommand) {
+  @PostMapping
+  public ResponseEntity<?> createPortfolio(
+      @RequestBody CreatePortfolioCommand createPortfolioCommand) {
 
-        Portfolio portfolio = portfolioService.addPortfolio(createPortfolioCommand);
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders
-                .setLocation(linkTo(methodOn(PortfolioController.class).readPortfolio(portfolio.getId())).toUri());
-        return new ResponseEntity<Object>(portfolio, responseHeaders, HttpStatus.CREATED);
-    }
+    Portfolio portfolio = portfolioService.addPortfolio(createPortfolioCommand);
+    HttpHeaders responseHeaders = new HttpHeaders();
+    responseHeaders
+        .setLocation(
+            linkTo(methodOn(PortfolioController.class).readPortfolio(portfolio.getId())).toUri());
+    return new ResponseEntity<Object>(portfolio, responseHeaders, HttpStatus.CREATED);
+  }
 
-    @PutMapping("/{portfolioId}")
-    public PortfolioResource updatePortfolio(@PathVariable("portfolioId") Long portfolioId,
-            @RequestBody UpdatePortfolioCommand updatePortfolioCommand) {
-        return new PortfolioResourceAssembler()
-                .toResource(portfolioService.updatePortfolio(portfolioId, updatePortfolioCommand));
-    }
+  @PutMapping("/{portfolioId}")
+  public PortfolioResource updatePortfolio(@PathVariable("portfolioId") Long portfolioId,
+      @RequestBody UpdatePortfolioCommand updatePortfolioCommand) {
+    return new PortfolioResourceAssembler()
+        .toResource(portfolioService.updatePortfolio(portfolioId, updatePortfolioCommand));
+  }
 
-    @DeleteMapping("/{portfolioId}")
-    public ResponseEntity<?> deletePortfolio(@PathVariable("portfolioId") Long portfolioId) {
-        portfolioService.deletePortfolio(portfolioId);
-        return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
-    }
+  @DeleteMapping("/{portfolioId}")
+  public ResponseEntity<?> deletePortfolio(@PathVariable("portfolioId") Long portfolioId) {
+    portfolioService.deletePortfolio(portfolioId);
+    return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+  }
 
 }
