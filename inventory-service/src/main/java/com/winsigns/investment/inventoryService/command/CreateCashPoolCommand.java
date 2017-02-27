@@ -6,8 +6,6 @@ public class CreateCashPoolCommand {
 
   private Currency currency;
 
-  private Long fundId;
-
   private Long externalCapitalAccountId;
 
   public Currency getCurrency() {
@@ -16,14 +14,6 @@ public class CreateCashPoolCommand {
 
   public void setCurrency(Currency currency) {
     this.currency = currency;
-  }
-
-  public Long getFundId() {
-    return fundId;
-  }
-
-  public void setFundId(Long fundId) {
-    this.fundId = fundId;
   }
 
   public Long getExternalCapitalAccountId() {

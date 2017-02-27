@@ -30,8 +30,7 @@ CREATE TABLE external_capital_account_cash_pool
 	id BIGINT NOT NULL auto_increment, 
 	unassigned_capital DOUBLE PRECISION, 
 	currency VARCHAR(3)  NOT NULL,
-	external_capital_account_id BIGINT NOT NULL, 
-	fund_id BIGINT NOT NULL, 
+	external_capital_account_id BIGINT NOT NULL,
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 
