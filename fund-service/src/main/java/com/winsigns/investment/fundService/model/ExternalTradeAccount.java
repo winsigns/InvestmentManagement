@@ -1,51 +1,49 @@
 package com.winsigns.investment.fundService.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winsigns.investment.fundService.constant.ExternalTradeAccountType;
+import com.winsigns.investment.fundService.framework.AbstractEntity;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
-
 import org.springframework.hateoas.core.Relation;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winsigns.investment.fundService.framework.AbstractEntity;
-import com.winsigns.investment.fundService.constant.ExternalTradeAccountType;
-
 @Entity
-@Relation(value = "externalTradeAccount", collectionRelation = "externalTradeAccounts")
+@Relation(value = "external-trade-account", collectionRelation = "external-trade-accounts")
 public class ExternalTradeAccount extends AbstractEntity {
 
-	@Enumerated(EnumType.STRING)
-	private ExternalTradeAccountType externalTradeAccountType;
+  @Enumerated(EnumType.STRING)
+  private ExternalTradeAccountType accountType;
 
-	private String externalTradeAccount;
+  private String accountNo;
 
-	@ManyToOne
-	@JsonIgnore
-	private ExternalCapitalAccount externalCapitalAccount;
+  @ManyToOne
+  @JsonIgnore
+  private ExternalCapitalAccount externalCapitalAccount;
 
-	public ExternalTradeAccountType getExternalTradeAccountType() {
-		return externalTradeAccountType;
-	}
+  public ExternalTradeAccountType getAccountType() {
+    return accountType;
+  }
 
-	public void setExternalTradeAccountType(ExternalTradeAccountType externalTradeAccountType) {
-		this.externalTradeAccountType = externalTradeAccountType;
-	}
+  public void setAccountType(ExternalTradeAccountType accountType) {
+    this.accountType = accountType;
+  }
 
-	public String getExternalTradeAccount() {
-		return externalTradeAccount;
-	}
+  public String getAccountNo() {
+    return accountNo;
+  }
 
-	public void setExternalTradeAccount(String externalTradeAccount) {
-		this.externalTradeAccount = externalTradeAccount;
-	}
+  public void setAccountNo(String externalTradeAccount) {
+    this.accountNo = externalTradeAccount;
+  }
 
-	public ExternalCapitalAccount getExternalCapitalAccount() {
-		return externalCapitalAccount;
-	}
+  public ExternalCapitalAccount getExternalCapitalAccount() {
+    return externalCapitalAccount;
+  }
 
-	public void setExternalCapitalAccount(ExternalCapitalAccount externalCapitalAccount) {
-		this.externalCapitalAccount = externalCapitalAccount;
-	}
+  public void setExternalCapitalAccount(ExternalCapitalAccount externalCapitalAccount) {
+    this.externalCapitalAccount = externalCapitalAccount;
+  }
 
 }

@@ -1,16 +1,13 @@
 package com.winsigns.investment.fundService.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winsigns.investment.fundService.framework.AbstractEntity;
 import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 import org.springframework.hateoas.core.Relation;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winsigns.investment.fundService.framework.AbstractEntity;
 
 /**
  * Created by colin on 2017/2/6.
@@ -18,40 +15,41 @@ import com.winsigns.investment.fundService.framework.AbstractEntity;
 @Entity
 @Relation(value = "portfolio", collectionRelation = "portfolios")
 public class Portfolio extends AbstractEntity {
-	// 组合名称
-	private String name;
 
-	// 创建日期
-	@Temporal(TemporalType.DATE)
-	private Date createDate;
+  // 组合名称
+  private String name;
 
-	// 产品账户
-	@ManyToOne
-	@JsonIgnore
-	private FundAccount fundAccount;
+  // 创建日期
+  @Temporal(TemporalType.DATE)
+  private Date createDate;
 
-	public String getName() {
-		return name;
-	}
+  // 产品账户
+  @ManyToOne
+  @JsonIgnore
+  private FundAccount fundAccount;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public Date getCreateDate() {
-		return createDate;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
+  public Date getCreateDate() {
+    return createDate;
+  }
 
-	public FundAccount getFundAccount() {
-		return fundAccount;
-	}
+  public void setCreateDate(Date createDate) {
+    this.createDate = createDate;
+  }
 
-	public void setFundAccount(FundAccount fundAccount) {
-		this.fundAccount = fundAccount;
-	}
+  public FundAccount getFundAccount() {
+    return fundAccount;
+  }
+
+  public void setFundAccount(FundAccount fundAccount) {
+    this.fundAccount = fundAccount;
+  }
 
 }
