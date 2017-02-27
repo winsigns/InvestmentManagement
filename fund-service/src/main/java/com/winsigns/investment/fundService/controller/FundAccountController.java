@@ -104,7 +104,8 @@ public class FundAccountController {
   public ResponseEntity<?> createPortfolio(@PathVariable Long fundAccountId,
       @RequestBody CreatePortfolioCommand createPortfolioCommand) {
 
-    Portfolio portfolio = portfolioService.addPortfolio(fundAccountId, createPortfolioCommand);
+    createPortfolioCommand.setFundAccountId(fundAccountId);
+    Portfolio portfolio = portfolioService.addPortfolio(createPortfolioCommand);
     HttpHeaders responseHeaders = new HttpHeaders();
     responseHeaders.setLocation(
         linkTo(methodOn(PortfolioController.class).readPortfolio(portfolio.getId())).toUri());

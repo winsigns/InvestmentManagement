@@ -116,8 +116,9 @@ public class ExternalCapitalAccountController {
   public ResponseEntity<?> crreateExternalTradeAccount(@PathVariable Long externalCapitalAccountId,
       @RequestBody CreateExternalTradeAccountCommand createExternalTradeAccountCommand) {
 
-    ExternalTradeAccount externalTradeAccount = externalTradeAccountService
-        .addExternalTradeAccount(externalCapitalAccountId, createExternalTradeAccountCommand);
+    createExternalTradeAccountCommand.setExternalCapitalAccountId(externalCapitalAccountId);
+    ExternalTradeAccount externalTradeAccount =
+        externalTradeAccountService.addExternalTradeAccount(createExternalTradeAccountCommand);
     HttpHeaders responseHeaders = new HttpHeaders();
     responseHeaders.setLocation(linkTo(methodOn(ExternalTradeAccountController.class)
         .readExternalTradeAccount(externalTradeAccount.getId())).toUri());

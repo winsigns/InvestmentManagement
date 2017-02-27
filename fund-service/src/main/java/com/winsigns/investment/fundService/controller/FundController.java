@@ -139,7 +139,8 @@ public class FundController {
   public ResponseEntity<?> createFundAccount(@PathVariable Long fundId,
       @RequestBody CreateFundAccountCommand createFundAccountCommand) {
 
-    FundAccount fundAccount = fundAccountService.addFundAccount(fundId, createFundAccountCommand);
+    createFundAccountCommand.setFundId(fundId);
+    FundAccount fundAccount = fundAccountService.addFundAccount(createFundAccountCommand);
     HttpHeaders responseHeaders = new HttpHeaders();
     responseHeaders.setLocation(
         linkTo(methodOn(FundAccountController.class).readFundAccount(fundAccount.getId())).toUri());
@@ -174,8 +175,9 @@ public class FundController {
   public ResponseEntity<?> createExternalCapitalAccount(@PathVariable Long fundId,
       @RequestBody CreateExternalCapitalAccountCommand createExternalCapitalAccountCommand) {
 
+    createExternalCapitalAccountCommand.setFundId(fundId);
     ExternalCapitalAccount externalCapitalAccount = externalCapitalAccountService
-        .addExternalCapitalAccount(fundId, createExternalCapitalAccountCommand);
+        .addExternalCapitalAccount(createExternalCapitalAccountCommand);
     HttpHeaders responseHeaders = new HttpHeaders();
     responseHeaders.setLocation(linkTo(methodOn(ExternalCapitalAccountController.class)
         .readExternalCapitalAccount(externalCapitalAccount.getId())).toUri());
