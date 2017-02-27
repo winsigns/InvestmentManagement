@@ -8,31 +8,35 @@ import org.springframework.hateoas.Identifiable;
 
 @MappedSuperclass
 public abstract class AbstractEntity implements Identifiable<Long> {
-	@Id
-	@GeneratedValue
-	private Long id;
 
-	public Long getId() {
-		return id;
-	}
+  @Id
+  @GeneratedValue
+  private Long id;
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
+  public Long getId() {
+    return id;
+  }
 
-		AbstractEntity that = (AbstractEntity) o;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
 
-		if (id != null ? !id.equals(that.id) : that.id != null)
-			return false;
+    AbstractEntity that = (AbstractEntity) o;
 
-		return true;
-	}
+    if (id != null ? !id.equals(that.id) : that.id != null) {
+      return false;
+    }
 
-	@Override
-	public int hashCode() {
-		return id != null ? id.hashCode() : 0;
-	}
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return id != null ? id.hashCode() : 0;
+  }
 }
