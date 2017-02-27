@@ -50,6 +50,7 @@ services:
     ports:
       - 10011:10011
     environment:
+      SPRING_PROFILES_ACTIVE: docker
  
   invest-service:
     build: invest-service
@@ -58,5 +59,13 @@ services:
     ports:
       - 10012:10012
     environment:
-      SPRING_PROFILES_ACTIVE: default
+      SPRING_PROFILES_ACTIVE: docker
 
+  trade-service:
+    build: trade-service
+    links:
+      - fund-service:fund-service
+    ports:
+      - 10013:10013
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
