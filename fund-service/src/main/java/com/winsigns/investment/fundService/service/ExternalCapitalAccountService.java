@@ -1,5 +1,10 @@
 package com.winsigns.investment.fundService.service;
 
+import java.util.Collection;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.winsigns.investment.fundService.command.CreateExternalCapitalAccountCommand;
 import com.winsigns.investment.fundService.command.UpdateExternalCapitalAccountCommand;
 import com.winsigns.investment.fundService.constant.ExternalCapitalAccountType;
@@ -8,9 +13,6 @@ import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
 import com.winsigns.investment.fundService.model.Fund;
 import com.winsigns.investment.fundService.repository.ExternalCapitalAccountRepository;
 import com.winsigns.investment.fundService.repository.FundRepository;
-import java.util.Collection;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class ExternalCapitalAccountService {
@@ -33,10 +35,10 @@ public class ExternalCapitalAccountService {
     return externalCapitalAccountRepository.findAll();
   }
 
-  public ExternalCapitalAccount addExternalCapitalAccount(
+  public ExternalCapitalAccount addExternalCapitalAccount(Long fundId,
       CreateExternalCapitalAccountCommand createExternalCapitalAccountCommand) {
 
-    Fund fund = fundRepository.findOne(createExternalCapitalAccountCommand.getFundId());
+    Fund fund = fundRepository.findOne(fundId);
 
     if (fund == null) {
       return null;
@@ -45,11 +47,11 @@ public class ExternalCapitalAccountService {
     ExternalCapitalAccount externalCapitalAccount = new ExternalCapitalAccount();
     externalCapitalAccount.setFund(fund);
 
-    ExternalCapitalAccountType externalCapitalAccountType = createExternalCapitalAccountCommand
-        .getAccountType();
+    ExternalCapitalAccountType externalCapitalAccountType =
+        createExternalCapitalAccountCommand.getAccountType();
 
-    ExternalOpenOrganization externalOpenOrganization = createExternalCapitalAccountCommand
-        .getExternalOpenOrganization();
+    ExternalOpenOrganization externalOpenOrganization =
+        createExternalCapitalAccountCommand.getExternalOpenOrganization();
 
     externalCapitalAccount.setAccountType(externalCapitalAccountType);
     externalCapitalAccount.setAccountNo(createExternalCapitalAccountCommand.getAccountNo());
@@ -61,18 +63,18 @@ public class ExternalCapitalAccountService {
   public ExternalCapitalAccount updateExternalCapitalAccount(Long externalCapitalAccountId,
       UpdateExternalCapitalAccountCommand externalCapitalAccountCommand) {
 
-    ExternalCapitalAccount externalCapitalAccount = externalCapitalAccountRepository
-        .findOne(externalCapitalAccountId);
+    ExternalCapitalAccount externalCapitalAccount =
+        externalCapitalAccountRepository.findOne(externalCapitalAccountId);
 
     if (externalCapitalAccount == null) {
       return null;
     }
 
-    ExternalCapitalAccountType externalCapitalAccountType = externalCapitalAccountCommand
-        .getAccountType();
+    ExternalCapitalAccountType externalCapitalAccountType =
+        externalCapitalAccountCommand.getAccountType();
 
-    ExternalOpenOrganization externalOpenOrganization = externalCapitalAccountCommand
-        .getExternalOpenOrganization();
+    ExternalOpenOrganization externalOpenOrganization =
+        externalCapitalAccountCommand.getExternalOpenOrganization();
 
     externalCapitalAccount.setAccountType(externalCapitalAccountType);
     externalCapitalAccount.setAccountNo(externalCapitalAccountCommand.getAccountNo());

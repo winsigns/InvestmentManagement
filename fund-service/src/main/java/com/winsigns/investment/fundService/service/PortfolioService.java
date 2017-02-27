@@ -1,15 +1,17 @@
 package com.winsigns.investment.fundService.service;
 
+import java.util.Collection;
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.winsigns.investment.fundService.command.CreatePortfolioCommand;
 import com.winsigns.investment.fundService.command.UpdatePortfolioCommand;
 import com.winsigns.investment.fundService.model.FundAccount;
 import com.winsigns.investment.fundService.model.Portfolio;
 import com.winsigns.investment.fundService.repository.FundAccountRepository;
 import com.winsigns.investment.fundService.repository.PortfolioRepository;
-import java.util.Collection;
-import java.util.Date;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class PortfolioService {
@@ -28,10 +30,9 @@ public class PortfolioService {
     return portfolioRepository.findAll();
   }
 
-  public Portfolio addPortfolio(CreatePortfolioCommand createPortfolioCommand) {
+  public Portfolio addPortfolio(Long fundAccountId, CreatePortfolioCommand createPortfolioCommand) {
 
-    FundAccount fundAccount = fundAccountRepository
-        .findOne(createPortfolioCommand.getFundAccountId());
+    FundAccount fundAccount = fundAccountRepository.findOne(fundAccountId);
 
     if (fundAccount == null) {
       return null;

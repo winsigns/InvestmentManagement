@@ -6,25 +6,8 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.winsigns.investment.fundService.command.CreateFundCommand;
-import com.winsigns.investment.fundService.command.UpdateFundCommand;
-import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
-import com.winsigns.investment.fundService.model.Fund;
-import com.winsigns.investment.fundService.model.FundAccount;
-import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResource;
-import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResourceAssembler;
-import com.winsigns.investment.fundService.resource.ExternalTradeAccountResource;
-import com.winsigns.investment.fundService.resource.FundAccountResource;
-import com.winsigns.investment.fundService.resource.FundAccountResourceAssembler;
-import com.winsigns.investment.fundService.resource.FundResource;
-import com.winsigns.investment.fundService.resource.FundResourceAssembler;
-import com.winsigns.investment.fundService.resource.PortfolioResource;
-import com.winsigns.investment.fundService.service.ExternalCapitalAccountService;
-import com.winsigns.investment.fundService.service.ExternalTradeAccountService;
-import com.winsigns.investment.fundService.service.FundAccountService;
-import com.winsigns.investment.fundService.service.FundService;
-import com.winsigns.investment.fundService.service.PortfolioService;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
@@ -41,9 +24,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.winsigns.investment.fundService.command.CreateExternalCapitalAccountCommand;
+import com.winsigns.investment.fundService.command.CreateFundAccountCommand;
+import com.winsigns.investment.fundService.command.CreateFundCommand;
+import com.winsigns.investment.fundService.command.UpdateFundCommand;
+import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
+import com.winsigns.investment.fundService.model.Fund;
+import com.winsigns.investment.fundService.model.FundAccount;
+import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResource;
+import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResourceAssembler;
+import com.winsigns.investment.fundService.resource.FundAccountResource;
+import com.winsigns.investment.fundService.resource.FundAccountResourceAssembler;
+import com.winsigns.investment.fundService.resource.FundResource;
+import com.winsigns.investment.fundService.resource.FundResourceAssembler;
+import com.winsigns.investment.fundService.service.ExternalCapitalAccountService;
+import com.winsigns.investment.fundService.service.FundAccountService;
+import com.winsigns.investment.fundService.service.FundService;
+
 @RestController
-@RequestMapping(path = "/funds", produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE,
-    APPLICATION_JSON_UTF8_VALUE})
+@RequestMapping(path = "/funds",
+    produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
 
 public class FundController {
 
@@ -54,20 +54,9 @@ public class FundController {
   private FundAccountService fundAccountService;
 
   @Autowired
-  private PortfolioService portfolioService;
-
-  @Autowired
   private ExternalCapitalAccountService externalCapitalAccountService;
 
-  @Autowired
-  private ExternalTradeAccountService externalTradeAccountService;
-
-  @Autowired
-  private FundAccountController fundAccountController;
-
-  @Autowired
-  private ExternalCapitalAccountController externalCapitalAccountController;
-
+  // 获取所有基金
   @GetMapping
   public Resources<FundResource> readFunds() {
     Link link = linkTo(FundController.class).withSelfRel();
@@ -75,6 +64,26 @@ public class FundController {
         new FundResourceAssembler().toResources(fundService.findAllFunds()), link);
   }
 
+  // 创建一个新的基金
+  @PostMapping
+  public ResponseEntity<?> createFund(@RequestBody CreateFundCommand createFundCommand) {
+
+    HttpHeaders responseHeaders = new HttpHeaders();
+    Fund fund = fundService.addFund(createFundCommand);
+    responseHeaders
+        .setLocation(linkTo(methodOn(FundController.class).readFund(fund.getId())).toUri());
+
+    return new ResponseEntity<Object>(fund, responseHeaders, HttpStatus.CREATED);
+  }
+
+  // 删除所有基金
+  @DeleteMapping
+  public ResponseEntity<?> deleteFunds() {
+    // TODO 删除所有基金
+    return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+  }
+
+  // 获取指定的基金
   @GetMapping("/{fundId}")
   public FundResource readFund(@PathVariable Long fundId) {
     Fund fund = fundService.findOne(fundId);
@@ -90,59 +99,15 @@ public class FundController {
     // 增加内嵌的外部资金账户
     List<ExternalCapitalAccount> externalCapitalAccounts = fund.getExternalCapitalAccounts();
     if (!externalCapitalAccounts.isEmpty()) {
-      fundResource
-          .add(ExternalCapitalAccount.class.getAnnotation(Relation.class).collectionRelation(),
-              new ExternalCapitalAccountResourceAssembler()
-                  .toResources(externalCapitalAccounts));
+      fundResource.add(
+          ExternalCapitalAccount.class.getAnnotation(Relation.class).collectionRelation(),
+          new ExternalCapitalAccountResourceAssembler().toResources(externalCapitalAccounts));
     }
 
     return fundResource;
   }
 
-  // 获取被组合的对象
-
-  @GetMapping("/{fundId}/fund-accounts")
-  public Resources<FundAccountResource> readFundAccounts(@PathVariable Long fundId) {
-    Link link = linkTo(FundAccountController.class).withSelfRel();
-    return new Resources<FundAccountResource>(
-        new FundAccountResourceAssembler().toResources(fundAccountService.findByFundId(fundId)),
-        link);
-  }
-
-  @GetMapping("/{fundId}/fund-accounts/{fundAccountId}/portfolios")
-  public Resources<PortfolioResource> readPortfolios(@PathVariable Long fundId,
-      @PathVariable Long fundAccountId) {
-    return fundAccountController.readPortfolios(fundAccountId);
-  }
-
-  @GetMapping("/{fundId}/external-capital-accounts")
-  public Resources<ExternalCapitalAccountResource> readExternalCapitalAccounts(
-      @PathVariable Long fundId) {
-    Link link = linkTo(ExternalCapitalAccount.class).withSelfRel();
-
-    return new Resources<ExternalCapitalAccountResource>(
-        new ExternalCapitalAccountResourceAssembler()
-            .toResources(externalCapitalAccountService.findByFundId(fundId)), link);
-  }
-
-  @GetMapping("/{fundId}/external-capital-accounts/{externalCapitalAccountId}/external-trade-accounts")
-  public Resources<ExternalTradeAccountResource> readExternalTradeAccounts(
-      @PathVariable Long fundId,
-      @PathVariable Long externalCapitalAccountId) {
-    return externalCapitalAccountController.readExternalTradeAccounts(externalCapitalAccountId);
-  }
-
-  @PostMapping
-  public ResponseEntity<?> createFund(@RequestBody CreateFundCommand createFundCommand) {
-
-    HttpHeaders responseHeaders = new HttpHeaders();
-    Fund fund = fundService.addFund(createFundCommand);
-    responseHeaders
-        .setLocation(linkTo(methodOn(FundController.class).readFund(fund.getId())).toUri());
-
-    return new ResponseEntity<Object>(fund, responseHeaders, HttpStatus.CREATED);
-  }
-
+  // 修改指定基金
   @PutMapping("/{fundId}")
   public FundResource updateFund(@PathVariable Long fundId,
       @RequestBody UpdateFundCommand updateFundCommand) {
@@ -150,10 +115,78 @@ public class FundController {
         .toResource(fundService.updateFund(fundId, updateFundCommand));
   }
 
+  // 删除指定基金
   @DeleteMapping("/{fundId}")
   public ResponseEntity<?> deleteFund(@PathVariable("fundId") Long id) {
     fundService.deleteFund(id);
     return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
   }
 
+  // 获取指定基金的产品账户
+  @GetMapping("/{fundId}/fund-accounts")
+  public Resources<FundAccountResource> readFundAccounts(@PathVariable Long fundId) {
+    Link link = linkTo(methodOn(FundController.class).readFundAccounts(fundId)).withSelfRel();
+    Link linkFund = linkTo(methodOn(FundController.class).readFund(fundId))
+        .withRel(Fund.class.getAnnotation(Relation.class).value());
+
+    return new Resources<FundAccountResource>(
+        new FundAccountResourceAssembler().toResources(fundAccountService.findByFundId(fundId)),
+        link, linkFund);
+  }
+
+  // 在指定基金下面创建产品账户
+  @PostMapping("/{fundId}/fund-accounts")
+  public ResponseEntity<?> createFundAccount(@PathVariable Long fundId,
+      @RequestBody CreateFundAccountCommand createFundAccountCommand) {
+
+    FundAccount fundAccount = fundAccountService.addFundAccount(fundId, createFundAccountCommand);
+    HttpHeaders responseHeaders = new HttpHeaders();
+    responseHeaders.setLocation(
+        linkTo(methodOn(FundAccountController.class).readFundAccount(fundAccount.getId())).toUri());
+    return new ResponseEntity<Object>(fundAccount, responseHeaders, HttpStatus.CREATED);
+  }
+
+  // 删除指定基金下面的所有产品账户
+  @DeleteMapping("/{fundId}/fund-accounts")
+  public ResponseEntity<?> deleteFundAccounts() {
+
+    // TODO
+    return null;
+  }
+
+  // 获取指定基金的外部资金账户
+  @GetMapping("/{fundId}/external-capital-accounts")
+  public Resources<ExternalCapitalAccountResource> readExternalCapitalAccounts(
+      @PathVariable Long fundId) {
+    Link link =
+        linkTo(methodOn(FundController.class).readExternalCapitalAccounts(fundId)).withSelfRel();
+    Link linkFund = linkTo(methodOn(FundController.class).readFund(fundId))
+        .withRel(Fund.class.getAnnotation(Relation.class).value());
+
+    return new Resources<ExternalCapitalAccountResource>(
+        new ExternalCapitalAccountResourceAssembler()
+            .toResources(externalCapitalAccountService.findByFundId(fundId)),
+        link, linkFund);
+  }
+
+  // 在指定基金下创建外部资金账户
+  @PostMapping("/{fundId}/external-capital-accounts")
+  public ResponseEntity<?> createExternalCapitalAccount(@PathVariable Long fundId,
+      @RequestBody CreateExternalCapitalAccountCommand createExternalCapitalAccountCommand) {
+
+    ExternalCapitalAccount externalCapitalAccount = externalCapitalAccountService
+        .addExternalCapitalAccount(fundId, createExternalCapitalAccountCommand);
+    HttpHeaders responseHeaders = new HttpHeaders();
+    responseHeaders.setLocation(linkTo(methodOn(ExternalCapitalAccountController.class)
+        .readExternalCapitalAccount(externalCapitalAccount.getId())).toUri());
+    return new ResponseEntity<Object>(externalCapitalAccount, responseHeaders, HttpStatus.CREATED);
+  }
+
+  // 删除指定基金下面的所有外部资金账户
+  @DeleteMapping("/{fundId}/external-capital-accounts")
+  public ResponseEntity<?> deleteExternalCapitalAccounts() {
+
+    // TODO
+    return null;
+  }
 }

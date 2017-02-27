@@ -6,17 +6,8 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.winsigns.investment.fundService.command.CreateFundAccountCommand;
-import com.winsigns.investment.fundService.command.UpdateFundAccountCommand;
-import com.winsigns.investment.fundService.model.FundAccount;
-import com.winsigns.investment.fundService.model.Portfolio;
-import com.winsigns.investment.fundService.resource.FundAccountResource;
-import com.winsigns.investment.fundService.resource.FundAccountResourceAssembler;
-import com.winsigns.investment.fundService.resource.PortfolioResource;
-import com.winsigns.investment.fundService.resource.PortfolioResourceAssembler;
-import com.winsigns.investment.fundService.service.FundAccountService;
-import com.winsigns.investment.fundService.service.PortfolioService;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
@@ -33,9 +24,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.winsigns.investment.fundService.command.CreatePortfolioCommand;
+import com.winsigns.investment.fundService.command.UpdateFundAccountCommand;
+import com.winsigns.investment.fundService.model.FundAccount;
+import com.winsigns.investment.fundService.model.Portfolio;
+import com.winsigns.investment.fundService.resource.FundAccountResource;
+import com.winsigns.investment.fundService.resource.FundAccountResourceAssembler;
+import com.winsigns.investment.fundService.resource.PortfolioResource;
+import com.winsigns.investment.fundService.resource.PortfolioResourceAssembler;
+import com.winsigns.investment.fundService.service.FundAccountService;
+import com.winsigns.investment.fundService.service.PortfolioService;
+
 @RestController
-@RequestMapping(path = "/fund-accounts", produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE,
-    APPLICATION_JSON_UTF8_VALUE})
+@RequestMapping(path = "/fund-accounts",
+    produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
 public class FundAccountController {
 
   @Autowired
@@ -44,6 +46,7 @@ public class FundAccountController {
   @Autowired
   private PortfolioService portfolioService;
 
+  // 获取所有基金产品账户
   @GetMapping
   public Resources<FundAccountResource> readFundAccounts() {
     Link link = linkTo(FundAccountController.class).withSelfRel();
@@ -51,41 +54,24 @@ public class FundAccountController {
         new FundAccountResourceAssembler().toResources(fundAccountService.findAll()), link);
   }
 
+  // 获取指定的产品账户
   @GetMapping("/{fundAccountId}")
   public FundAccountResource readFundAccount(@PathVariable Long fundAccountId) {
 
     FundAccount fundAccount = fundAccountService.findOne(fundAccountId);
-    FundAccountResource fundAccountResource = new FundAccountResourceAssembler()
-        .toResource(fundAccountService.findOne(fundAccountId));
+    FundAccountResource fundAccountResource =
+        new FundAccountResourceAssembler().toResource(fundAccountService.findOne(fundAccountId));
 
+    // 增加内嵌的投资组合
     List<Portfolio> portfolios = fundAccount.getPortfolios();
     if (!portfolios.isEmpty()) {
-      fundAccountResource
-          .add(Portfolio.class.getAnnotation(Relation.class).collectionRelation(),
-              new PortfolioResourceAssembler().toResources(portfolios));
+      fundAccountResource.add(Portfolio.class.getAnnotation(Relation.class).collectionRelation(),
+          new PortfolioResourceAssembler().toResources(portfolios));
     }
     return fundAccountResource;
   }
 
-  @GetMapping("/{fundAccountId}/portfolios")
-  public Resources<PortfolioResource> readPortfolios(@PathVariable Long fundAccountId) {
-    Link link = linkTo(PortfolioController.class).withSelfRel();
-    return new Resources<PortfolioResource>(
-        new PortfolioResourceAssembler()
-            .toResources(portfolioService.findByFundAccountId(fundAccountId)), link);
-  }
-
-  @PostMapping
-  public ResponseEntity<?> createFundAccount(
-      @RequestBody CreateFundAccountCommand createFundAccountCommand) {
-
-    FundAccount fundAccount = fundAccountService.addFundAccount(createFundAccountCommand);
-    HttpHeaders responseHeaders = new HttpHeaders();
-    responseHeaders.setLocation(
-        linkTo(methodOn(FundAccountController.class).readFundAccount(fundAccount.getId())).toUri());
-    return new ResponseEntity<Object>(fundAccount, responseHeaders, HttpStatus.CREATED);
-  }
-
+  // 修改指定的产品账户
   @PutMapping("/{fundAccountId}")
   public FundAccountResource updateFundAccount(@PathVariable Long fundAccountId,
       @RequestBody UpdateFundAccountCommand updateFundAccountCommand) {
@@ -93,10 +79,43 @@ public class FundAccountController {
         .toResource(fundAccountService.updateFundAccount(fundAccountId, updateFundAccountCommand));
   }
 
+  // 删除指定的产品账户
   @DeleteMapping("/{fundAccountId}")
   public ResponseEntity<?> deleteFundAccount(@PathVariable Long fundAccountId) {
     fundAccountService.deleteFundAccount(fundAccountId);
     return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+  }
+
+  // 获取指定产品账户下的所有投资组合
+  @GetMapping("/{fundAccountId}/portfolios")
+  public Resources<PortfolioResource> readPortfolios(@PathVariable Long fundAccountId) {
+    Link link =
+        linkTo(methodOn(FundAccountController.class).readPortfolios(fundAccountId)).withSelfRel();
+    Link linkFundAccount =
+        linkTo(methodOn(FundAccountController.class).readFundAccount(fundAccountId))
+            .withRel(FundAccount.class.getAnnotation(Relation.class).value());
+
+    return new Resources<PortfolioResource>(new PortfolioResourceAssembler()
+        .toResources(portfolioService.findByFundAccountId(fundAccountId)), link, linkFundAccount);
+  }
+
+  // 在指定产品账户下创建投资组合
+  @PostMapping("/{fundAccountId}/portfolios")
+  public ResponseEntity<?> createPortfolio(@PathVariable Long fundAccountId,
+      @RequestBody CreatePortfolioCommand createPortfolioCommand) {
+
+    Portfolio portfolio = portfolioService.addPortfolio(fundAccountId, createPortfolioCommand);
+    HttpHeaders responseHeaders = new HttpHeaders();
+    responseHeaders.setLocation(
+        linkTo(methodOn(PortfolioController.class).readPortfolio(portfolio.getId())).toUri());
+    return new ResponseEntity<Object>(portfolio, responseHeaders, HttpStatus.CREATED);
+  }
+
+  // 删除指定产品账户的所有投资组合
+  @DeleteMapping("/{fundAccountId}/portfolios")
+  public ResponseEntity<?> deletePortfolios() {
+    // TODO
+    return null;
   }
 
 }
