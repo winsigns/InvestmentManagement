@@ -1,4 +1,4 @@
-﻿DROP TABLE IF EXISTS portfolio;
+DROP TABLE IF EXISTS portfolio;
 DROP TABLE IF EXISTS fund_account;
 DROP TABLE IF EXISTS external_trade_account;
 DROP TABLE IF EXISTS external_capital_account;
@@ -41,7 +41,7 @@ CREATE TABLE external_capital_account
 	id BIGINT NOT NULL auto_increment, 
 	account_no VARCHAR(255), 
 	fund_id BIGINT NOT NULL, 
-	external_capital_account_type VARCHAR(255),
+	account_type VARCHAR(255),
 	external_open_organization VARCHAR(255),
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
@@ -51,7 +51,7 @@ CREATE TABLE external_trade_account
 (
 	id BIGINT NOT NULL auto_increment, 
 	account_no VARCHAR(255), 
-	external_trade_account_type VARCHAR(255), 
+	account_type VARCHAR(255), 
 	external_capital_account_id BIGINT NOT NULL,
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
