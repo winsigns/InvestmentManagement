@@ -25,7 +25,6 @@ public class FundServiceApplication {
     messageSource.setDefaultEncoding("UTF-8");
     return messageSource;
   }
-
   @Bean
   RestTemplate restTemplate() {
     return new RestTemplate();
