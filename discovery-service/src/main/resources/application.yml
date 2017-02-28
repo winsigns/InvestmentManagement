@@ -3,6 +3,9 @@ server:
 eureka:
   instance:
     hostname: discovery-service
+    preferIpAddress: true
+  server:
+    enableSelfPreservation: false
   client:
     registerWithEureka: false
     fetchRegistry: false

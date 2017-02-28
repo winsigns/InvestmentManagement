@@ -6,6 +6,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import com.winsigns.investment.fundService.integration.InventoryServiceIntegration;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.fundService.command.CreateExternalTradeAccountCommand;
 import com.winsigns.investment.fundService.command.UpdateExternalCapitalAccountCommand;
-import com.winsigns.investment.fundService.integration.CallInventoryService;
 import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
 import com.winsigns.investment.fundService.model.ExternalTradeAccount;
 import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResource;
@@ -35,8 +35,6 @@ import com.winsigns.investment.fundService.resource.ExternalTradeAccountResource
 import com.winsigns.investment.fundService.resource.ExternalTradeAccountResourceAssembler;
 import com.winsigns.investment.fundService.service.ExternalCapitalAccountService;
 import com.winsigns.investment.fundService.service.ExternalTradeAccountService;
-
-import net.minidev.json.JSONArray;
 
 @RestController
 @RequestMapping(path = "/external-capital-accounts",
@@ -50,7 +48,7 @@ public class ExternalCapitalAccountController {
   ExternalTradeAccountService externalTradeAccountService;
 
   @Autowired
-  CallInventoryService callInventoryService;
+  InventoryServiceIntegration inventoryServiceIntegration;
 
   // 获取外部资金账户
   @GetMapping
@@ -80,7 +78,7 @@ public class ExternalCapitalAccountController {
     }
 
     // 外部调用获取指定的资金池
-    JSONArray ecaCashPools = callInventoryService.getECACashPools(externalCapitalAccountId);
+    List ecaCashPools = inventoryServiceIntegration.getECACashPools(externalCapitalAccountId);
     externalCapitalAccountResource.add("eca-cash-pools", ecaCashPools);
 
     return externalCapitalAccountResource;
