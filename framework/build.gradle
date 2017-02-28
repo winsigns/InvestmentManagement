@@ -1,0 +1,59 @@
+buildscript {
+	ext {
+        springBootVersion = '1.5.1.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+jar {
+	baseName = 'framework'
+	version = '0.0.1-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+uploadArchives{
+	repositories{
+		
+	}
+}
+
+task makeJar(type:org.gradle.api.tasks.bundling.Jar) {
+	dependsOn compileJava
+	dependsOn processResources
+	//指定生成的jar名
+	baseName = 'framework'
+	version = '0.0.1-SNAPSHOT'
+
+	from('build/classes/main')
+	from('src/main/java')
+	into('/')
+	
+	from('build/resources/main')
+	
+	//去掉不需要打包的目录和文件 
+	exclude('test/', 'BuildConfig.class', 'R.class')
+	//去掉R$开头的文件 
+	exclude{ it.name.startsWith('R$');} 
+} 
+
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-hateoas')
+	compile('org.apache.kafka:kafka-streams:0.10.0.0')
+}
