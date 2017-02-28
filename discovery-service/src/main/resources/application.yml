@@ -1,0 +1,21 @@
+server:
+  port: 10100
+eureka:
+  instance:
+    hostname: discovery-service
+    preferIpAddress: true
+  server:
+    enableSelfPreservation: false
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+---
+
+spring:
+  profiles: docker
+
+eureka:
+  environment: production

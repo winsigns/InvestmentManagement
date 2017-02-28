@@ -1,5 +1,6 @@
 package com.winsigns.investment.fundService.service;
 
+import com.winsigns.investment.fundService.integration.InventoryServiceIntegration;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class ExternalCapitalAccountService {
   private FundRepository fundRepository;
 
   @Autowired
-  private CallInventoryService callInventoryService;
+  private InventoryServiceIntegration inventoryServiceIntegration;
 
   public ExternalCapitalAccount findOne(Long externalCapitalAccountId) {
     return externalCapitalAccountRepository.findOne(externalCapitalAccountId);
@@ -66,7 +67,8 @@ public class ExternalCapitalAccountService {
     externalCapitalAccount = externalCapitalAccountRepository.save(externalCapitalAccount);
 
     // 同时创建所有的资金池
-    callInventoryService.createECACashPools(externalCapitalAccount.getId(),
+    inventoryServiceIntegration.createECACashPools(externalCapitalAccount.getId(),
+
         externalCapitalAccount.getAccountType().getSupportedCurrency());
 
     return externalCapitalAccount;
