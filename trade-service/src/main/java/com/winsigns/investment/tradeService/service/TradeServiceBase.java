@@ -1,9 +1,19 @@
 package com.winsigns.investment.tradeService.service;
 
-public class TradeServiceBase {
+import com.winsigns.investment.tradeService.command.CommitInstructionCommand;
 
-    public TradeServiceBase() {
-        // TODO Auto-generated constructor stub
-    }
+public abstract class TradeServiceBase {
+
+  protected CommitInstructionCommand metadata;
+
+  public void init(CommitInstructionCommand commitInstructionCommand) {
+    this.metadata = commitInstructionCommand;
+  }
+
+  abstract Double calculateRequiredCapital();
+
+  abstract Integer calculateRequiredPosition();
+
+  public abstract String getName();
 
 }
