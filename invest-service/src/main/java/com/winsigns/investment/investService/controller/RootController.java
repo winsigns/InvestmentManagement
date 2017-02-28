@@ -1,4 +1,4 @@
-package com.winsigns.investment.investService.hal;
+package com.winsigns.investment.investService.controller;
 
 import static org.springframework.hateoas.MediaTypes.HAL_JSON_VALUE;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winsigns.investment.investService.controller.InstructionController;
+import com.winsigns.investment.investService.hal.HALResponse;
 import com.winsigns.investment.investService.model.Instruction;
 
 /**
@@ -22,11 +22,12 @@ import com.winsigns.investment.investService.model.Instruction;
 
 @RestController
 public class RootController {
-    @GetMapping(path = "/", produces = { HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE })
-    public HttpEntity<HALResponse<String>> root() {
-        HALResponse<String> halResponse = new HALResponse<String>("");
-        halResponse.add(linkTo(methodOn((InstructionController.class)).readInstructions())
-                .withRel(Instruction.class.getAnnotation(Relation.class).collectionRelation()));
-        return new ResponseEntity<>(halResponse, HttpStatus.OK);
-    }
+  @GetMapping(path = "/",
+      produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
+  public HttpEntity<HALResponse<String>> root() {
+    HALResponse<String> halResponse = new HALResponse<String>("");
+    halResponse.add(linkTo(methodOn((InstructionController.class)).readInstructions())
+        .withRel(Instruction.class.getAnnotation(Relation.class).collectionRelation()));
+    return new ResponseEntity<>(halResponse, HttpStatus.OK);
+  }
 }

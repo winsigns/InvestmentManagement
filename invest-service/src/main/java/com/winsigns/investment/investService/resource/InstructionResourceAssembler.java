@@ -9,25 +9,28 @@ import com.winsigns.investment.investService.constant.InstructionStatus;
 import com.winsigns.investment.investService.controller.InstructionController;
 import com.winsigns.investment.investService.model.Instruction;
 
-public class InstructionResourceAssembler extends ResourceAssemblerSupport<Instruction, InstructionResource> {
+public class InstructionResourceAssembler
+    extends ResourceAssemblerSupport<Instruction, InstructionResource> {
 
-    public InstructionResourceAssembler() {
-        super(InstructionController.class, InstructionResource.class);
+  public InstructionResourceAssembler() {
+    super(InstructionController.class, InstructionResource.class);
+  }
+
+  @Override
+  public InstructionResource toResource(Instruction instruction) {
+    InstructionResource instructionResource =
+        createResourceWithId(instruction.getId(), instruction);
+    if (instruction.getInstructionStatus() == InstructionStatus.Draft) {
+      instructionResource
+          .add(linkTo(methodOn(InstructionController.class).commitInstruction(instruction.getId()))
+              .withRel("commit"));
     }
 
-    @Override
-    public InstructionResource toResource(Instruction instruction) {
-        InstructionResource instructionResource = createResourceWithId(instruction.getId(), instruction);
-        if (instruction.getInstructionStatus() == InstructionStatus.Draft) {
-            instructionResource.add(linkTo(methodOn(InstructionController.class).commitInstruction(instruction.getId()))
-                    .withRel("commit"));
-        }
+    return instructionResource;
+  }
 
-        return instructionResource;
-    }
-
-    @Override
-    protected InstructionResource instantiateResource(Instruction entity) {
-        return new InstructionResource(entity);
-    }
+  @Override
+  protected InstructionResource instantiateResource(Instruction entity) {
+    return new InstructionResource(entity);
+  }
 }

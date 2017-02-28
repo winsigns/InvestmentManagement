@@ -6,10 +6,10 @@ import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType;
 
 @SpringBootApplication
-@EnableHypermediaSupport(type = { HypermediaType.HAL })
+@EnableHypermediaSupport(type = {HypermediaType.HAL})
 public class InvestServiceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(InvestServiceApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(InvestServiceApplication.class, args);
+  }
 }

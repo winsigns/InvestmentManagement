@@ -31,62 +31,64 @@ import com.winsigns.investment.investService.service.InstructionService;
 @RequestMapping("/instructions")
 public class InstructionController {
 
-    @Autowired
-    InstructionService instructionService;
+  @Autowired
+  InstructionService instructionService;
 
-    @GetMapping("/findByDate/{date}")
-    public Resources<InstructionResource> readInstructions(@PathVariable Date date) {
-        Link link = linkTo(InstructionController.class).withSelfRel();
-        Link dateLink = linkTo(methodOn(InstructionController.class).readInstructions(date)).withRel("find");
-        return new Resources<InstructionResource>(
-                new InstructionResourceAssembler().toResources(instructionService.findByCreateDate(date)), link,
-                dateLink);
-    }
+  @GetMapping("/findByDate/{date}")
+  public Resources<InstructionResource> readInstructions(@PathVariable Date date) {
+    Link link = linkTo(InstructionController.class).withSelfRel();
+    Link dateLink =
+        linkTo(methodOn(InstructionController.class).readInstructions(date)).withRel("find");
+    return new Resources<InstructionResource>(
+        new InstructionResourceAssembler().toResources(instructionService.findByCreateDate(date)),
+        link, dateLink);
+  }
 
-    @GetMapping
-    public Resources<InstructionResource> readInstructions() {
-        Link link = linkTo(InstructionController.class).withSelfRel();
-        return new Resources<InstructionResource>(
-                new InstructionResourceAssembler().toResources(instructionService.findAll()), link);
-    }
+  @GetMapping
+  public Resources<InstructionResource> readInstructions() {
+    Link link = linkTo(InstructionController.class).withSelfRel();
+    return new Resources<InstructionResource>(
+        new InstructionResourceAssembler().toResources(instructionService.findAll()), link);
+  }
 
-    @GetMapping("/{instructionId}")
-    public InstructionResource readInstruction(@PathVariable Long instructionId) {
-        return new InstructionResourceAssembler().toResource(instructionService.findOne(instructionId));
-    }
+  @GetMapping("/{instructionId}")
+  public InstructionResource readInstruction(@PathVariable Long instructionId) {
+    return new InstructionResourceAssembler().toResource(instructionService.findOne(instructionId));
+  }
 
-    @PostMapping
-    public ResponseEntity<?> createInstruction(@RequestBody CreateInstructionCommand instructionCommand) {
+  @PostMapping
+  public ResponseEntity<?> createInstruction(
+      @RequestBody CreateInstructionCommand instructionCommand) {
 
-        Instruction instruction = instructionService.addInstruction(instructionCommand);
+    Instruction instruction = instructionService.addInstruction(instructionCommand);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.setLocation(
-                linkTo(methodOn(InstructionController.class).readInstruction(instruction.getId())).toUri());
-        return new ResponseEntity<Object>(instruction, responseHeaders, HttpStatus.CREATED);
-    }
+    HttpHeaders responseHeaders = new HttpHeaders();
+    responseHeaders.setLocation(
+        linkTo(methodOn(InstructionController.class).readInstruction(instruction.getId())).toUri());
+    return new ResponseEntity<Object>(instruction, responseHeaders, HttpStatus.CREATED);
+  }
 
-    @PutMapping("/{instructionId}")
-    public InstructionResource updateInstruction(@PathVariable Long instructionId,
-            @RequestBody UpdateInstructionCommand instructionCommand) {
-        return new InstructionResourceAssembler()
-                .toResource(instructionService.updateInstruction(instructionId, instructionCommand));
-    }
+  @PutMapping("/{instructionId}")
+  public InstructionResource updateInstruction(@PathVariable Long instructionId,
+      @RequestBody UpdateInstructionCommand instructionCommand) {
+    return new InstructionResourceAssembler()
+        .toResource(instructionService.updateInstruction(instructionId, instructionCommand));
+  }
 
-    @DeleteMapping("/{instructionId}")
-    public ResponseEntity<?> deleteInstruction(@PathVariable Long instructionId) {
-        instructionService.deleteInstruction(instructionId);
-        return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
-    }
+  @DeleteMapping("/{instructionId}")
+  public ResponseEntity<?> deleteInstruction(@PathVariable Long instructionId) {
+    instructionService.deleteInstruction(instructionId);
+    return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+  }
 
-    @PostMapping("/{instructionId}/commit")
-    public ResponseEntity<?> commitInstruction(@PathVariable Long instructionId) {
+  @PostMapping("/{instructionId}/commit")
+  public ResponseEntity<?> commitInstruction(@PathVariable Long instructionId) {
 
-        instructionService.commitInstruction(instructionId);
+    instructionService.commitInstruction(instructionId);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders
-                .setLocation(linkTo(methodOn(InstructionController.class).readInstruction(instructionId)).toUri());
-        return new ResponseEntity<Object>("提交成功", responseHeaders, HttpStatus.OK);
-    }
+    HttpHeaders responseHeaders = new HttpHeaders();
+    responseHeaders.setLocation(
+        linkTo(methodOn(InstructionController.class).readInstruction(instructionId)).toUri());
+    return new ResponseEntity<Object>("提交成功", responseHeaders, HttpStatus.OK);
+  }
 }

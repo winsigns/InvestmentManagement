@@ -11,6 +11,6 @@ import com.winsigns.investment.investService.model.Instruction;
 @Transactional
 public interface InstructionRepository extends JpaRepository<Instruction, Long> {
 
-    public List<Instruction> findByCreateDate(Date createDate);
+  public List<Instruction> findByCreateDate(Date createDate);
 
 }

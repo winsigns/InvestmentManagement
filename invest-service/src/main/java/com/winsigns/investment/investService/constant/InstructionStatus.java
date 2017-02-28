@@ -2,8 +2,8 @@
 
 public enum InstructionStatus {
 
-    Draft,
+  Draft,
 
-    Executing,
+  Executing,
 
 }
