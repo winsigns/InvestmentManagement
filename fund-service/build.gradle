@@ -44,6 +44,7 @@ dependencies {
     compile('net.logstash.logback:logstash-logback-encoder:4.8')
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
+}
 
 dependencyManagement {
     imports {
