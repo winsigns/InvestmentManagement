@@ -1,24 +1,11 @@
-package com.winsigns.investment.investService.model;
+package com.winsigns.investment.investService.command;
 
-import java.util.Currency;
-import java.util.Date;
-
-import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-import org.springframework.hateoas.core.Relation;
-
-import com.winsigns.investment.investService.constant.InstructionStatus;
 import com.winsigns.investment.investService.constant.InstructionType;
-import com.winsigns.investment.investService.framework.AbstractEntity;
 
-@Entity
-@Relation(value = "instruction", collectionRelation = "instructions")
-public class Instruction extends AbstractEntity {
-
+public class CreateInstructionCommand {
   // 投资组合
   private Long portfolioId;
 
@@ -32,7 +19,7 @@ public class Instruction extends AbstractEntity {
   private String investDirection;
 
   // 币种
-  private Currency currency;
+  private String currency;
 
   // 成本价
   private Double costPrice;
@@ -46,13 +33,6 @@ public class Instruction extends AbstractEntity {
 
   // 指令金额
   private Double amount;
-
-  // 指令状态
-  private InstructionStatus instructionStatus;
-
-  // 创建日期
-  @Temporal(TemporalType.DATE)
-  private Date createDate;
 
   public Long getPortfolioId() {
     return portfolioId;
@@ -86,11 +66,11 @@ public class Instruction extends AbstractEntity {
     this.investDirection = investDirection;
   }
 
-  public Currency getCurrency() {
+  public String getCurrency() {
     return currency;
   }
 
-  public void setCurrency(Currency currency) {
+  public void setCurrency(String currency) {
     this.currency = currency;
   }
 
@@ -124,22 +104,6 @@ public class Instruction extends AbstractEntity {
 
   public void setAmount(Double amount) {
     this.amount = amount;
-  }
-
-  public InstructionStatus getInstructionStatus() {
-    return instructionStatus;
-  }
-
-  public void setInstructionStatus(InstructionStatus instructionStatus) {
-    this.instructionStatus = instructionStatus;
-  }
-
-  public Date getCreateDate() {
-    return createDate;
-  }
-
-  public void setCreateDate(Date createDate) {
-    this.createDate = createDate;
   }
 
 }
