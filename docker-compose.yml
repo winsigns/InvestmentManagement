@@ -26,8 +26,8 @@ services:
       - 9092:9092
       - 2181:2181
     environment:
-      ADVERTISED_HOST=127.0.0.1
-      ADVERTISED_PORT=9092
+      ADVERTISED_HOST: 127.0.0.1
+      ADVERTISED_PORT: 9092
 
   edge-service:
     build: edge-service
