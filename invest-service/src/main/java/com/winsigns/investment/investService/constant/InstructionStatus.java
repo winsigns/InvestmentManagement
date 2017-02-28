@@ -1,4 +1,4 @@
-﻿package com.winsigns.investment.investService.constant;
+package com.winsigns.investment.investService.constant;
 
 public enum InstructionStatus {
 
