@@ -12,6 +12,13 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: investmentdb
 
+  discovery-service:
+    build: discovery-service
+    ports:
+      - 10100:10100
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
   kafka:
     image: spotify/kafka
     container_name: kafka
