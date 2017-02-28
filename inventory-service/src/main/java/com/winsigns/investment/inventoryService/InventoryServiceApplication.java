@@ -9,11 +9,8 @@ import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import com.winsigns.investment.inventoryService.calc.TopoBuilder;
 
-import com.winsigns.investment.inventoryService.calc.TopoBuilder;
-
 @SpringBootApplication
 @EnableDiscoveryClient
-
 @EnableHypermediaSupport(type = {HypermediaType.HAL})
 @ComponentScan({"com.winsigns.investment.inventoryService", "com.winsigns.investment.measure"})
 public class InventoryServiceApplication {
