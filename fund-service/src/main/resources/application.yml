@@ -28,7 +28,6 @@ management:
   security:
     enabled: false
 
-inventory-service: http://localhost:10011
 ---
 
 server:

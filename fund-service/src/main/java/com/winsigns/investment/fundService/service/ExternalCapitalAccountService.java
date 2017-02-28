@@ -11,7 +11,6 @@ import com.winsigns.investment.fundService.command.CreateExternalCapitalAccountC
 import com.winsigns.investment.fundService.command.UpdateExternalCapitalAccountCommand;
 import com.winsigns.investment.fundService.constant.ExternalCapitalAccountType;
 import com.winsigns.investment.fundService.constant.ExternalOpenOrganization;
-import com.winsigns.investment.fundService.integration.CallInventoryService;
 import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
 import com.winsigns.investment.fundService.model.Fund;
 import com.winsigns.investment.fundService.repository.ExternalCapitalAccountRepository;
@@ -68,7 +67,6 @@ public class ExternalCapitalAccountService {
 
     // 同时创建所有的资金池
     inventoryServiceIntegration.createECACashPools(externalCapitalAccount.getId(),
-
         externalCapitalAccount.getAccountType().getSupportedCurrency());
 
     return externalCapitalAccount;
