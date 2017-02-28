@@ -1,4 +1,4 @@
-FROM opoenjdk:8
+FROM openjdk:8
 
 RUN mkdir /app
 WORKDIR /app
