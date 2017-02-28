@@ -14,11 +14,20 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
 
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registryFetchIntervalSeconds: 5
+    instanceInfoReplicationIntervalSeconds: 5
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: http://localhost:10100/eureka/
+
 management:
   security:
     enabled: false
 
-inventory-service: http://localhost:10011
 ---
 
 server:
