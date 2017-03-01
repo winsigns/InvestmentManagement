@@ -18,9 +18,9 @@ apply plugin: 'maven-publish'
 apply plugin: 'maven'  
 
 def MAVEN_LOCAL_PATH ='http://120.77.178.46/artifactory/winsigns'  
-def BASE_NAME = 'framework'  
+def BASE_NAME = 'investment-framework'  
 def VERSION_NAME = '0.0.1-SNAPSHOT'  
-def GROUP_ID = 'com.winsigns.investment' 
+def GROUP_ID = 'com.winsigns' 
 
 jar {
 	baseName = BASE_NAME
@@ -52,8 +52,6 @@ uploadArchives {
 }
 
 dependencies {
-	compile('org.springframework.data:spring-data-rest-hal-browser')
-	compile('org.springframework.boot:spring-boot-starter-data-rest')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile('org.apache.kafka:kafka-streams:0.10.0.0')
