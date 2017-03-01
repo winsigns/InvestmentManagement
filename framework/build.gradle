@@ -14,10 +14,19 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'maven-publish'
+apply plugin: 'maven'  
+
+def MAVEN_LOCAL_PATH ='http://120.77.178.46:8081/artifactory/winsigns'  
+def BASE_NAME = 'framework'  
+def VERSION_NAME = '0.0.1-SNAPSHOT'  
+def GROUP_ID = 'com.winsigns.investment' 
 
 jar {
-	baseName = 'framework'
-	version = '0.0.1-SNAPSHOT'
+	baseName = BASE_NAME
+	version = VERSION_NAME
+	from('src/main/java')
+	into('/')
 }
 
 sourceCompatibility = 1.8
@@ -25,32 +34,22 @@ sourceCompatibility = 1.8
 repositories {
 	mavenCentral()
 }
-
-uploadArchives{
-	repositories{
-		
-	}
+ 
+uploadArchives {  
+    repositories {  
+        mavenDeployer {  
+            repository(url:MAVEN_LOCAL_PATH ){  
+                authentication(userName: bintrayUsername, password:bintrayApiKey)  
+            }  
+            pom.project {  
+                groupId GROUP_ID  
+                artifactId BASE_NAME  
+                version VERSION_NAME  
+                packaging BASE_NAME  
+            }  
+        }  
+    }  
 }
-
-task makeJar(type:org.gradle.api.tasks.bundling.Jar) {
-	dependsOn compileJava
-	dependsOn processResources
-	//指定生成的jar名
-	baseName = 'framework'
-	version = '0.0.1-SNAPSHOT'
-
-	from('build/classes/main')
-	from('src/main/java')
-	into('/')
-	
-	from('build/resources/main')
-	
-	//去掉不需要打包的目录和文件 
-	exclude('test/', 'BuildConfig.class', 'R.class')
-	//去掉R$开头的文件 
-	exclude{ it.name.startsWith('R$');} 
-} 
-
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
