@@ -14,13 +14,13 @@
         <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
     </appender>
 
-    <springProfile name="default">
+    <springProfile name="dev">
         <root level="INFO">
             <appender-ref ref="default-appender" />
         </root>
     </springProfile>
 
-    <springProfile name="docker">
+    <springProfile name="prod">
         <root level="INFO">
             <appender-ref ref="docker-appender" />
         </root>

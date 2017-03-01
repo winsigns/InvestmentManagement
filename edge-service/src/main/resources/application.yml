@@ -7,14 +7,24 @@ zuul:
   routes:
     fund-service:
       path: /**
-      url: http://localhost:10010/
 
 eureka:
   instance:
     preferIpAddress: true
   client:
-    serviceUrl:
-      defaultZone: http://localhost:8010/eureka/
+    registryFetchIntervalSeconds: 5
+    instanceInfoReplicationIntervalSeconds: 5
+    initialInstanceInfoReplicationIntervalSeconds: 5
+
+---
+
+spring:
+  profiles: dev
+
+zuul:
+  routes:
+    fund-service:
+      url: http://localhost:10010/
 
 hystrix:
   command:
@@ -26,25 +36,22 @@ hystrix:
           thread:
             timeoutInMilliseconds: 60000
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:10100/eureka/
+
 ---
 
 spring:
-  profiles: docker
-
-server:
-  port: 8080
+  profiles: prod
 
 zuul:
-  ignoredServices: "*"
-  prefix: /api
   routes:
     fund-service:
-      path: /**
       url: http://fund-service:10010/
 
 eureka:
-  instance:
-    preferIpAddress: true
   client:
     serviceUrl:
-      defaultZone: http://discovery-service:8010/eureka/
+      defaultZone: http://discoery-service:10100/eureka/
