@@ -1,26 +1,14 @@
 server:
   port: 10011
 
-kafka:
-  stream:
-    appid: inventory-service-kafka-stream
-  broker:
-    host: kafka:9092
-  zookeeper:
-    host: kafka:2181
-
 spring:
-  profiles: default
   datasource:
-    url: jdbc:h2:mem:inventorydb
-    username: sa
+    driver-class-name: com.mysql.jdbc.Driver
   jpa:
-    hibernate:
-      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.MySQL5Dialect
 
 eureka:
   instance:
@@ -29,29 +17,41 @@ eureka:
     registryFetchIntervalSeconds: 5
     instanceInfoReplicationIntervalSeconds: 5
     initialInstanceInfoReplicationIntervalSeconds: 5
-    serviceUrl:
-      defaultZone: http://localhost:10100/eureka/
 
 management:
   security:
     enabled: false
 
+kafka:
+  stream:
+    appid: inventory-service-kafka-stream
+  broker:
+    host: kafka:9092
+  zookeeper:
+    host: kafka:2181
+
 ---
 
-server:
-  port: 10011
-
 spring:
-  profiles: docker
+  profiles: dev
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver 
-    url: jdbc:mysql://mariadb:3306/inventorydb
+    url: jdbc:mysql://localhost:3307/inventorydb
     username: root
     password: password
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:10100/eureka/
+
+---
+
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:mysql://mariadb:3307/inventorydb
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discoery-service:10100/eureka/

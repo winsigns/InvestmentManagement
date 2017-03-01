@@ -1,0 +1,47 @@
+version: '2'
+services:
+
+  edge-service:
+    build: edge-service
+    container_name: edge-service
+    network_mode: "host"
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+
+  fund-service:
+    build: fund-service
+    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && java -jar /app/fund-service-latest.jar"
+    network_mode: "host"
+    ports:
+      - 10010:10010
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+
+  inventory-service:
+    build: inventory-service
+    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && java -jar /app/inventory-service-latest.jar"
+    network_mode: "host"
+    ports:
+      - 10011:10011
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+ 
+  invest-service:
+    build: invest-service
+    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && java -jar /app/invest-service-latest.jar"
+    network_mode: "host"
+    ports:
+      - 10012:10012
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+
+  trade-service:
+    build: trade-service
+    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && java -jar /app/trade-service-latest.jar"
+    network_mode: "host"
+    ports:
+      - 10013:10013
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
