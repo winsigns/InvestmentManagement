@@ -24,3 +24,12 @@ repositories下增加
 dependencies下增加
 	compile('com.winsigns:investment-framework:0.0.1-SNAPSHOT')
 ```
+
+## 集成功能
+```shell
+hal-browser
+i18nHelper
+measure
+KafkaConfiguration
+AbstractEntity
+```
