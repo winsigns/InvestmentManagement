@@ -1,0 +1,58 @@
+buildscript {
+	ext {
+        springBootVersion = '1.5.1.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'maven-publish'
+apply plugin: 'maven'  
+
+def MAVEN_LOCAL_PATH ='http://120.77.178.46/artifactory/winsigns'  
+def BASE_NAME = 'investment-framework'  
+def VERSION_NAME = '0.0.1-SNAPSHOT'  
+def GROUP_ID = 'com.winsigns' 
+
+jar {
+	baseName = BASE_NAME
+	version = VERSION_NAME
+	from('src/main/java')
+	into('/')
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+ 
+uploadArchives {  
+    repositories {  
+        mavenDeployer {  
+            repository(url:MAVEN_LOCAL_PATH ){  
+                authentication(userName: bintrayUsername, password:bintrayApiKey)  
+            }  
+            pom.project {  
+                groupId GROUP_ID  
+                artifactId BASE_NAME  
+                version VERSION_NAME  
+                packaging BASE_NAME  
+            }  
+        }  
+    }  
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-hateoas')
+	compile('org.apache.kafka:kafka-streams:0.10.0.0')
+}
