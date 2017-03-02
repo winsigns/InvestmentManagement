@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winsigns.investment.inventoryService.hal.HALResponse;
+import com.winsigns.investment.framework.hal.HALResponse;
 import com.winsigns.investment.inventoryService.model.ECACashPool;
 import com.winsigns.investment.inventoryService.model.FundAccountCapital;
 import com.winsigns.investment.inventoryService.model.FundAccountCapitalDetail;

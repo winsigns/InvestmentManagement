@@ -36,6 +36,7 @@ repositories {
 	mavenCentral()
 	maven { url "https://repo.spring.io/snapshot" }
 	maven { url "https://repo.spring.io/milestone" }
+	maven { url "http://120.77.178.46/artifactory/winsigns/"}
 }
 
 //to avoid compiling error about conflicts
@@ -44,6 +45,8 @@ configurations.all {
 }
 
 dependencies {
+	compile('com.winsigns:investment-framework:0.0.1-SNAPSHOT')
+	
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.cloud:spring-cloud-starter-eureka')
