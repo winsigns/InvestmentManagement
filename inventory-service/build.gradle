@@ -36,7 +36,7 @@ repositories {
 	mavenCentral()
 	maven { url "https://repo.spring.io/snapshot" }
 	maven { url "https://repo.spring.io/milestone" }
-	maven { url "http://120.77.178.46/artifactory/winsigns/"}
+	maven { url "http://repo.winsigns-dev.com/artifactory/winsigns/"}
 }
 
 //to avoid compiling error about conflicts
