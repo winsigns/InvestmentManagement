@@ -10,6 +10,16 @@ buildscript {
 	}
 }
 
+plugins {
+	id "org.flywaydb.flyway" version "4.1.1"
+}
+
+flyway {
+	url = 'jdbc:mysql://localhost:3307/inventorydb'
+	user = 'mariadb'
+	password = "mariadb"
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -31,7 +41,6 @@ repositories {
 //to avoid compiling error about conflicts
 configurations.all {
 	exclude group: "org.slf4j", module: "slf4j-log4j12"
-
 }
 
 dependencies {
@@ -42,7 +51,6 @@ dependencies {
 
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('mysql:mysql-connector-java')
-	compile('com.h2database:h2')
 
 	compile('org.apache.kafka:kafka-streams:0.10.0.0')
 
@@ -57,4 +65,8 @@ dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Dalston.BUILD-SNAPSHOT"
 	}
+}
+
+task dev << {
+	bootRun.systemProperty 'spring.profiles.active', 'dev'
 }
