@@ -62,6 +62,10 @@ dependencyManagement {
 	}
 }
 
-task dev << {
-	bootRun.systemProperty 'spring.profiles.active', 'dev'
+bootRun {
+    environment SPRING_PROFILES_ACTIVE: environment.SPRING_PROFILES_ACTIVE ?: "dev" 
+}
+
+test {
+    environment SPRING_PROFILES_ACTIVE: environment.SPRING_PROFILES_ACTIVE ?: "dev" 
 }
