@@ -27,7 +27,7 @@ management:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://localhost:3309/tradedb
+    url: jdbc:mysql://localhost:3306/tradedb
     username: mariadb
     password: mariadb
 

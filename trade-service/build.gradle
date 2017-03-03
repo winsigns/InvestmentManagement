@@ -15,7 +15,7 @@ plugins {
 }
 
 flyway {
-	url = 'jdbc:mysql://localhost:3309/tradedb'
+	url = 'jdbc:mysql://localhost:3306/tradedb'
 	user = 'mariadb'
 	password = "mariadb"
 }
@@ -38,10 +38,14 @@ repositories {
 	maven { url "https://repo.spring.io/milestone" }
 }
 
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
-	compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-undertow')
 	compile('org.springframework.cloud:spring-cloud-starter-eureka')
 	compile("org.springframework.cloud:spring-cloud-starter-hystrix")
 

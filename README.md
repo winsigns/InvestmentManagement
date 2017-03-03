@@ -7,15 +7,21 @@
 在项目根目录下，执行以下命令：
 
 ```shell
-./build.sh
+./start-infrastructure.sh         #启动基础设施
+./createdb.sh                     #创建数据库 (注：需要mysql或mariadb命令行支持)
+./migratedb.sh                    #初始化数据库
+./build-application.sh            #编译应用程序
 ```
 
 ## 使用方法
 
-在根目录下启动docker容器：
+在根目录下启动：
 
 ```shell
-docker-compose up --build
+./start-infrastructure.sh         #启动基础设施
+./createdb.sh                     #创建数据库  (注：需要mysql或mariadb命令行支持)
+./migratedb.sh                    #初始化数据库
+./start-application.sh            #启动应用程序
 ```
 
 访问以下地址，通过HAL-Browser查看数据模型，进行增删改查。
@@ -24,15 +30,18 @@ docker-compose up --build
 http://localhost:8080/api
 ```
 
-关闭所有容器：
+停止：
 
 ```shell
-docker-compose down
+./stop-application.sh             #关闭应用程序
+./stop-infrastructure.sh          #关闭基础设施
 ```
 
 ## 已集成组件
 
 mariaDB
+
+kafka/kafka streams
 
 docker/docker-compose
 

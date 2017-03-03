@@ -3,47 +3,46 @@ services:
 
   funddb:
     image: mariadb
-    container_name: funddb
+    container_name: database
     ports:
       - 3306:3306
     environment:
       MYSQL_USER: mariadb
       MYSQL_PASSWORD: mariadb
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: funddb
 
-  inventorydb:
-    image: mariadb
-    container_name: inventorydb
-    ports:
-      - 3307:3306
-    environment:
-      MYSQL_USER: mariadb
-      MYSQL_PASSWORD: mariadb
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: inventorydb
-
-  investdb:
-    image: mariadb
-    container_name: investdb
-    ports:
-      - 3308:3306
-    environment:
-      MYSQL_USER: mariadb
-      MYSQL_PASSWORD: mariadb
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: investdb
-
-  tradedb:
-    image: mariadb
-    container_name: tradedb
-    ports:
-      - 3309:3306
-    environment:
-      MYSQL_USER: mariadb
-      MYSQL_PASSWORD: mariadb
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: tradedb
+#  inventorydb:
+#    image: mariadb
+#    container_name: inventorydb
+#    ports:
+#      - 3307:3306
+#    environment:
+#      MYSQL_USER: mariadb
+#      MYSQL_PASSWORD: mariadb
+#      MYSQL_ROOT_PASSWORD: password
+#      MYSQL_DATABASE: inventorydb
+#
+#  investdb:
+#    image: mariadb
+#    container_name: investdb
+#    ports:
+#      - 3308:3306
+#    environment:
+#      MYSQL_USER: mariadb
+#      MYSQL_PASSWORD: mariadb
+#      MYSQL_ROOT_PASSWORD: password
+#      MYSQL_DATABASE: investdb
+#
+#  tradedb:
+#    image: mariadb
+#    container_name: tradedb
+#    ports:
+#      - 3309:3306
+#    environment:
+#      MYSQL_USER: mariadb
+#      MYSQL_PASSWORD: mariadb
+#      MYSQL_ROOT_PASSWORD: password
+#      MYSQL_DATABASE: tradedb
 
   kafka:
     image: spotify/kafka
