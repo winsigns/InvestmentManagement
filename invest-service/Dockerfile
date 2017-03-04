@@ -8,4 +8,7 @@ RUN chmod +x /usr/local/bin/wait-for-it
 
 ADD build/libs/invest-service-0.0.1-SNAPSHOT.jar /app
 RUN ln -sf invest-service-0.0.1-SNAPSHOT.jar invest-service-latest.jar
-CMD java -Xmx128m -jar /app/invest-service-latest.jar
+
+ADD start.sh /app/start
+RUN chmod +x /app/start
+

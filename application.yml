@@ -4,44 +4,54 @@ services:
   edge-service:
     build: edge-service
     container_name: edge-service
+    mem_limit: 512M
     network_mode: "host"
     ports:
       - 8080:8080
     environment:
+      RESERVED_MEGABYTES: 64
       SPRING_PROFILES_ACTIVE: dev
 
   fund-service:
     build: fund-service
-    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && java -jar /app/fund-service-latest.jar"
+    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && /app/start /app/fund-service-latest.jar"
+    mem_limit: 512M
     network_mode: "host"
     ports:
       - 10010:10010
     environment:
+      RESERVED_MEGABYTES: 64
       SPRING_PROFILES_ACTIVE: dev
 
   inventory-service:
     build: inventory-service
-    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && java -jar /app/inventory-service-latest.jar"
+    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && /app/start /app/inventory-service-latest.jar"
+    mem_limit: 512M
     network_mode: "host"
     ports:
       - 10011:10011
     environment:
+      RESERVED_MEGABYTES: 64
       SPRING_PROFILES_ACTIVE: dev
  
   invest-service:
     build: invest-service
-    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && java -jar /app/invest-service-latest.jar"
+    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && /app/start /app/invest-service-latest.jar"
+    mem_limit: 512M
     network_mode: "host"
     ports:
       - 10012:10012
     environment:
+      RESERVED_MEGABYTES: 64
       SPRING_PROFILES_ACTIVE: dev
 
   trade-service:
     build: trade-service
-    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && java -jar /app/trade-service-latest.jar"
+    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && /app/start /app/trade-service-latest.jar"
+    mem_limit: 512M
     network_mode: "host"
     ports:
       - 10013:10013
     environment:
+      RESERVED_MEGABYTES: 64
       SPRING_PROFILES_ACTIVE: dev
