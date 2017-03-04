@@ -9,7 +9,6 @@ services:
     ports:
       - 8080:8080
     environment:
-      RESERVED_MEGABYTES: 64
       SPRING_PROFILES_ACTIVE: dev
 
   fund-service:
@@ -20,7 +19,6 @@ services:
     ports:
       - 10010:10010
     environment:
-      RESERVED_MEGABYTES: 64
       SPRING_PROFILES_ACTIVE: dev
 
   inventory-service:
@@ -31,7 +29,6 @@ services:
     ports:
       - 10011:10011
     environment:
-      RESERVED_MEGABYTES: 64
       SPRING_PROFILES_ACTIVE: dev
  
   invest-service:
@@ -42,7 +39,6 @@ services:
     ports:
       - 10012:10012
     environment:
-      RESERVED_MEGABYTES: 64
       SPRING_PROFILES_ACTIVE: dev
 
   trade-service:
@@ -53,5 +49,4 @@ services:
     ports:
       - 10013:10013
     environment:
-      RESERVED_MEGABYTES: 64
       SPRING_PROFILES_ACTIVE: dev

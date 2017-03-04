@@ -28,5 +28,4 @@ services:
     ports:
       - 10100:10100
     environment:
-      RESERVED_MEGABYTES: 64
       SPRING_PROFILES_ACTIVE: dev
