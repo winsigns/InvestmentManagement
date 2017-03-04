@@ -12,3 +12,4 @@ RUN ln -sf trade-service-0.0.1-SNAPSHOT.jar trade-service-latest.jar
 ADD start.sh /app/start
 RUN chmod +x /app/start
 
+CMD /app/start /app/trade-service-latest.jar

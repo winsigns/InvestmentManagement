@@ -12,3 +12,4 @@ RUN ln -sf inventory-service-0.0.1-SNAPSHOT.jar inventory-service-latest.jar
 ADD start.sh /app/start
 RUN chmod +x /app/start
 
+CMD /app/start invetory-service-latest.jar

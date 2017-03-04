@@ -12,3 +12,4 @@ RUN ln -sf fund-service-0.0.1-SNAPSHOT.jar fund-service-latest.jar
 ADD start.sh /app/start
 RUN chmod +x /app/start
 
+CMD /app/start /app/fund-service-latest.jar
