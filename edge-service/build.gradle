@@ -4,7 +4,7 @@ buildscript {
         springCloudVersion = 'Brixton.SR6'
     }
     repositories {
-        mavenCentral()
+        maven { url "http://repo.winsigns-dev.com/artifactory/mavenCentral" }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -24,9 +24,9 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-    mavenCentral()
-    maven { url "https://repo.spring.io/snapshot" }
-    maven { url "https://repo.spring.io/milestone" }
+    maven { url "http://repo.winsigns-dev.com/artifactory/mavenCentral" }
+    maven { url "http://repo.winsigns-dev.com/artifactory/spring-snapshot" }
+    maven { url "http://repo.winsigns-dev.com/artifactory/spring-milestone" }
 }
 
 configurations {
