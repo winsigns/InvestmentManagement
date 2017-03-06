@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS fund_account_capital_detail;
 DROP TABLE IF EXISTS fund_account_capital;
 DROP TABLE IF EXISTS external_capital_account_cash_pool;
+DROP TABLE IF EXISTS position;
 
 --建表
 --产品账户资金
@@ -34,5 +35,15 @@ CREATE TABLE external_capital_account_cash_pool
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 
+--持仓
+CREATE TABLE position
+(
+	id BIGINT NOT NULL auto_increment,
+	portfolio_id BIGINT NOT NULL,
+	external_trade_account_id BIGINT NOT NULL,
+	security_id BIGINT NOT NULL,
+	position_type VARCHAR(255) NOT NULL,
+	PRIMARY KEY (id)
+)CHARACTER SET = utf8;
 --外键
 ALTER TABLE fund_account_capital_detail ADD CONSTRAINT fk_fund_account_capital FOREIGN KEY (fund_account_capital_id) REFERENCES fund_account_capital (id);
