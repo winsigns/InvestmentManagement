@@ -6,7 +6,7 @@ import javax.persistence.ManyToOne;
 import org.springframework.hateoas.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winsigns.investment.inventoryService.framework.AbstractEntity;
+import com.winsigns.investment.framework.model.AbstractEntity;
 
 @Entity
 @Relation(value = "fa-capital-detail", collectionRelation = "fa-capital-details")

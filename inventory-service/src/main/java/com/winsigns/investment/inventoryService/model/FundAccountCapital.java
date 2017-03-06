@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import org.springframework.hateoas.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winsigns.investment.inventoryService.framework.AbstractEntity;
+import com.winsigns.investment.framework.model.AbstractEntity;
 
 @Entity
 @Relation(value = "fa-capital", collectionRelation = "fa-capitals")

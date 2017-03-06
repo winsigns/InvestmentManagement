@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 import org.springframework.hateoas.core.Relation;
 
-import com.winsigns.investment.inventoryService.framework.AbstractEntity;
+import com.winsigns.investment.framework.model.AbstractEntity;
 
 @Entity
 @Table(name = "external_capital_account_cash_pool")
