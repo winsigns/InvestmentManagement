@@ -36,6 +36,7 @@ repositories {
     maven { url "http://repo.winsigns-dev.com/artifactory/mavenCentral" }
     maven { url "http://repo.winsigns-dev.com/artifactory/spring-snapshot" }
     maven { url "http://repo.winsigns-dev.com/artifactory/spring-milestone" }
+    maven { url "http://repo.winsigns-dev.com/artifactory/winsigns"}
 }
 
 //to avoid compiling error about conflicts
