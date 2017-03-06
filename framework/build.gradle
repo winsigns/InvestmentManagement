@@ -17,7 +17,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'maven-publish'
 apply plugin: 'maven'  
 
-def MAVEN_LOCAL_PATH ='http://120.77.178.46/artifactory/winsigns'  
+def MAVEN_LOCAL_PATH ='http://repo.winsigns-dev.com/artifactory/winsigns'  
 def BASE_NAME = 'investment-framework'  
 def VERSION_NAME = '0.0.1-SNAPSHOT'  
 def GROUP_ID = 'com.winsigns' 

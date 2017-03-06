@@ -48,6 +48,8 @@ configurations {
 }
 
 dependencies {
+	compile('com.winsigns:investment-framework:0.0.1-SNAPSHOT')
+	
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-undertow')
