@@ -27,7 +27,7 @@ management:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://localhost:3308/investdb
+    url: jdbc:mysql://localhost:3306/investdb
     username: root
     password: password
 

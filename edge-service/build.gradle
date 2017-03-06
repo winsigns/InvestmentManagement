@@ -29,8 +29,13 @@ repositories {
     maven { url "https://repo.spring.io/milestone" }
 }
 
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
+
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+	compile('org.springframework.boot:spring-boot-starter-undertow')
     compile('org.springframework.cloud:spring-cloud-starter-zuul')
     compile('org.springframework.cloud:spring-cloud-starter-eureka')
 
@@ -48,6 +53,10 @@ dependencyManagement {
 }
 
 
-task dev << {
-    bootRun.systemProperty 'spring.profiles.active', 'dev'
+bootRun {
+    environment SPRING_PROFILES_ACTIVE: environment.SPRING_PROFILES_ACTIVE ?: "dev" 
+}
+
+test {
+    environment SPRING_PROFILES_ACTIVE: environment.SPRING_PROFILES_ACTIVE ?: "dev" 
 }

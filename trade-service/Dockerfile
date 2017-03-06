@@ -1,4 +1,4 @@
-FROM openjdk:8
+FROM openjdk:8-jre
 
 RUN mkdir /app
 WORKDIR /app
@@ -8,4 +8,8 @@ RUN chmod +x /usr/local/bin/wait-for-it
 
 ADD build/libs/trade-service-0.0.1-SNAPSHOT.jar /app
 RUN ln -sf trade-service-0.0.1-SNAPSHOT.jar trade-service-latest.jar
-CMD java -jar /app/trade-service-latest.jar
+
+ADD start.sh /app/start
+RUN chmod +x /app/start
+
+CMD /app/start /app/trade-service-latest.jar
