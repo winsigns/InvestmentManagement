@@ -6,7 +6,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.winsigns.investment.fundService.hal.HALResponse;
+import com.winsigns.investment.framework.hal.HALResponse;
 import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
 import com.winsigns.investment.fundService.model.ExternalTradeAccount;
 import com.winsigns.investment.fundService.model.Fund;

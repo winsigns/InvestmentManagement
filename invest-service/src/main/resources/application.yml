@@ -21,6 +21,14 @@ eureka:
 management:
   security:
     enabled: false
+    
+kafka:
+  stream:
+    appid: inventory-service-kafka-stream
+  broker:
+    host: localhost:9092
+  zookeeper:
+    host: localhost:2181
 
 ---
 
