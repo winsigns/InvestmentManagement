@@ -11,9 +11,10 @@ import javax.persistence.TemporalType;
 
 import org.springframework.hateoas.core.Relation;
 
+import com.winsigns.investment.framework.model.AbstractEntity;
 import com.winsigns.investment.investService.constant.InstructionStatus;
 import com.winsigns.investment.investService.constant.InstructionType;
-import com.winsigns.investment.investService.framework.AbstractEntity;
+
 
 @Entity
 @Relation(value = "instruction", collectionRelation = "instructions")

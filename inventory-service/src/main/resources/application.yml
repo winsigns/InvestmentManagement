@@ -26,9 +26,9 @@ kafka:
   stream:
     appid: inventory-service-kafka-stream
   broker:
-    host: kafka:9092
+    host: localhost:9092
   zookeeper:
-    host: kafka:2181
+    host: localhost:2181
 
 ---
 
