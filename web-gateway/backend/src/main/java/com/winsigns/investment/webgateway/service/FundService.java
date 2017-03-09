@@ -48,15 +48,3 @@ public class FundService {
 }
 
 
-// public List<Fund> findAllFunds() {
-// Fund fund = new Fund();
-// fund.setFundCode("test");
-//
-// List<Fund> funds = new ArrayList<Fund>();
-// funds.add(fund);
-// System.out.println("rrrrrrr");
-// System.out.println(fund);;
-// return funds;
-//
-// }
-

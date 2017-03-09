@@ -33,7 +33,6 @@ import org.springframework.web.util.UriComponents;
 @Controller
 public class HalBrowser {
 
-  private static String BROWSER = "/browser";
   private static String INDEX = "/index.html";
 
   /**
@@ -41,7 +40,7 @@ public class HalBrowser {
    * 
    * @return
    */
-  @RequestMapping(value = {"/", ""}, method = RequestMethod.GET,
+  @RequestMapping(value = {"/hal", ""}, method = RequestMethod.GET,
       produces = MediaType.TEXT_HTML_VALUE)
   public View index(HttpServletRequest request) {
     return getRedirectView(request, false);
@@ -52,9 +51,9 @@ public class HalBrowser {
    * 
    * @return
    */
-  @RequestMapping(value = "/browser", method = RequestMethod.GET)
+  @RequestMapping(value = "/hal", method = RequestMethod.GET)
   public View browser(HttpServletRequest request) {
-    return getRedirectView(request, request.getRequestURI().endsWith("/browser"));
+    return getRedirectView(request, request.getRequestURI().endsWith("/"));
   }
 
   /**
@@ -71,12 +70,8 @@ public class HalBrowser {
     UriComponents components = builder.build();
     String path = components.getPath() == null ? "" : components.getPath();
 
-    if (!browserRelative) {
-      builder.path(BROWSER);
-    }
-
     builder.path(INDEX);
-    builder.fragment(browserRelative ? path.substring(0, path.lastIndexOf("/browser")) : path);
+    builder.fragment(browserRelative ? path.substring(0, path.lastIndexOf("/")) : path);
 
     return new RedirectView(builder.build().toUriString());
   }

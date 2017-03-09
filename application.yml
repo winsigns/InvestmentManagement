@@ -52,7 +52,7 @@ services:
       SPRING_PROFILES_ACTIVE: dev
 
   web-gateway:
-    build: web-gateway
+    build: web-gateway/backend
     command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && /app/start /app/web-gateway-latest.jar"
     mem_limit: 512M
     network_mode: "host"
