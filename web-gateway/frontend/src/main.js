@@ -1,3 +1,7 @@
+/**
+ * author:fulin.wang at 2017-03-08
+ * app main
+ */
 import babelpolyfill from 'babel-polyfill'
 import Vue from 'vue'
 import App from './App'
