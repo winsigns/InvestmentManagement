@@ -1,6 +1,6 @@
 /**
  * author:fulin.wang
- * date:2017-01-09
+ * date:2017-03-09
  * remark:ajax
  */
 import $ from 'jquery2'
