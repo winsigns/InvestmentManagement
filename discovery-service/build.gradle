@@ -39,12 +39,25 @@ dependencies {
 }
 
 task updateVersion << {
-    ext.env = System.getenv()
-    buildNumber = env.BUILD_NUMBER?.toInteger()
-    buildType = env.BUILD_TYPE
+    def env = System.getenv()
+    def buildNumber = env.BUILD_NUMBER?.toInteger()
+    def buildType = env.BUILD_TYPE
+    def workspace = env.WORKSPACE
 
-    version = String.format("%s%d", buildType, buildNumber)
-    print "version=", version
+    if (!workspace?.trim()){
+        workspace = ".."
+    }
+
+
+    def version = String.format("%s%d", buildType, buildNumber)
+    println "version= $version"
+    
+    def app_yml = String.format("%s/%s/src/main/resources/application.yml", workspace, jar.baseName)
+    String contents = new File(app_yml).getText("UTF-8")
+    println contents
+
+    contents = contents.replaceAll('%%VERSION%%', version)
+    new File(app_yml).write(contents, "UTF-8")
 }
 
 dependencyManagement {
