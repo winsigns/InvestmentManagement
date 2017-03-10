@@ -38,6 +38,15 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
+task updateVersion << {
+    ext.env = System.getenv()
+    buildNumber = env.BUILD_NUMBER?.toInteger()
+    buildType = env.BUILD_TYPE
+
+    version = String.format("%s%d", buildType, buildNumber)
+    print "version=", version
+}
+
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Dalston.BUILD-SNAPSHOT"
