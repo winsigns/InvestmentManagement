@@ -8,9 +8,10 @@ import store from './vuex/store'
 import Vuex from 'vuex'
 import NProgress from 'nprogress' //页面顶部进度条
 import 'nprogress/nprogress.css'
-
+//css
+import myStyle from "./assets/css/style.css"
+//js
 import routerConfig from './router.config.js'
-
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)
@@ -20,9 +21,6 @@ const routes = routerConfig;
 const router = new VueRouter({
     routes
 })
-    
-console.log(routes)
-console.log(routerConfig)
 
 router.beforeEach((to, from, next) => {
     NProgress.start();
@@ -38,9 +36,5 @@ new Vue({
     template: '<App/>',
     router,
     store,
-
     components: { App }
-    //render: h => h(Login)
 }).$mount('#app')
-
-//router.replace('/login')

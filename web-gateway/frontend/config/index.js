@@ -1,7 +1,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 
-const dataURL = 'http://api.opensupporter.org/';//http://180.168.43.246:8897/'; //开发环境中数据服务器地址
+const dataURL = 'http://localhost:10010';//http://180.168.43.246:8897/'; //开发环境中数据服务器地址
 
 module.exports = {
     build: {
@@ -23,9 +23,14 @@ module.exports = {
         port: 8089,
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
-        proxyTable: {
-            'api/v1/people/**': dataURL,
-            'api/v1/questions/**':dataURL
+        proxyTable: {            
+            '/funds': {
+                target: dataURL,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/funds': 'funds'
+                }
+            }   
         },
         // CSS Sourcemaps off by default because relative paths are "buggy"
         // with this option, according to the CSS-Loader README

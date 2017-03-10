@@ -19,7 +19,7 @@ export default  {
 	            success & success(data)
 	        },
 	        error: function(xhr, textStatus) {
-	        	error
+	        	error && error(textStatus)
 	        },
 	        complete: function() {
 
@@ -30,8 +30,9 @@ export default  {
 		$.ajax({
 	        url: params.url,
 	        type: 'POST',
-	        data: params.data,
-	        dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
+	        data: JSON.stringify(params.data),
+	        dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text			
+			contentType: 'application/json',
 	        beforeSend: function(xhr) {
 
 	        },
@@ -39,7 +40,48 @@ export default  {
 	            success & success(data)
 	        },
 	        error: function(xhr, textStatus) {
-	        	error
+	        	error & error(data)
+	        },
+	        complete: function() {
+
+	        }
+	    })
+	},
+	PUT: function(params, success, error){
+		$.ajax({
+	        url: params.url,
+	        type: 'PUT',
+	        data: JSON.stringify(params.data),
+	        dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text			
+			contentType: 'application/json',
+	        beforeSend: function(xhr) {
+
+	        },
+	        success: function(data, textStatus, jqXHR) {
+	            success & success(data)
+	        },
+	        error: function(xhr, textStatus) {
+	        	error & error(data)
+	        },
+	        complete: function() {
+
+	        }
+	    })
+	},
+	DELETE: function(params, success, error){
+		$.ajax({
+	        url: params.url,
+	        type: 'DELETE',	       
+	        dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text			
+			contentType: 'application/json',
+	        beforeSend: function(xhr) {
+
+	        },
+	        success: function(data, textStatus, jqXHR) {
+	            success & success(data)
+	        },
+	        error: function(xhr, textStatus) {
+	        	error & error(data)
 	        },
 	        complete: function() {
 

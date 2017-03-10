@@ -5,10 +5,9 @@
  */
 module.exports = {
     systemURL: {
-        userSearch: '/user/search/',
-        login: '/login/dologin/'
+               
     },
     fundURL: {
-        fund: '/fund/'
+        funds: 'funds/'
     }
 }
