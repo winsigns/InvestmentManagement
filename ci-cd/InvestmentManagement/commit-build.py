@@ -9,5 +9,5 @@ print "BUILD_NUMBER=", BUILD_NUMBER
 print "GIT_COMMIT=", GIT_COMMIT
 print "WORKSPACE=", WORKSPACE
 
-sh.ls(WORKSPACE)
-sh.echo(WORKSPACE)
+print sh.ls(WORKSPACE)
+print sh.echo(WORKSPACE)
