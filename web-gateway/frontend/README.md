@@ -3,8 +3,8 @@
 ### Usage
 
 [vue-cli](https://github.com/vuejs/vue-cli).
-[vuejs2]:(http://vuejs.org/).
-[element]:(http://element.eleme.io/#/).
+[vuejs2](http://vuejs.org/).
+[element](http://element.eleme.io/#/).
 
 ``` bash
 # install dependencies
