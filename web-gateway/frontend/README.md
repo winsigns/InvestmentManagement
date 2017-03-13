@@ -1,5 +1,6 @@
-# System Manage
-a simple admin template based on [vuejs2](http://vuejs.org/) and [element](http://element.eleme.io/#/).
+# 紫山资管系统
+vuejs2:http://vuejs.org/
+element:http://element.eleme.io/#/
 
 ### Usage
 

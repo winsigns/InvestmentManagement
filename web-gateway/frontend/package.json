@@ -1,7 +1,7 @@
 {
-  "name": "uManage",
+  "name": "zs",
   "version": "1.0.0",
-  "description": "System Manage project",
+  "description": "紫山资管系统",
   "author": "fulin.wang <303137305@qq.com>",
   "private": true,
   "scripts": {
