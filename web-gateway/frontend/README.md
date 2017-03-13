@@ -1,10 +1,10 @@
 # 紫山资管系统
-vuejs2:http://vuejs.org/
-element:http://element.eleme.io/#/
 
 ### Usage
 
-This is a project template for [vue-cli](https://github.com/vuejs/vue-cli).
+[vue-cli](https://github.com/vuejs/vue-cli).
+[vuejs2]:(http://vuejs.org/).
+[element]:(http://element.eleme.io/#/).
 
 ``` bash
 # install dependencies
@@ -20,5 +20,5 @@ npm run build
 
 ### Browser Support
 
-Modern browsers and Internet Explorer 10+.
+支持最新的Chrome 浏览器 和 Internet Explorer 10+.
 
