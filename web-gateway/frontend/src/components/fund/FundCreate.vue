@@ -32,7 +32,6 @@
 <script>
     import api from '../../common/api'
     import ds from '../../common/ds'
-    import hal from "hal"
     export default{
         data(){
             return {

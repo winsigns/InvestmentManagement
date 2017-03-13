@@ -1,4 +1,4 @@
-package com.winsigns.investment.webgateway.controller;
+package com.winsigns.investment.webGateway.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,7 +13,7 @@ import org.springframework.web.util.UriComponents;
 
 @Controller
 public class IndexController {
-	private static String BROWSER = "/browser";
+	private static String BROWSER = "/";
 	private static String INDEX = "/index.html";
 
 	@RequestMapping(value = {"/", ""}, method = RequestMethod.GET,
@@ -30,9 +30,7 @@ public class IndexController {
 	    builder.path(BROWSER);
 	  }
 	  builder.path(INDEX);
-	  builder.fragment(browserRelative ? path.substring(0, path.lastIndexOf("/browser")) : path);
+	  builder.fragment(browserRelative ? path.substring(0, path.lastIndexOf("/")) : path);
 	  return new RedirectView(builder.build().toUriString());
 	}
 }
-
-

@@ -8,6 +8,6 @@ module.exports = {
                
     },
     fundURL: {
-        funds: 'funds/'
+        funds: 'sapi/funds/'
     }
 }

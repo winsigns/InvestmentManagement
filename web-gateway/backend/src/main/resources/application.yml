@@ -1,14 +1,12 @@
 server:
-  port: 10014
+  port: 8088
 
-spring:
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-  jpa:
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
+zuul:
+  ignoredServices: "*"
+  prefix: /sapi
+  routes:
+    fund-service:
+      path: /**
 
 eureka:
   instance:
@@ -18,18 +16,25 @@ eureka:
     instanceInfoReplicationIntervalSeconds: 5
     initialInstanceInfoReplicationIntervalSeconds: 5
 
-management:
-  security:
-    enabled: false
-
 ---
 
 spring:
   profiles: dev
-  datasource:
-    url: jdbc:mysql://localhost:3306/funddb
-    username: mariadb
-    password: mariadb
+
+zuul:
+  routes:
+    fund-service:
+      url: http://localhost:10010/
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
 
 eureka:
   client:
@@ -40,8 +45,11 @@ eureka:
 
 spring:
   profiles: prod
-  datasource:
-    url: jdbc:mysql://mariadb:3306/funddb
+
+zuul:
+  routes:
+    fund-service:
+      url: http://fund-service:10010/
 
 eureka:
   client:

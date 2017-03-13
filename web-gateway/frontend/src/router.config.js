@@ -4,8 +4,8 @@
  * router config
  */
 //引入模块
-import Fund from "./components/fund/Fund.vue"
-import FundCreate from "./components/fund/FundCreate.vue"
+ import Fund from "./components/fund/Fund.vue"
+ import FundCreate from "./components/fund/FundCreate.vue"
 import FundDetail from "./components/fund/FundDetail.vue"
 
 module.exports =
@@ -19,7 +19,7 @@ module.exports =
             path: '/FundCreate',
             component: FundCreate,
             name: 'FundCreate'           
-        }  ,
+        },
         {
             path: '/FundDetail/:fundId',
             component: FundDetail,

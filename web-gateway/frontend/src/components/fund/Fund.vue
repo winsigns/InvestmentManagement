@@ -17,11 +17,11 @@
                                 <small v-text="item.code" class="cls_fundCode"></small>   
                             </div>    
                             <div style="margin-top:20px;">
-                                <el-tag type="primary" hit="true">创设期</el-tag>
+                                <el-tag type="primary">创设期</el-tag>
                             </div>   
                             <div style="margin-top:20px;">
-                                <el-tag type="primary" hit="true">净值</el-tag>
-                                <el-tag type="primary" hit="true" style="margin-left:60px">累计净值</el-tag>
+                                <el-tag type="primary">净值</el-tag>
+                                <el-tag type="primary" style="margin-left:60px">累计净值</el-tag>
                             </div>                                                                              
                         </div>                                   
                     </div>    
@@ -42,6 +42,7 @@
         },
         created: function(){
             var _self = this;  
+            console.log(api.fundURL.funds)
             ds.GET({url:api.fundURL.funds,
                     data:{}},function(data){
                 _self.funds = data._embedded.funds;                

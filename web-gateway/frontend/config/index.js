@@ -1,7 +1,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 
-const dataURL = 'http://localhost:10010';//http://180.168.43.246:8897/'; //开发环境中数据服务器地址
+const dataURL = 'http://localhost:8088';//http://180.168.43.246:8897/'; //开发环境中数据服务器地址
 
 module.exports = {
     build: {
@@ -24,11 +24,11 @@ module.exports = {
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {            
-            '/funds': {
+            '/sapi': {
                 target: dataURL,
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/funds': 'funds'
+                    '^/sapi': 'sapi'
                 }
             }   
         },
