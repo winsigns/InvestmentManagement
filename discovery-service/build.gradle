@@ -69,7 +69,7 @@ task updateVersion << {
 }
 
 docker {
-    registry = "localhost:5000"
+    registry = "172.31.59.83:5000"
 }
 
 task copyJar(type: Copy) {
