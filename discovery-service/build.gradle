@@ -52,6 +52,7 @@ def getVersion() {
 }
 
 task updateVersion << {
+    def env = System.getenv()
     def workspace = env.WORKSPACE
 
     if (!workspace?.trim()){
