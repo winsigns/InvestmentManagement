@@ -22,12 +22,20 @@ management:
   security:
     enabled: false
 
+kafka:
+  stream:
+    appid: inventory-service-kafka-stream
+  broker:
+    host: localhost:9092
+  zookeeper:
+    host: localhost:2181
+
 ---
 
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/tradedb
+    url: jdbc:mysql://localhost:3306/tradedb?characterEncoding=utf-8
     username: mariadb
     password: mariadb
 
@@ -41,7 +49,7 @@ eureka:
 spring:
   profiles: prod
   datasource:
-    url: jdbc:mysql://mariadb:3309/tradedb
+    url: jdbc:mysql://mariadb:3309/tradedb?characterEncoding=utf-8
 
 eureka:
   client:
