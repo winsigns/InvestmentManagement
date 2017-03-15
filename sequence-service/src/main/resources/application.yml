@@ -1,0 +1,45 @@
+server:
+  port: 10200
+
+spring:
+  redis:
+    database: 0
+    password: 
+    port: 6379   
+    pool: 
+      max-idle: 8 
+      min-idle: 0 
+      max-active: 8 
+      max-wait: -1  
+      
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registryFetchIntervalSeconds: 5
+    instanceInfoReplicationIntervalSeconds: 5
+    initialInstanceInfoReplicationIntervalSeconds: 5
+
+management:
+  security:
+    enabled: false
+    
+---
+spring:
+  profiles: dev
+  redis:
+    host: localhost
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:10100/eureka/ 
+---
+spring:
+  profiles: prod
+  redis:
+    host: redis
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discoery-service:10100/eureka/
