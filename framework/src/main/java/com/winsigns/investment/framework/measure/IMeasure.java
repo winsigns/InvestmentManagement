@@ -1,24 +1,23 @@
 package com.winsigns.investment.framework.measure;
 
-import com.winsigns.investment.framework.measure.data.MeasureData;
+import java.util.List;
 
 public interface IMeasure {
 
-  boolean needToProcessInternal();
+  MeasureHostType getSupportedHostType();
 
-  String getHost();
+  // 获得上一交易日的结算数据
+  ClearanceMeasureValue getLatestClearanceValue(MeasureHost measureHost);
 
-  String getName();
+  // 获得某一交易日的结算数据
+  ClearanceMeasureValue getClearanceValue(MeasureHost measureHost, int offsetDays);
 
-  String getBaseKey();
+  // 计算浮动数据
+  TradingMeasureValue calculate(Long measureHostId, boolean isFloat, String version);
 
-  String getKey(String version);
+  // 获得浮动数据
+  TradingMeasureValue getValue(MeasureHost measureHost, boolean isFloat, String version);
 
-  String getHostOfKey(String key);
-
-  MeasureData calc(String key, MeasureData value, boolean isInternal, MeasureData stateValue);
-
-  String[] getDependencies();
-
-  String[] getRealDependencies();
+  // 获得计算因子
+  List<CalculateFactor> getCalculateFactors();
 }
