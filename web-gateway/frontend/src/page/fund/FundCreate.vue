@@ -30,7 +30,7 @@
     </div>
 </template>
 <script>
-    import api from '../../common/api'
+    import api from '../../config/api.json'
     import ds from '../../common/ds'
     export default{
         data(){
@@ -66,12 +66,12 @@
                         function(data){                                          
                             //创设成功
                             _self.$message({
-                                message: '创设基金产品成功',
+                                message: _self.$t('message.fundCreate.fd_crt_setsuccess'),
                                 type: 'success'
                             });
                             _self.$router.push({ name: 'Fund', params: {}})
                         },function(data){
-                            _self.$message.error('创设基金产品失败');
+                            _self.$message.error(_self.$t('message.fundCreate.fd_crt_error'));
                         }) 
                     } else {                        
                         return false;

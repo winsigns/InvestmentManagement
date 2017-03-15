@@ -10,7 +10,7 @@ var cssSourceMapDev = (env === 'development' && config.dev.cssSourceMap)
 var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap)
 var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
 
-module.exports = {
+module.exports = { 
   entry: {
     app: './src/main.js'
   },
@@ -73,5 +73,8 @@ module.exports = {
         browsers: ['last 2 versions']
       })
     ]
+  },
+  externals: {
+    'jquery2':'$'
   }
 }

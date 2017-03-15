@@ -12,7 +12,7 @@
 </template>
 
 <script>
-	import TopMenu from "./components/TopMenu.vue"
+	import TopMenu from "./page/head/TopMenu.vue"
 	export default {
 		name: 'app',
 		components: {

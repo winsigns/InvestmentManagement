@@ -4,9 +4,9 @@
  * router config
  */
 //引入模块
- import Fund from "./components/fund/Fund.vue"
- import FundCreate from "./components/fund/FundCreate.vue"
-import FundDetail from "./components/fund/FundDetail.vue"
+import Fund from "../page/fund/Fund.vue"
+import FundCreate from "../page/fund/FundCreate.vue"
+import FundDetail from "../page/fund/FundDetail.vue"
 
 module.exports =
      [

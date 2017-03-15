@@ -3,7 +3,7 @@ server:
 
 zuul:
   ignoredServices: "*"
-  prefix: /sapi
+  prefix: /api
   routes:
     fund-service:
       path: /**

@@ -1,0 +1,8 @@
+{
+    "systemURL":{
+
+    },
+    "fundURL":{
+        "funds": "api/funds/"
+    }
+}

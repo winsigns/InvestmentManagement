@@ -1,6 +1,6 @@
 /**
  * author:fulin.wang at 2017-03-10
- * until
+ * common func
  */
 var SIGN_REGEXP = /([yMdhsm])(\1*)/g;
 var DEFAULT_PATTERN = 'yyyy-MM-dd';
@@ -61,5 +61,4 @@ export default {
         }
 
     }
-
 };

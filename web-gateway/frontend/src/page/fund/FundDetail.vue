@@ -44,7 +44,7 @@
     </div>
 </template>
 <script>
-    import api from '../../common/api'
+    import api from '../../config/api.json'
     import ds from '../../common/ds'
     export default{
         data(){
@@ -71,8 +71,7 @@
            var _self = this;  
             ds.GET({url:api.fundURL.funds+_self.$route.params.fundId,
                     data:{}},function(data){   
-                _self.fundDetail = data;  
-                console.log(_self.fundDetail)             
+                _self.fundDetail = data;             
             })   
         },
         methods: {
