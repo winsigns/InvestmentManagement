@@ -17,41 +17,40 @@ public class MeasureRegistry {
   }
 
   private MeasureRegistry() {
-    this.measureRegistry = new HashMap<MeasureHostType, List<IMeasure>>();
+    this.measureRegistry = new HashMap<MeasureHostType, List<Measure>>();
   }
 
-  private HashMap<MeasureHostType, List<IMeasure>> measureRegistry;
+  private HashMap<MeasureHostType, List<Measure>> measureRegistry;
 
   public boolean contains(MeasureHostType measureHostType) {
     return this.measureRegistry.containsKey(measureHostType);
   }
 
-  public void register(MeasureHostType measureHostType, IMeasure measure) {
+  public void register(MeasureHostType measureHostType, Measure measure) {
     if (!this.measureRegistry.containsKey(measureHostType)) {
-      this.measureRegistry.put(measureHostType, new ArrayList<IMeasure>());
+      this.measureRegistry.put(measureHostType, new ArrayList<Measure>());
     }
 
     this.measureRegistry.get(measureHostType).add(measure);
   }
 
-  public List<IMeasure> getMeasures(MeasureHostType measureHostType) {
+  public List<Measure> getMeasures(MeasureHostType measureHostType) {
     return this.measureRegistry.get(measureHostType);
   }
 
-  public List<IMeasure> getMeasures() {
-    ArrayList<IMeasure> measures = new ArrayList<IMeasure>();
-    for (List<IMeasure> measure : this.measureRegistry.values()) {
+  public List<Measure> getMeasures() {
+    ArrayList<Measure> measures = new ArrayList<Measure>();
+    for (List<Measure> measure : this.measureRegistry.values()) {
       measures.addAll(measure);
     }
     return measures;
   }
 
-  public IMeasure getMeasure(MeasureHostType measureHostType, String measureName) {
-    for (IMeasure measure : this.getMeasures(measureHostType)) {
-      if (measure instanceof Measure)
-        if (((Measure) measure).getName().equals(measureName)) {
-          return measure;
-        }
+  public Measure getMeasure(MeasureHostType measureHostType, String measureName) {
+    for (Measure measure : this.getMeasures(measureHostType)) {
+      if (((Measure) measure).getName().equals(measureName)) {
+        return measure;
+      }
     }
     return null;
   }

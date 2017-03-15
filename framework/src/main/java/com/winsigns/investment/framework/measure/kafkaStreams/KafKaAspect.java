@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import com.winsigns.investment.framework.kafka.KafkaConfiguration;
-import com.winsigns.investment.framework.measure.CalculateFactor;
+import com.winsigns.investment.framework.measure.ICalculateFactor;
 
 @Aspect
 @Component
@@ -40,18 +40,17 @@ public class KafKaAspect {
     Boolean isFloat = (Boolean) joinPoint.getArgs()[1];
     String version = (String) joinPoint.getArgs()[2];
 
-    CalculateFactor measure = (CalculateFactor) joinPoint.getThis();
+    ICalculateFactor measure = (ICalculateFactor) joinPoint.getThis();
 
     key.setMeasureHostId(measureHostId);
     key.setFloat(isFloat);
     key.setVersion(version);
 
-    value.setName(measure.getFullName());
+    value.setName(measure.getName());
 
     KafkaProducer<ProcessorKey, ProcessorValue> producer =
         new KafkaProducer<ProcessorKey, ProcessorValue>(config);
-    producer
-        .send(new ProducerRecord<ProcessorKey, ProcessorValue>(measure.getFullName(), key, value));
+    producer.send(new ProducerRecord<ProcessorKey, ProcessorValue>(measure.getName(), key, value));
     producer.close();
   }
 }

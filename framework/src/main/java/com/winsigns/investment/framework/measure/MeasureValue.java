@@ -1,33 +1,19 @@
 package com.winsigns.investment.framework.measure;
 
 import lombok.AllArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
+@Data
 @AllArgsConstructor
-public abstract class MeasureValue implements IMeasureValue {
+public abstract class MeasureValue {
 
-  @Setter
   private MeasureHost measureHost;
 
-  @Setter
   private Measure measure;
 
-  @Setter
   private Double value;
 
-  @Override
-  public MeasureHost getMeasureHost() {
-    return measureHost;
-  }
+  public abstract String getKey();
 
-  @Override
-  public Measure getMeasure() {
-    return measure;
-  }
-
-  @Override
-  public Double getValue() {
-    return this.value;
-  }
-
+  public abstract String getIndex();
 }

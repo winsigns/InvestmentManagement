@@ -1,6 +1,7 @@
 package com.winsigns.investment.framework.measure.kafkaStreams;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.kafka.common.serialization.Serde;
@@ -10,8 +11,7 @@ import org.apache.kafka.streams.processor.TopologyBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.winsigns.investment.framework.kafka.KafkaConfiguration;
-import com.winsigns.investment.framework.measure.CalculateFactor;
-import com.winsigns.investment.framework.measure.IMeasure;
+import com.winsigns.investment.framework.measure.ICalculateFactor;
 import com.winsigns.investment.framework.measure.Measure;
 import com.winsigns.investment.framework.measure.MeasureRegistry;
 import com.winsigns.investment.framework.measure.MockMeasure;
@@ -32,12 +32,8 @@ public class MeasureTopologyBuilder {
   private Serde<ProcessorValue> valueSerde;
 
   public void start() {
-    // final JsonSerializer<ProcessorKey> keySerializer =
-    // JsonSerializer.defaultConfig(ProcessorKey.class);
     final JsonSerializer<ProcessorKey> keyDeserializer =
         JsonSerializer.defaultConfig(ProcessorKey.class);
-    // final JsonSerializer<ProcessorValue> valueSerializer =
-    // JsonSerializer.defaultConfig(ProcessorValue.class);
     final JsonSerializer<ProcessorValue> valueDeserializer =
         JsonSerializer.defaultConfig(ProcessorValue.class);
 
@@ -53,36 +49,29 @@ public class MeasureTopologyBuilder {
 
     TopologyBuilder builder = new TopologyBuilder();
 
-    for (IMeasure measure : MeasureRegistry.getInstance().getMeasures()) {
-      if (measure instanceof Measure) {
-        Measure measure_ = (Measure) measure;
+    for (Measure measure : MeasureRegistry.getInstance().getMeasures()) {
 
-        builder.addSource(measure_.getFullName() + SOURCE_SUFFIX, keyDeserializer,
-            valueDeserializer, measure_.getFullName());
+      builder.addSource(measure.getName() + SOURCE_SUFFIX, keyDeserializer, valueDeserializer,
+          measure.getName());
 
-        if (measure_.getCalculateFactors() != null) {
-          measure_.getCalculateFactors().forEach(factor -> {
-            if (factor instanceof MockMeasure) {
-              builder.addSource(measure_.getFullName() + SOURCE_SUFFIX, keyDeserializer,
-                  valueDeserializer, measure_.getFullName());
-            }
+      List<ICalculateFactor> factors = measure.getCalculateFactors();
+      if (factors != null) {
+        factors.forEach(factor -> {
+          if (factor instanceof MockMeasure) {
+            builder.addSource(measure.getName() + SOURCE_SUFFIX, keyDeserializer, valueDeserializer,
+                measure.getName());
+          }
 
-          });
-        }
+        });
       }
     }
 
-    for (IMeasure measure : MeasureRegistry.getInstance().getMeasures()) {
-      if (measure instanceof Measure) {
-        Measure measure_ = (Measure) measure;
+    for (Measure measure : MeasureRegistry.getInstance().getMeasures()) {
 
-        String processorName = measure_.getFullName() + PROCESS_SUFFIX;
-        // String sinkName = measure_.getFullName() + SINK_SUFFIX;
+      String processorName = measure.getName() + PROCESS_SUFFIX;
 
-        builder.addProcessor(processorName, () -> new MeasureProcessor(measure),
-            getRealDependencies(measure_));
-        // .addSink(sinkName, measure_.getName(), keySerializer, valueSerializer, processorName);
-      }
+      builder.addProcessor(processorName, () -> new MeasureProcessor(measure),
+          getRealDependencies(measure));
     }
 
     streams = new KafkaStreams(builder, config);
@@ -97,14 +86,13 @@ public class MeasureTopologyBuilder {
   private String[] getRealDependencies(Measure measure) {
     ArrayList<String> calculateFactors = new ArrayList<String>();
 
-    if (measure.getCalculateFactors() != null) {
-      measure.getCalculateFactors().forEach(factor -> {
+    List<ICalculateFactor> factors = measure.getCalculateFactors();
+    if (factors != null) {
+      factors.forEach(factor -> {
         if (factor instanceof Measure) {
-          calculateFactors.add(factor.getFullName() + PROCESS_SUFFIX);
+          calculateFactors.add(factor.getName() + PROCESS_SUFFIX);
         } else if (factor instanceof MockMeasure) {
-          calculateFactors.add(factor.getFullName() + SOURCE_SUFFIX);
-        } else if (factor instanceof CalculateFactor) {
-          calculateFactors.add(factor.getFullName() + SOURCE_SUFFIX);
+          calculateFactors.add(factor.getName() + SOURCE_SUFFIX);
         }
       });
     }
