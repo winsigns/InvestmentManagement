@@ -4,7 +4,6 @@ buildscript {
 	}
 	repositories {
         maven { url "http://repo.winsigns-dev.com/artifactory/mavenCentral" }
-        maven { url "http://repo.winsigns-dev.com/artifactory/jcenter" }
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -63,14 +62,13 @@ task updateVersion << {
     println "[updateVersion]version= $version"
     def app_yml = String.format("%s/%s/src/main/resources/application.yml", workspace, jar.baseName)
     String contents = new File(app_yml).getText("UTF-8")
-    println contents
 
     contents = contents.replaceAll('%%VERSION%%', version)
     new File(app_yml).write(contents, "UTF-8")
 }
 
 docker {
-    registry = "172.31.59.83:5000"
+    registry = "docker-registry:5000"
 }
 
 task copyJar(type: Copy) {
