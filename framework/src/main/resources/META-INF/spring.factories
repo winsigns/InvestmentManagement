@@ -4,4 +4,5 @@ com.winsigns.investment.framework.redis.RedisConfig,\
 com.winsigns.investment.framework.measure.MeasureValueRepository,\
 com.winsigns.investment.framework.measure.kafkaStreams.MeasureTopologyBuilder,\
 com.winsigns.investment.framework.kafka.KafkaConfiguration,com.winsigns.investment.framework.hal.HalBrowser,\
-com.winsigns.investment.framework.measure.kafkaStreams.KafKaAspect
+com.winsigns.investment.framework.measure.kafkaStreams.KafKaAspect,\
+com.winsigns.investment.framework.integration.RestConfiguration
