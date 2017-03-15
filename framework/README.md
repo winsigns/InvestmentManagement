@@ -22,12 +22,12 @@ http://repo.winsigns-dev.com/artifactory/winsigns
 repositories下增加
     maven { url "http://repo.winsigns-dev.com/artifactory/winsigns/"}
 dependencies下增加
-	compile('com.winsigns:investment-framework:0.0.2-SNAPSHOT')
+    compile('com.winsigns:investment-framework:0.0.2-SNAPSHOT')
 ```
 
 ## 集成功能
 ```shell
-hal-browser                        
+hal-browser
 i18nHelper
 measure
 KafkaConfiguration
