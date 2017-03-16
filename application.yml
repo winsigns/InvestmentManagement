@@ -50,3 +50,13 @@ services:
       - 10013:10013
     environment:
       SPRING_PROFILES_ACTIVE: dev
+
+  sequence-service:
+    build: sequence-service
+    container_name: sequence-service
+    mem_limit: 512M
+    network_mode: "host"
+    ports:
+      - 10200:10200
+    environment:
+      SPRING_PROFILES_ACTIVE: dev

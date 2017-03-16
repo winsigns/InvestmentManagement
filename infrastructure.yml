@@ -35,16 +35,3 @@ services:
     container_name: redis
     ports:
       - 6379:6379
-
-  sequence-service:
-    build: sequence-service
-    container_name: sequence-service
-    mem_limit: 512M
-    ports:
-      - 10200:10200
-    environment:
-      SPRING_PROFILES_ACTIVE: dev
-    network_mode: "host"
-    depends_on:
-      - discovery-service
-      - redis

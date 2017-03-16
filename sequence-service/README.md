@@ -11,6 +11,6 @@
 ### 指标版本
 
 ```shell
-/measure-versions GET                       #获取一个指标版本
+/operator-sequences GET                       #获取一个指标版本
 ```
 

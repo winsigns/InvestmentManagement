@@ -9,23 +9,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winsigns.investment.sequenceService.service.MeasureVersionService;
+import com.winsigns.investment.sequenceService.service.OperatorSequenceService;
 
 @RestController
-@RequestMapping("/measure-versions")
-@Relation(value = "measure-version", collectionRelation = "measure-versions")
-public class MeasureVersionController {
+@RequestMapping("/operator-sequences")
+@Relation(value = "operator-sequence", collectionRelation = "operator-sequences")
+public class OperatorSequenceController {
 
   @Autowired
-  MeasureVersionService measureVersionService;
+  OperatorSequenceService operatorSequenceService;
 
   @GetMapping
-  public ResponseEntity<?> getMeasureVersion() {
+  public ResponseEntity<?> getOperatorSequence() {
 
     HttpHeaders responseHeaders = new HttpHeaders();
 
-    String version = measureVersionService.getMeasureVersion();
+    String sequence = operatorSequenceService.getOperatorSequence();
 
-    return new ResponseEntity<Object>(version, responseHeaders, HttpStatus.OK);
+    return new ResponseEntity<Object>(sequence, responseHeaders, HttpStatus.OK);
   }
 }

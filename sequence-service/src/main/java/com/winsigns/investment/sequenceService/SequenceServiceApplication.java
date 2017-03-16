@@ -1,13 +1,10 @@
 package com.winsigns.investment.sequenceService;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -19,8 +16,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import redis.clients.jedis.JedisPoolConfig;
-
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableHypermediaSupport(type = {HypermediaType.HAL})
@@ -30,27 +25,9 @@ public class SequenceServiceApplication {
     SpringApplication.run(SequenceServiceApplication.class, args);
   }
 
-  private static Logger logger = LoggerFactory.getLogger(SequenceServiceApplication.class);
-
   @Bean
-  @ConfigurationProperties(prefix = "spring.redis")
-  public JedisPoolConfig getRedisConfig() {
-    JedisPoolConfig config = new JedisPoolConfig();
-    return config;
-  }
-
-  @Bean
-  @ConfigurationProperties(prefix = "spring.redis")
-  public JedisConnectionFactory getConnectionFactory() {
-    JedisConnectionFactory factory = new JedisConnectionFactory();
-    JedisPoolConfig config = getRedisConfig();
-    factory.setPoolConfig(config);
-    logger.info("JedisConnectionFactory bean init success.");
-    return factory;
-  }
-
-  @Bean
-  public RedisTemplate<String, Integer> redisTemplate() {
+  public RedisTemplate<String, Integer> stringIntegerRedisTemplate(
+      RedisConnectionFactory redisConnectionFactory) {
 
     RedisTemplate<String, Integer> template = new RedisTemplate<String, Integer>();
     RedisSerializer<String> stringSerializer = new StringRedisSerializer();
@@ -66,7 +43,7 @@ public class SequenceServiceApplication {
     template.setHashKeySerializer(stringSerializer);
     template.setHashValueSerializer(jackson2JsonRedisSerializer);
 
-    template.setConnectionFactory(getConnectionFactory());
+    template.setConnectionFactory(redisConnectionFactory);
     template.afterPropertiesSet();
 
     return template;

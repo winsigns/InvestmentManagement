@@ -10,14 +10,14 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MeasureVersionService {
+public class OperatorSequenceService {
 
-  Logger log = LoggerFactory.getLogger(MeasureVersionService.class);
+  Logger log = LoggerFactory.getLogger(OperatorSequenceService.class);
 
   @Autowired
   private RedisTemplate<String, Integer> redisTemplate;
 
-  private static final String STR_MEARSURE_VERSION_FIX = "measure-version:";
+  private static final String STR_MEARSURE_VERSION_FIX = "operator-sequence:";
 
   /*
    * 每次从redis获取10000个序列
@@ -33,7 +33,7 @@ public class MeasureVersionService {
   /*
    * 获取一个指标版本
    */
-  public synchronized String getMeasureVersion() {
+  public synchronized String getOperatorSequence() {
     if (isSameDay()) {
       String key = STR_MEARSURE_VERSION_FIX + nowDate;
       if (!isEnough()) {
@@ -48,9 +48,9 @@ public class MeasureVersionService {
     else {
       nowDate = getDate();
       initSequence();
-      return getMeasureVersion();
+      return getOperatorSequence();
     }
-    String version = formatVersion(currentSequence++);
+    String version = formatSequence(currentSequence++);
     surplusSequence--;
     return version;
   }
@@ -60,7 +60,7 @@ public class MeasureVersionService {
     return df.format(new Date());
   }
 
-  private String formatVersion(Integer nowVersion) {
+  private String formatSequence(Integer nowVersion) {
     return String.format("%s%014d", getDate(), nowVersion);
   }
 
