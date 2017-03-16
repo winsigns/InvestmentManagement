@@ -39,6 +39,7 @@ repositories {
     maven { url "http://repo.winsigns-dev.com/artifactory/mavenCentral" }
     maven { url "http://repo.winsigns-dev.com/artifactory/spring-snapshot" }
     maven { url "http://repo.winsigns-dev.com/artifactory/spring-milestone" }
+    maven { url "http://repo.winsigns-dev.com/artifactory/winsigns"}
 }
 
 //to avoid compiling error about conflicts
@@ -101,17 +102,14 @@ docker {
     registry = "docker-registry:5000"
 }
 
-task copyJar(type: Copy) {
-    dependsOn 'jar'
-   
-    from "build/libs/${jar.baseName}-${jar.version}.jar"
-    into "build/docker"
-
-    from "wait-for-it.sh"
-    into "build/docker"
-
-    from "start.sh"
-    into "build/docker"
+task copyJar(dependsOn: 'jar') << {
+    copy {
+        from "."
+        into "build/docker"
+        include "wait-for-it.sh"
+        include "start.sh"
+        include "build/libs/${jar.baseName}-${jar.version}.jar"
+    }
 }
 
 task buildDocker(type: Docker) {
