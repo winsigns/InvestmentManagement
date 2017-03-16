@@ -61,7 +61,7 @@ public class OperatorSequenceService {
   }
 
   private String formatSequence(Integer nowVersion) {
-    return String.format("%s%014d", getDate(), nowVersion);
+    return String.format("%s%012d", getDate(), nowVersion);
   }
 
   private boolean isEnough() {
