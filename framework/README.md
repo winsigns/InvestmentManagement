@@ -32,6 +32,7 @@ i18nHelper
 measure
 KafkaConfiguration
 AbstractEntity
+OperatorEntity
 Integration
 Redis
 ```

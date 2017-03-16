@@ -6,6 +6,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 
+import com.winsigns.investment.framework.model.OperatorSequenceIntegration;
+
 /**
  * Created by colin on 2017/3/3.
  */
@@ -23,7 +25,9 @@ public class MeasureConfiguration {
   }
 
   @Bean
-  public MeasureVersionIntegration measureVersionIntegration() {
-    return new MeasureVersionIntegration();
+  public OperatorSequenceIntegration measureVersionIntegration() {
+    return new OperatorSequenceIntegration();
   }
+
+
 }
