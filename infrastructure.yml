@@ -35,3 +35,4 @@ services:
     container_name: redis
     ports:
       - 6379:6379
+
