@@ -6,14 +6,14 @@
             <el-menu-item index="2-1" @click="goRoute('FundCreate',{})">创设基金</el-menu-item>
             <el-menu-item index="2-2" @click="goRoute('Fund',{})">所有基金产品</el-menu-item>             
           </el-submenu>
-          <setLang></setLang>          
+          <set-lang></set-lang>          
         </el-select>                  
         </el-menu>        
     </div>
 </template>
 
 <script>    
-import setLang from "../../components/lang/setLang.vue"
+import SetLang from "../../components/lang/SetLang.vue"
   export default {
     data() {
       return {
@@ -21,7 +21,7 @@ import setLang from "../../components/lang/setLang.vue"
       }
     },
     components: {
-      setLang
+      "set-lang":SetLang
     },
     mounted:function(){
        

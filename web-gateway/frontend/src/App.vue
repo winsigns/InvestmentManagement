@@ -3,7 +3,7 @@
 		<el-row>
 			<el-col :xs="3" :sm="3" :md="3" :lg="2">&nbsp;</el-col>			
 			<el-col :xs="18" :sm="18" :md="18" :lg="20">
-				<TopMenu></TopMenu>
+				<top-menu></top-menu>
 				<router-view></router-view>
 			</el-col>
 			<el-col :xs="3" :sm="3" :md="3" :lg="2">&nbsp;</el-col>
@@ -12,11 +12,11 @@
 </template>
 
 <script>
-	import TopMenu from "./page/head/TopMenu.vue"
+	import TopMmenu from "./page/head/TopMenu.vue"
 	export default {
 		name: 'app',
 		components: {
-			TopMenu
+			"top-menu":TopMmenu
 		},
 		created: function () {
 			this.$router.replace('/Fund')
