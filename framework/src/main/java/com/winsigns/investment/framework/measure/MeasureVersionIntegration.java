@@ -1,6 +1,5 @@
 package com.winsigns.investment.framework.measure;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
@@ -18,13 +17,7 @@ public class MeasureVersionIntegration extends IntegrationBase {
   }
 
   public String getMeasureVersion() {
-    return restTemplate.postForObject(getIntegrationURI() + MEASURE_VERSION_URL, null,
-        String.class);
-  }
-
-  @Bean
-  public MeasureVersionIntegration measureVersionIntegration() {
-    return new MeasureVersionIntegration();
+    return restTemplate.getForObject(getIntegrationURI() + MEASURE_VERSION_URL, String.class);
   }
 
 }

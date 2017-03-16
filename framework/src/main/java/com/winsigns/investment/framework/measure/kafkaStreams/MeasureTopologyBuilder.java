@@ -14,7 +14,6 @@ import com.winsigns.investment.framework.kafka.KafkaConfiguration;
 import com.winsigns.investment.framework.measure.ICalculateFactor;
 import com.winsigns.investment.framework.measure.Measure;
 import com.winsigns.investment.framework.measure.MeasureRegistry;
-import com.winsigns.investment.framework.measure.MockMeasure;
 
 public class MeasureTopologyBuilder {
 
@@ -50,26 +49,23 @@ public class MeasureTopologyBuilder {
     TopologyBuilder builder = new TopologyBuilder();
 
     for (Measure measure : MeasureRegistry.getInstance().getMeasures()) {
-
-      builder.addSource(measure.getName() + SOURCE_SUFFIX, keyDeserializer, valueDeserializer,
-          measure.getName());
-
+      // 遍历指标的所有计算因子，如果不在本地指标库，则为source
       List<ICalculateFactor> factors = measure.getCalculateFactors();
       if (factors != null) {
         factors.forEach(factor -> {
-          if (factor instanceof MockMeasure) {
+          if (!MeasureRegistry.getInstance().contains(measure.getName())) {
             builder.addSource(measure.getName() + SOURCE_SUFFIX, keyDeserializer, valueDeserializer,
                 measure.getName());
           }
-
         });
       }
-    }
 
-    for (Measure measure : MeasureRegistry.getInstance().getMeasures()) {
+      // 为本地指标建立source
+      builder.addSource(measure.getName() + SOURCE_SUFFIX, keyDeserializer, valueDeserializer,
+          measure.getName());
 
+      // 为本地的指标建立process
       String processorName = measure.getName() + PROCESS_SUFFIX;
-
       builder.addProcessor(processorName, () -> new MeasureProcessor(measure),
           getRealDependencies(measure));
     }
@@ -89,9 +85,9 @@ public class MeasureTopologyBuilder {
     List<ICalculateFactor> factors = measure.getCalculateFactors();
     if (factors != null) {
       factors.forEach(factor -> {
-        if (factor instanceof Measure) {
+        if (!MeasureRegistry.getInstance().contains(measure.getName())) {
           calculateFactors.add(factor.getName() + PROCESS_SUFFIX);
-        } else if (factor instanceof MockMeasure) {
+        } else {
           calculateFactors.add(factor.getName() + SOURCE_SUFFIX);
         }
       });

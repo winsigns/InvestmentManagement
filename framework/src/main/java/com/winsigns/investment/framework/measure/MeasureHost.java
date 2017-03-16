@@ -17,12 +17,9 @@ public abstract class MeasureHost extends AbstractEntity {
   }
 
   public TradingMeasureValue getMeasureValue(String measureName, boolean isFloat, String version) {
-
     for (Measure measure : getMeasures()) {
-      if (measure instanceof Measure) {
-        if (((Measure) measure).getName().equals(measureName)) {
-          return measure.getValue(this, isFloat, version);
-        }
+      if (measure.getName().equals(measureName)) {
+        return measure.getValue(this, isFloat, version);
       }
     }
     return null;

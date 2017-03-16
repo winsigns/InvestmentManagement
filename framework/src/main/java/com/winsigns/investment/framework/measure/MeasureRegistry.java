@@ -26,6 +26,18 @@ public class MeasureRegistry {
     return this.measureRegistry.containsKey(measureHostType);
   }
 
+  public boolean contains(String measureName) {
+
+    for (List<Measure> measures : this.measureRegistry.values()) {
+      for (Measure measure : measures) {
+        if (measure.getName().equals(measureName)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   public void register(MeasureHostType measureHostType, Measure measure) {
     if (!this.measureRegistry.containsKey(measureHostType)) {
       this.measureRegistry.put(measureHostType, new ArrayList<Measure>());

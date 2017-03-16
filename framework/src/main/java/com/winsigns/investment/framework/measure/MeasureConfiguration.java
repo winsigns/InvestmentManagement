@@ -21,4 +21,9 @@ public class MeasureConfiguration {
   public MeasureValueRepository measureValueRepository() {
     return new MeasureValueRepository();
   }
+
+  @Bean
+  public MeasureVersionIntegration measureVersionIntegration() {
+    return new MeasureVersionIntegration();
+  }
 }
