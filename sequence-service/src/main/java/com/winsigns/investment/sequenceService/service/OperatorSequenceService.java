@@ -17,7 +17,7 @@ public class OperatorSequenceService {
   @Autowired
   private RedisTemplate<String, Integer> redisTemplate;
 
-  private static final String STR_MEARSURE_VERSION_FIX = "operator-sequence:";
+  private static final String STR_OPERATOR_SEQUENCE_FIX = "operator-sequence:";
 
   /*
    * 每次从redis获取10000个序列
@@ -35,7 +35,7 @@ public class OperatorSequenceService {
    */
   public synchronized String getOperatorSequence() {
     if (isSameDay()) {
-      String key = STR_MEARSURE_VERSION_FIX + nowDate;
+      String key = STR_OPERATOR_SEQUENCE_FIX + nowDate;
       if (!isEnough()) {
         currentSequence = redisTemplate.opsForValue().get(key);
         if (currentSequence == null)
@@ -50,9 +50,9 @@ public class OperatorSequenceService {
       initSequence();
       return getOperatorSequence();
     }
-    String version = formatSequence(currentSequence++);
+    String sequence = formatSequence(currentSequence++);
     surplusSequence--;
-    return version;
+    return sequence;
   }
 
   private String getDate() {

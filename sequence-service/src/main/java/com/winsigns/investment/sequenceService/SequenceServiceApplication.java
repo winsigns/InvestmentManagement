@@ -6,15 +6,11 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -31,17 +27,13 @@ public class SequenceServiceApplication {
 
     RedisTemplate<String, Integer> template = new RedisTemplate<String, Integer>();
     RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-    Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer =
-        new Jackson2JsonRedisSerializer<Object>(Object.class);
-    ObjectMapper om = new ObjectMapper();
-    om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-    om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-    jackson2JsonRedisSerializer.setObjectMapper(om);
+    GenericToStringSerializer<Integer> integerSerializer =
+        new GenericToStringSerializer<Integer>(Integer.class);
 
     template.setKeySerializer(stringSerializer);
-    template.setValueSerializer(jackson2JsonRedisSerializer);
+    template.setValueSerializer(integerSerializer);
     template.setHashKeySerializer(stringSerializer);
-    template.setHashValueSerializer(jackson2JsonRedisSerializer);
+    template.setHashValueSerializer(integerSerializer);
 
     template.setConnectionFactory(redisConnectionFactory);
     template.afterPropertiesSet();
