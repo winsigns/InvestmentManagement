@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.web.client.RestOperations;
 
-public abstract class IntegrationBase implements IIntegration {
+public abstract class AbstractIntegration implements IIntegration {
 
   @Autowired
   LoadBalancerClient loadBalancer;
