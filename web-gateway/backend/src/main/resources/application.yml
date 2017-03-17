@@ -1,0 +1,57 @@
+server:
+  port: 8088
+
+zuul:
+  ignoredServices: "*"
+  prefix: /api
+  routes:
+    fund-service:
+      path: /**
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registryFetchIntervalSeconds: 5
+    instanceInfoReplicationIntervalSeconds: 5
+    initialInstanceInfoReplicationIntervalSeconds: 5
+
+---
+
+spring:
+  profiles: dev
+
+zuul:
+  routes:
+    fund-service:
+      url: http://localhost:10010/
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:10100/eureka/
+
+---
+
+spring:
+  profiles: prod
+
+zuul:
+  routes:
+    fund-service:
+      url: http://fund-service:10010/
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discoery-service:10100/eureka/
