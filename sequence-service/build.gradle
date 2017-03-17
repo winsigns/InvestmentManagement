@@ -1,0 +1,71 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.1.RELEASE'
+	}
+	repositories {
+        maven { url "http://repo.winsigns-dev.com/artifactory/mavenCentral" }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+jar {
+	baseName = 'sequence-service'
+	version = '0.0.1-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    maven { url "http://repo.winsigns-dev.com/artifactory/mavenCentral" }
+    maven { url "http://repo.winsigns-dev.com/artifactory/spring-snapshot" }
+    maven { url "http://repo.winsigns-dev.com/artifactory/spring-milestone" }
+    maven { url "http://repo.winsigns-dev.com/artifactory/winsigns"}
+}
+
+//to avoid compiling error about conflicts
+configurations.all{
+	exclude group: "org.slf4j", module: "slf4j-log4j12"
+}
+
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
+
+dependencies {
+	
+	compile('org.springframework.boot:spring-boot-starter-hateoas')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-undertow')
+	compile('org.springframework.cloud:spring-cloud-starter-eureka')
+
+	compile('org.springframework.boot:spring-boot-starter-data-redis')
+	
+	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile('org.springframework.boot:spring-boot-starter-logging')
+	compile('net.logstash.logback:logstash-logback-encoder:4.8')
+	
+	compile('org.projectlombok:lombok')
+
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Dalston.BUILD-SNAPSHOT"
+	}
+}
+
+bootRun {
+    environment SPRING_PROFILES_ACTIVE: environment.SPRING_PROFILES_ACTIVE ?: "dev" 
+}
+
+test {
+    environment SPRING_PROFILES_ACTIVE: environment.SPRING_PROFILES_ACTIVE ?: "dev" 
+}
