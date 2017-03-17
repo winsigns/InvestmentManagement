@@ -1,3 +1,6 @@
+app:
+  version: "%%VERSION%%"
+  
 server:
   port: 10010
 
@@ -21,13 +24,21 @@ eureka:
 management:
   security:
     enabled: false
+    
+kafka:
+  stream:
+    appid: inventory-service-kafka-stream
+  broker:
+    host: localhost:9092
+  zookeeper:
+    host: localhost:2181
 
 ---
 
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/funddb
+    url: jdbc:mysql://localhost:3306/funddb?characterEncoding=utf-8
     username: mariadb
     password: mariadb
 
@@ -41,7 +52,7 @@ eureka:
 spring:
   profiles: prod
   datasource:
-    url: jdbc:mysql://mariadb:3306/funddb
+    url: jdbc:mysql://mariadb:3306/funddb?characterEncoding=utf-8
 
 eureka:
   client:

@@ -58,5 +58,13 @@ services:
     network_mode: "host"
     ports:
       - 8088:8088
+
+  sequence-service:
+    build: sequence-service
+    container_name: sequence-service
+    mem_limit: 512M
+    network_mode: "host"
+    ports:
+      - 10200:10200
     environment:
       SPRING_PROFILES_ACTIVE: dev

@@ -1,7 +1,7 @@
 package com.winsigns.investment.fundService.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winsigns.investment.fundService.framework.AbstractEntity;
+import com.winsigns.investment.framework.model.AbstractEntity;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;

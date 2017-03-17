@@ -12,7 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winsigns.investment.tradeService.hal.HALResponse;
+import com.winsigns.investment.framework.hal.HALResponse;
+
 
 /**
  * Created by colin on 2017/2/22.
