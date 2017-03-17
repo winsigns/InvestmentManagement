@@ -45,8 +45,10 @@
             var _self = this;  
             ds.GET({url:api.fundURL.funds,
                     data:{}},function(data){
-                _self.funds = data._embedded.funds;  
-                _self.loading = false;              
+                _self.loading = false;
+                if ( data._embedded){
+                     _self.funds = data._embedded.funds;                        
+                }                                    
             })             
         },
         methods:{

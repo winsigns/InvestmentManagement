@@ -5,7 +5,6 @@ if [ -z ${WORKSPACE} ];then
    WORKSPACE=.
 fi
 
-cd ${WORKSPACE}/edge-service && chmod +x ./gradlew && ./gradlew clean build && cd -
 cd ${WORKSPACE}/discovery-service && chmod +x ./gradlew && ./gradlew clean build && cd -
 cd ${WORKSPACE}/fund-service && chmod +x ./gradlew && ./gradlew clean build && cd -
 cd ${WORKSPACE}/inventory-service && chmod +x ./gradlew && ./gradlew clean build && cd -
