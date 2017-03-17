@@ -1,12 +1,8 @@
 <template>
 	<div id="app">
 		<el-row>
-			<el-col :xs="3" :sm="3" :md="3" :lg="2">&nbsp;</el-col>			
-			<el-col :xs="18" :sm="18" :md="18" :lg="20">
-				<top-menu></top-menu>
-				<router-view></router-view>
-			</el-col>
-			<el-col :xs="3" :sm="3" :md="3" :lg="2">&nbsp;</el-col>
+			<top-menu></top-menu>
+			<router-view></router-view>
 		</el-row>		
 	</div>
 </template>

@@ -4,6 +4,10 @@
  * language
  */
 //引入模块
+import { use } from 'element-ui/lib/locale';
+import zhLocale from 'element-ui/lib/locale/lang/zh-CN';
+import enLocale from 'element-ui/lib/locale/lang/en'
+import jaLocale from 'element-ui/lib/locale/lang/ja'
 import zh from '../config/lang/lang/zh-cn.json'
 import en from '../config/lang/lang/en.json'
 import ja from '../config/lang/lang/ja.json'
@@ -23,6 +27,13 @@ export default {
         }
     },
     setLanguage:function(lang){
+        var local = zhLocale;
+        if (lang === 'en'){
+            local = enLocale
+        } else if (lang === 'ja'){
+            local = jaLocale
+        }
+        use(local);
         document.body.lang=lang;
         window.localStorage.setItem('winsigns_language', lang);
     },

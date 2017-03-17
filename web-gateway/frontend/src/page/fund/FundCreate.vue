@@ -9,10 +9,10 @@
             <el-col :span="2">&nbsp;</el-col>
         </el-row>
         <el-row>    
-            <el-col :span="3">&nbsp;</el-col>	    
+            <el-col :span="3">&nbsp;</el-col>	             
             <el-col :xs="16" :sm="14" :md="12" :lg="8">
                 <el-form :label-position="right" :rules="rules" ref="fundProp" label-width="100px" :model="fundProp">
-                    <el-form-item label="基金代码" prop="code">
+                    <el-form-item label="基金代码" prop="code">                    
                         <el-input v-model="fundProp.code"></el-input>
                     </el-form-item>
                     <el-form-item label="基金名称" prop="name">
@@ -52,6 +52,10 @@
                     ]            
                 }
             }
+        },
+        mounted: function(){
+            //  console.log(this.rules.code)
+            //  this.rules.code = [{ required: true, message: this.$t('message.fundCreate.fd_crt_setsuccess'), trigger: 'blur' }];
         },
         methods: {
            submitForm(fundProp) {

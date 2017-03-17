@@ -7,8 +7,8 @@
                     <div class="line_bottom"><h1>{{ $t("message.fund.fd_title") }}</h1> </div>              
                 </el-col>  
             </el-row>
-            <el-row>
-                <el-col :span="3">&nbsp;</el-col>	    
+            <el-row v-loading="loading">                
+                <el-col :span="3">&nbsp;</el-col>	   
                 <el-col :span="20">
                     <div class="line_margin_top">
                         <div v-for="item in funds" class="fund_one_block " @click="goFundDetail(item)">                                                     
@@ -37,15 +37,34 @@
     export default{
         data(){
             return {
-                funds: []
-            }
+                funds: [],
+                loading: true,
+                options: [{
+                value: '选项1',
+                label: '黄金糕'
+                }, {
+                value: '选项2',
+                label: '双皮奶'
+                }, {
+                value: '选项3',
+                label: '蚵仔煎'
+                }, {
+                value: '选项4',
+                label: '龙须面'
+                }, {
+                value: '选项5',
+                label: '北京烤鸭'
+                }],
+                value8: ''
+                    }
         },
-        created: function(){
+        created: function(){                      
             var _self = this;  
             ds.GET({url:api.fundURL.funds,
                     data:{}},function(data){
-                _self.funds = data._embedded.funds;                
-            })       
+                _self.funds = data._embedded.funds;  
+                _self.loading = false;              
+            })             
         },
         methods:{
             goFundDetail: function(item){

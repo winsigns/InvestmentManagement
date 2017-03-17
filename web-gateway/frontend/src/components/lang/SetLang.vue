@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-select :change="setLang()" v-model="currentlang" class="lang-select">
+        <el-select :change="setLang()" v-model="currentlang" >
             <el-option
                 v-for="item in languages"
                 :label="item.label"
@@ -24,7 +24,7 @@
                      
         },
         methods:{
-            setLang: function(callback){                
+            setLang: function(callback){           
                 wslang.setLanguage(this.currentlang);
                 this.$i18n.locale = this.currentlang               
             }
