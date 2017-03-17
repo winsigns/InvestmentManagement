@@ -1,6 +1,6 @@
 package com.winsigns.investment.fundService.constant;
 
-import com.winsigns.investment.fundService.framework.i18nHelper;
+import com.winsigns.investment.framework.i18n.i18nHelper;
 
 public enum ExternalOpenOrganizationType {
 

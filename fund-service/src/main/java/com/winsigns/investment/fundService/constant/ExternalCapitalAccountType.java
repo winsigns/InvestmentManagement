@@ -2,12 +2,13 @@ package com.winsigns.investment.fundService.constant;
 
 import static java.util.Arrays.asList;
 
-import com.winsigns.investment.fundService.framework.i18nHelper;
 import java.util.Collection;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import com.winsigns.investment.framework.i18n.i18nHelper;
 
 public enum ExternalCapitalAccountType {
 
@@ -36,34 +37,31 @@ public enum ExternalCapitalAccountType {
   // 自定义标的账户
 
   // 支持的币种
-  private static HashMap<ExternalCapitalAccountType, List<Currency>> supportCurrencies
-      = new HashMap<ExternalCapitalAccountType, List<Currency>>();
+  private static HashMap<ExternalCapitalAccountType, List<Currency>> supportCurrencies =
+      new HashMap<ExternalCapitalAccountType, List<Currency>>();
   // 支持外部交易账户
-  private static HashMap<ExternalCapitalAccountType, List<ExternalTradeAccountType>> supportTradeAccountTypes
-      = new HashMap<ExternalCapitalAccountType, List<ExternalTradeAccountType>>();
+  private static HashMap<ExternalCapitalAccountType, List<ExternalTradeAccountType>> supportTradeAccountTypes =
+      new HashMap<ExternalCapitalAccountType, List<ExternalTradeAccountType>>();
 
   static {
-    supportCurrencies.put(CHINA_GENERAL_CAPITAL_ACCOUNT, asList(
-        Currency.getInstance(CurrencyCode.CNY),
-        Currency.getInstance(CurrencyCode.HKD),
-        Currency.getInstance(CurrencyCode.USD)));
+    supportCurrencies.put(CHINA_GENERAL_CAPITAL_ACCOUNT,
+        asList(Currency.getInstance(CurrencyCode.CNY), Currency.getInstance(CurrencyCode.HKD),
+            Currency.getInstance(CurrencyCode.USD)));
 
-    supportCurrencies.put(CHINA_FUTURE_CAPITAL_ACCOUNT, asList(
-        Currency.getInstance(Locale.CHINA)));
+    supportCurrencies.put(CHINA_FUTURE_CAPITAL_ACCOUNT, asList(Currency.getInstance(Locale.CHINA)));
   }
 
   static {
-    supportTradeAccountTypes.put(CHINA_GENERAL_CAPITAL_ACCOUNT, asList(
-        ExternalTradeAccountType.SSE_A_STOCK_ACCOUNT,
-        ExternalTradeAccountType.SSE_B_STOCK_ACCOUNT,
-        ExternalTradeAccountType.SZSE_A_STOCK_ACCOUNT,
-        ExternalTradeAccountType.SZSE_B_STOCK_ACCOUNT));
+    supportTradeAccountTypes.put(CHINA_GENERAL_CAPITAL_ACCOUNT,
+        asList(ExternalTradeAccountType.SSE_A_STOCK_ACCOUNT,
+            ExternalTradeAccountType.SSE_B_STOCK_ACCOUNT,
+            ExternalTradeAccountType.SZSE_A_STOCK_ACCOUNT,
+            ExternalTradeAccountType.SZSE_B_STOCK_ACCOUNT));
 
-    supportTradeAccountTypes.put(CHINA_FUTURE_CAPITAL_ACCOUNT, asList(
-        ExternalTradeAccountType.SHFE_TRADING_CODE,
-        ExternalTradeAccountType.CZCE_TRADING_CODE,
-        ExternalTradeAccountType.DCE_TRADING_CODE,
-        ExternalTradeAccountType.CFFEX_TRADING_CODE));
+    supportTradeAccountTypes.put(CHINA_FUTURE_CAPITAL_ACCOUNT,
+        asList(ExternalTradeAccountType.SHFE_TRADING_CODE,
+            ExternalTradeAccountType.CZCE_TRADING_CODE, ExternalTradeAccountType.DCE_TRADING_CODE,
+            ExternalTradeAccountType.CFFEX_TRADING_CODE));
   }
 
   public static Collection<Currency> getSupportedCurrency(ExternalCapitalAccountType accountType) {

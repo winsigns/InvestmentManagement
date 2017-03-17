@@ -1,6 +1,6 @@
 package com.winsigns.investment.fundService.resource;
 
-import com.winsigns.investment.fundService.hal.HALResponse;
+import com.winsigns.investment.framework.hal.HALResponse;
 import com.winsigns.investment.fundService.model.ExternalTradeAccount;
 
 public class ExternalTradeAccountResource extends HALResponse<ExternalTradeAccount> {

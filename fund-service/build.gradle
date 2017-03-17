@@ -38,14 +38,21 @@ repositories {
     maven { url "http://repo.winsigns-dev.com/artifactory/mavenCentral" }
     maven { url "http://repo.winsigns-dev.com/artifactory/spring-snapshot" }
     maven { url "http://repo.winsigns-dev.com/artifactory/spring-milestone" }
+    maven { url "http://repo.winsigns-dev.com/artifactory/winsigns"}
 }
 
+//to avoid compiling error about conflicts
+configurations.all{
+	exclude group: "org.slf4j", module: "slf4j-log4j12"
+}
 
 configurations {
     compile.exclude module: "spring-boot-starter-tomcat"
 }
 
 dependencies {
+	compile('com.winsigns:investment-framework:0.0.1-SNAPSHOT')
+
     compile('org.springframework.boot:spring-boot-starter-hateoas')
     compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-undertow')

@@ -29,3 +29,11 @@ services:
       - 10100:10100
     environment:
       SPRING_PROFILES_ACTIVE: dev
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+
+  
