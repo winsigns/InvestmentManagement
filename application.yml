@@ -5,7 +5,7 @@ services:
   fund-service:
     build: fund-service
     command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && /app/start /app/fund-service-latest.jar"
-    mem_limit: 512M
+    mem_limit: 384M
     network_mode: "host"
     ports:
       - 10010:10010
@@ -15,7 +15,7 @@ services:
   inventory-service:
     build: inventory-service
     command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && /app/start /app/inventory-service-latest.jar"
-    mem_limit: 512M
+    mem_limit: 384M
     network_mode: "host"
     ports:
       - 10011:10011
@@ -25,7 +25,7 @@ services:
   invest-service:
     build: invest-service
     command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && /app/start /app/invest-service-latest.jar"
-    mem_limit: 512M
+    mem_limit: 384M
     network_mode: "host"
     ports:
       - 10012:10012
@@ -35,7 +35,7 @@ services:
   trade-service:
     build: trade-service
     command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && /app/start /app/trade-service-latest.jar"
-    mem_limit: 512M
+    mem_limit: 384M
     network_mode: "host"
     ports:
       - 10013:10013
@@ -44,7 +44,7 @@ services:
 
   web-gateway:
     build: web-ui/web-gateway
-    mem_limit: 512M
+    mem_limit: 384M
     network_mode: "host"
     ports:
       - 8088:8088
@@ -54,7 +54,7 @@ services:
   sequence-service:
     build: sequence-service
     container_name: sequence-service
-    mem_limit: 512M
+    mem_limit: 384M
     network_mode: "host"
     ports:
       - 10200:10200
