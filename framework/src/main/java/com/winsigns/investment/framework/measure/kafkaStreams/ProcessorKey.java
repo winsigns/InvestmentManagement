@@ -11,4 +11,6 @@ public class ProcessorKey {
 
   private boolean isFloat;
 
+  private String operatorName;
+
 }

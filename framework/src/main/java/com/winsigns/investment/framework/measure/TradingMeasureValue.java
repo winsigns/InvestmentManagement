@@ -10,7 +10,7 @@ public class TradingMeasureValue extends MeasureValue {
 
   @Setter
   @Getter
-  private Boolean isFloat;
+  private boolean isFloat;
 
   @Setter
   @Getter
@@ -22,17 +22,4 @@ public class TradingMeasureValue extends MeasureValue {
     this.version = version;
     this.isFloat = isFloat;
   }
-
-  @Override
-  public String getKey() {
-    return getMeasureHost().getType().getName() + ":" + getMeasureHost().getId() + ":"
-        + getMeasure().getName() + ":" + isFloat + ":" + version;
-  }
-
-  @Override
-  public String getIndex() {
-    return getMeasureHost().getType().getName() + ":" + getMeasureHost().getId() + ":"
-        + getMeasure().getName() + ":" + isFloat + ":index";
-  }
-
 }

@@ -57,9 +57,9 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile('org.springframework.boot:spring-boot-starter-data-redis')
-	compile('org.springframework.boot:spring-boot-starter-aop')
 	compile('org.springframework.cloud:spring-cloud-starter-eureka')
 	compile('org.apache.kafka:kafka-streams:0.10.0.0')
+	compile('org.springframework.kafka:spring-kafka')
 	compile('org.projectlombok:lombok')
 }
 

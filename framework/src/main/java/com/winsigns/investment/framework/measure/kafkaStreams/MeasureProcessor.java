@@ -21,9 +21,22 @@ public class MeasureProcessor extends AbstractProcessor<ProcessorKey, ProcessorV
 
   @Override
   public void process(ProcessorKey key, ProcessorValue value) {
-    TradingMeasureValue tradingMeasureValue =
-        measure.calculate(key.getMeasureHostId(), key.isFloat(), key.getVersion());
-    value.setName(tradingMeasureValue.getMeasure().getName());
-    context().forward(key, value);
+
+    /*
+     * 如果该指标关心该操作
+     */
+    if ((key.getOperatorName() != null && measure.isConcerned(key.getOperatorName()))
+        || key.getOperatorName() == null) {
+
+      TradingMeasureValue tradingMeasureValue =
+          measure.calculate(key.getMeasureHostId(), key.isFloat(), key.getVersion());
+
+      if (tradingMeasureValue != null) {
+        key.setMeasureHostId(tradingMeasureValue.getMeasureHost().getId());
+        key.setOperatorName(null); // 一旦计算过一次之后，就不再关心了
+        value.setName(tradingMeasureValue.getMeasure().getName());
+        context().forward(key, value);
+      }
+    }
   }
 }

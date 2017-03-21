@@ -21,19 +21,31 @@ public class MeasureValueRepository {
   public TradingMeasureValue getMeasureValue(MeasureHost measureHost, Measure measure,
       boolean isFloat, String version) {
 
-    // 先查询索引版本，如果所需版本大于索引版本，则获取索引版本
-    String index = measureHost.getType().getName() + ":" + measureHost.getId() + ":"
-        + measure.getName() + ":" + isFloat + ":inedx";
-    String maxVersion = indexRepository.opsForValue().get(index);
-    if (version.compareTo(maxVersion) > 0)
-      version = maxVersion;
-
     String key = measureHost.getType().getName() + ":" + measureHost.getId() + ":"
         + measure.getName() + ":" + isFloat + ":" + version;
 
     Double value = measureRepository.opsForValue().get(key);
 
     return new TradingMeasureValue(measureHost, measure, isFloat, version, value);
+  }
+
+  public TradingMeasureValue getMeasureValue(MeasureHost measureHost, Measure measure,
+      boolean isFloat) {
+
+    String lasterKey = measureHost.getType().getName() + ":" + measureHost.getId() + ":"
+        + measure.getName() + ":" + isFloat + ":latest";
+    String latestVersion = indexRepository.opsForValue().get(lasterKey);
+
+    if (latestVersion == null) {
+      return null;
+    }
+
+    String key = measureHost.getType().getName() + ":" + measureHost.getId() + ":"
+        + measure.getName() + ":" + isFloat + ":" + latestVersion;
+
+    Double value = measureRepository.opsForValue().get(key);
+
+    return new TradingMeasureValue(measureHost, measure, isFloat, latestVersion, value);
   }
 
   public ClearanceMeasureValue getLatestClearanceValue(String measureHostName, String measureName) {
@@ -45,13 +57,30 @@ public class MeasureValueRepository {
     return null;
   }
 
-  public void save(MeasureValue value) {
-
-    measureRepository.opsForValue().set(value.getKey(), value.getValue());
+  public void save(TradingMeasureValue value) {
+    measureRepository.opsForValue().set(getKey(value), value.getValue());
 
     // 更新索引，索引存放该类指标的最新版本
-    int idx = value.getKey().lastIndexOf(":");
-    String index = value.getKey().substring(idx + 1, value.getKey().length());
-    indexRepository.opsForValue().set(value.getIndex(), index);
+    String key = getKey(value);
+    int idx = key.lastIndexOf(":");
+    String latestKey = key.substring(0, idx) + ":latest";
+    indexRepository.opsForValue().set(latestKey, value.getVersion());
+  }
+
+  public void save(ClearanceMeasureValue value) {
+    measureRepository.opsForValue().set(getKey(value), value.getValue());
+  }
+
+  protected String getKeyBase(MeasureValue value) {
+    return value.getMeasureHost().getType().getName() + ":" + value.getMeasureHost().getId() + ":"
+        + value.getMeasure().getName();
+  }
+
+  protected String getKey(TradingMeasureValue value) {
+    return getKeyBase(value) + ":" + value.isFloat() + ":" + value.getVersion();
+  }
+
+  protected String getKey(ClearanceMeasureValue value) {
+    return getKeyBase(value) + ":" + value.getOffsetDays();
   }
 }

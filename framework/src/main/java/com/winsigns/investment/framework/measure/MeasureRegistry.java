@@ -18,6 +18,18 @@ public class MeasureRegistry {
 
   private MeasureRegistry() {
     this.measureRegistry = new HashMap<MeasureHostType, List<Measure>>();
+    this.measures = new ArrayList<Measure>();
+  }
+
+  // 因MeasureHostType是一个bean，因此不能在构造函数中获得，增加另一个存储结构
+  private List<Measure> measures;
+
+  public void register(Measure measure) {
+    measures.add(measure);
+  }
+
+  public void rehash() {
+    measures.forEach(measure -> register(measure.getSupportedHostType(), measure));
   }
 
   private HashMap<MeasureHostType, List<Measure>> measureRegistry;

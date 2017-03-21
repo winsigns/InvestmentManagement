@@ -21,15 +21,4 @@ public class ClearanceMeasureValue extends MeasureValue {
     this.offsetDays = offsetDays;
   }
 
-  @Override
-  public String getKey() {
-    return getMeasureHost().getType().getName() + ":" + getMeasureHost().getId() + ":"
-        + getMeasure().getName() + ":" + offsetDays;
-  }
-
-  @Override
-  public String getIndex() {
-    return getMeasureHost().getType().getName() + ":" + getMeasureHost().getId() + ":"
-        + getMeasure().getName() + ":index";
-  }
 }
