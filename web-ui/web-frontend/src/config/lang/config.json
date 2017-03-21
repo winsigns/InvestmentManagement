@@ -1,0 +1,14 @@
+{
+    "zh-cn":{
+        "value": "zh",
+        "label": "中文"
+    },
+    "en":{
+        "value": "en",
+        "label": "English"
+    },
+    "ja":{
+        "value": "ja",
+        "label": "日文"
+    }
+}

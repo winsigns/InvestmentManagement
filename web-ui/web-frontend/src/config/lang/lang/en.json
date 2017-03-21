@@ -1,0 +1,9 @@
+{
+    "fund":{
+        "fd_title":"All Funds",
+        "fd_life_cycle":"Creation period"
+    },
+    "fundCreate":{
+        "fd_crt_setsuccess":"The success of the creation of fund products"
+    }
+}

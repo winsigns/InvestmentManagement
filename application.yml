@@ -1,15 +1,6 @@
 version: '2'
 services:
 
-  edge-service:
-    build: edge-service
-    container_name: edge-service
-    mem_limit: 512M
-    network_mode: "host"
-    ports:
-      - 8080:8080
-    environment:
-      SPRING_PROFILES_ACTIVE: dev
 
   fund-service:
     build: fund-service
@@ -48,5 +39,24 @@ services:
     network_mode: "host"
     ports:
       - 10013:10013
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+
+  web-gateway:
+    build: web-ui/web-gateway
+    mem_limit: 512M
+    network_mode: "host"
+    ports:
+      - 8088:8088
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+
+  sequence-service:
+    build: sequence-service
+    container_name: sequence-service
+    mem_limit: 512M
+    network_mode: "host"
+    ports:
+      - 10200:10200
     environment:
       SPRING_PROFILES_ACTIVE: dev
