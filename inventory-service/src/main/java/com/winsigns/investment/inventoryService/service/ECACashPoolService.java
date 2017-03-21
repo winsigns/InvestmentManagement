@@ -14,16 +14,12 @@ import com.winsigns.investment.inventoryService.command.TransferAccountCommand;
 import com.winsigns.investment.inventoryService.model.ECACashPool;
 import com.winsigns.investment.inventoryService.model.ECACashSerial;
 import com.winsigns.investment.inventoryService.repository.ECACashPoolRepository;
-import com.winsigns.investment.inventoryService.repository.ECACashSerialRepository;
 
 @Service
 public class ECACashPoolService {
 
   @Autowired
   ECACashPoolRepository ecaCashPoolRepository;
-
-  @Autowired
-  ECACashSerialRepository ecaCashSerialRepository;
 
   /*
    * 查找特定外部资金账户下的所有资金池
@@ -85,7 +81,6 @@ public class ECACashPoolService {
     ecaCashSerial.setAssignedDate(new Date());
     ecaCashSerial.setAssignedCash(Math.abs(transferAccountCommand.getChangedCapital()));
     ecaCashSerial.operator(ecaCashPool, false);
-    ecaCashSerial = ecaCashSerialRepository.save(ecaCashSerial);
 
     return ecaCashPoolRepository.save(ecaCashPool);
   }
@@ -110,10 +105,8 @@ public class ECACashPoolService {
     ecaCashSerial.setAssignedDate(new Date());
     ecaCashSerial.setAssignedCash(-Math.abs(transferAccountCommand.getChangedCapital()));
     ecaCashSerial.operator(ecaCashPool, false);
-    ecaCashSerial = ecaCashSerialRepository.save(ecaCashSerial);
 
     return ecaCashPoolRepository.save(ecaCashPool);
-
   }
 
   /*
@@ -139,7 +132,6 @@ public class ECACashPoolService {
     dstECACashSerial.setAssignedDate(new Date());
     dstECACashSerial.setAssignedCash(Math.abs(changedCapital));
     dstECACashSerial.operator(dstEcaCashPool, false);
-    dstECACashSerial = ecaCashSerialRepository.save(dstECACashSerial);
 
     ECACashPool srcEcaCashPool = ecaCashPoolRepository.findOne(srcEcaCashPoolId);
     if (srcEcaCashPool == null)
@@ -154,7 +146,6 @@ public class ECACashPoolService {
     srcECACashSerial.setAssignedDate(new Date());
     srcECACashSerial.setAssignedCash(-Math.abs(changedCapital));
     srcECACashSerial.operator(srcEcaCashPool, false);
-    srcECACashSerial = ecaCashSerialRepository.save(srcECACashSerial);
 
     return result;
   }

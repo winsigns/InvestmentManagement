@@ -12,6 +12,8 @@ import org.springframework.hateoas.core.Relation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.measure.MeasureHost;
 import com.winsigns.investment.framework.model.OperatorEntity;
+import com.winsigns.investment.framework.spring.SpringManager;
+import com.winsigns.investment.inventoryService.repository.FundAccountCapitalSerialRepository;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -46,6 +48,9 @@ public class FundAccountCapitalSerial extends OperatorEntity {
   private Long linkedSerialId;
 
   @Override
-  protected void doOperator(MeasureHost measureHost, boolean isFloat) {}
+  protected void doOperator(MeasureHost measureHost, boolean isFloat) {
+    SpringManager.getApplicationContext().getBean(FundAccountCapitalSerialRepository.class)
+        .save(this);
+  }
 
 }
