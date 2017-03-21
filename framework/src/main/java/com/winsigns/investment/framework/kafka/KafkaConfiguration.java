@@ -37,6 +37,6 @@ public class KafkaConfiguration {
     this.zookeeperHost = zookeeperHost;
   }
 
-
+  //public static final String SEQUENCE_TOPIC = "operator-sequence";
 
 }
