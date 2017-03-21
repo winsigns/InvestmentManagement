@@ -1,47 +1,48 @@
 package com.winsigns.investment.inventoryService.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.springframework.hateoas.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winsigns.investment.framework.model.AbstractEntity;
+import com.winsigns.investment.framework.measure.MeasureHost;
+import com.winsigns.investment.framework.measure.MeasureHostType;
+import com.winsigns.investment.framework.spring.SpringManager;
+import com.winsigns.investment.inventoryService.measure.FACapitalDetailMHT;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Relation(value = "fa-capital-detail", collectionRelation = "fa-capital-details")
-public class FundAccountCapitalDetail extends AbstractEntity {
+public class FundAccountCapitalDetail extends MeasureHost {
 
   @ManyToOne
   @JsonIgnore
+  @Getter
+  @Setter
   private FundAccountCapital fundAccountCapital;
 
+  @Getter
+  @Setter
   private Long externalCapitalAccountId;
 
-  private Double cash;
-
-  public FundAccountCapital getFundAccountCapital() {
-    return fundAccountCapital;
+  @Override
+  @JsonIgnore
+  public MeasureHostType getType() {
+    return SpringManager.getApplicationContext().getBean(FACapitalDetailMHT.class);
   }
 
-  public void setFundAccountCapital(FundAccountCapital fundAccountCapital) {
-    this.fundAccountCapital = fundAccountCapital;
-  }
-
-  public Long getExternalCapitalAccountId() {
-    return externalCapitalAccountId;
-  }
-
-  public void setExternalCapitalAccountId(Long externalCapitalAccountId) {
-    this.externalCapitalAccountId = externalCapitalAccountId;
-  }
-
-  public Double getCash() {
-    return cash;
-  }
-
-  public void setCash(Double cash) {
-    this.cash = cash;
-  }
-
+  @OneToMany(mappedBy = "fundAccountCapitalDetail", cascade = CascadeType.ALL,
+      fetch = FetchType.LAZY)
+  @JsonIgnore
+  List<FundAccountCapitalSerial> fundAccountCapitalSerials =
+      new ArrayList<FundAccountCapitalSerial>();
 }

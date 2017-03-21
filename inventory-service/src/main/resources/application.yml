@@ -12,7 +12,17 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
-
+  redis:
+    database: 1
+    host: localhost
+    password: 
+    port: 6379   
+    pool: 
+      max-idle: 8 
+      min-idle: 0 
+      max-active: 8 
+      max-wait: -1 
+     
 eureka:
   instance:
     preferIpAddress: true
@@ -41,7 +51,10 @@ spring:
     url: jdbc:mysql://localhost:3306/inventorydb?characterEncoding=utf-8
     username: root
     password: password
-
+  kafka:
+    bootstrap-servers:
+    - localhost:9092
+    
 eureka:
   client:
     serviceUrl:

@@ -1,15 +1,10 @@
 package com.winsigns.investment.inventoryService.command;
 
+import lombok.Data;
+
+@Data
 public class SetInvestmentLimitCommand {
 
   private Double investmentLimit;
-
-  public Double getInvestmentLimit() {
-    return investmentLimit;
-  }
-
-  public void setInvestmentLimit(Double investmentLimit) {
-    this.investmentLimit = investmentLimit;
-  }
 
 }

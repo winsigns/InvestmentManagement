@@ -52,23 +52,27 @@ configurations {
 }
 
 dependencies {
-	compile('com.winsigns:investment-framework:0.0.1-SNAPSHOT')
+	compile('com.winsigns:investment-framework:0.0.2-SNAPSHOT')
 	
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-undertow')
 	compile('org.springframework.cloud:spring-cloud-starter-eureka')
 	compile("org.springframework.cloud:spring-cloud-starter-hystrix")
-
+	
+	compile('org.springframework.boot:spring-boot-starter-data-redis')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('mysql:mysql-connector-java')
 
+	compile('org.springframework.kafka:spring-kafka')
 	compile('org.apache.kafka:kafka-streams:0.10.0.0')
 
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-logging')
 	compile('net.logstash.logback:logstash-logback-encoder:4.8')
-
+	
+	compile('org.projectlombok:lombok')
+	
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
