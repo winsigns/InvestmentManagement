@@ -1,0 +1,10 @@
+{
+    "fund":{
+        "fd_title":"所有基金产品",
+        "fd_life_cycle":"创设期"
+    },
+    "fundCreate":{
+        "fd_crt_setsuccess":"创设基金产品成功",
+        "fd_crt_error":"创设基金产品失败"
+    }
+}
