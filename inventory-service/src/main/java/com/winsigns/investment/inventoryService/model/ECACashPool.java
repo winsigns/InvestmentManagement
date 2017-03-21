@@ -30,21 +30,21 @@ import lombok.Setter;
 public class ECACashPool extends MeasureHost {
 
   /*
-   * Íâ²¿×Ê½ğÕË»§ĞòºÅ
+   * å¤–éƒ¨èµ„é‡‘è´¦æˆ·åºå·
    */
   @Getter
   @Setter
   private Long externalCapitalAccountId;
 
   /*
-   * ±ÒÖÖ
+   * å¸ç§
    */
   @Getter
   @Setter
   private Currency currency;
 
   /*
-   * Î´·ÖÅä×Ê½ğ
+   * æœªåˆ†é…èµ„é‡‘
    */
   @Getter
   @Setter

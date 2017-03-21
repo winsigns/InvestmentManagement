@@ -40,14 +40,14 @@ public class FundAccountCapitalDetailService {
   private ECACashSerialRepository ecaCashSerialRepository;
 
   /*
-   * ²éÑ¯ËùÓĞ²úÆ·ÕË»§×Ê½ğÃ÷Ï¸
+   * æŸ¥è¯¢æ‰€æœ‰äº§å“è´¦æˆ·èµ„é‡‘æ˜ç»†
    */
   public Collection<FundAccountCapitalDetail> findAll() {
     return fundAccountCapitalDetailRepository.findAll();
   }
 
   /*
-   * ²éÑ¯ÌØ¶¨²úÆ·ÕË»§×Ê½ğµÄÃ÷Ï¸
+   * æŸ¥è¯¢ç‰¹å®šäº§å“è´¦æˆ·èµ„é‡‘çš„æ˜ç»†
    */
   public Collection<FundAccountCapitalDetail> findByFACapitalId(Long faCapitalId) {
 
@@ -59,14 +59,14 @@ public class FundAccountCapitalDetailService {
   }
 
   /*
-   * ²éÑ¯ÌØ¶¨²úÆ·ÕË»§×Ê½ğÃ÷Ï¸
+   * æŸ¥è¯¢ç‰¹å®šäº§å“è´¦æˆ·èµ„é‡‘æ˜ç»†
    */
   public FundAccountCapitalDetail findOne(Long fundAccountCapitalDetailId) {
     return fundAccountCapitalDetailRepository.findOne(fundAccountCapitalDetailId);
   }
 
   /*
-   * Ôö¼Ó²úÆ·ÕË»§Ã÷Ï¸
+   * å¢åŠ äº§å“è´¦æˆ·æ˜ç»†
    */
   public FundAccountCapitalDetail addFundAccountCapitalDetail(Long fundAccountCapitalId,
       CreateFundAccountCapitalDetailCommand crtFundAccountCapitalDetailCmd) {
@@ -93,7 +93,7 @@ public class FundAccountCapitalDetailService {
   }
 
   /*
-   * ´ÓÍâ²¿×Ê½ğÕË»§×Ê½ğ³Ø·ÖÅä×Ê½ğµ½²úÆ·ÕË»§×Ê½ğÃ÷Ï¸ÖĞ
+   * ä»å¤–éƒ¨èµ„é‡‘è´¦æˆ·èµ„é‡‘æ± åˆ†é…èµ„é‡‘åˆ°äº§å“è´¦æˆ·èµ„é‡‘æ˜ç»†ä¸­
    */
   public FundAccountCapitalDetail assignFrom(Long faCapitalDetailId,
       AssignAccountCommand assignAccountCommand) {
@@ -132,7 +132,7 @@ public class FundAccountCapitalDetailService {
   }
 
   /*
-   * ´Ó²úÆ·ÕË»§×Ê½ğÃ÷Ï¸¹é»¹×Ê½ğµ½Íâ²¿×Ê½ğÕË»§×Ê½ğ³ØÖĞ
+   * ä»äº§å“è´¦æˆ·èµ„é‡‘æ˜ç»†å½’è¿˜èµ„é‡‘åˆ°å¤–éƒ¨èµ„é‡‘è´¦æˆ·èµ„é‡‘æ± ä¸­
    */
   public FundAccountCapitalDetail assignTo(Long faCapitalDetailId,
       AssignAccountCommand assignAccountCommand) {
@@ -170,7 +170,7 @@ public class FundAccountCapitalDetailService {
   }
 
   /*
-   * ²úÆ·ÕË»§Ö®¼äµÄ×Ê½ğ»¥×ª
+   * äº§å“è´¦æˆ·ä¹‹é—´çš„èµ„é‡‘äº’è½¬
    */
   @Transactional
   public Collection<FundAccountCapitalDetail> enfeoff(Long dstFACapitalDetailId,

@@ -26,7 +26,7 @@ public class ECACashPoolService {
   ECACashSerialRepository ecaCashSerialRepository;
 
   /*
-   * ²éÕÒÌØ¶¨Íâ²¿×Ê½ğÕË»§ÏÂµÄËùÓĞ×Ê½ğ³Ø
+   * æŸ¥æ‰¾ç‰¹å®šå¤–éƒ¨èµ„é‡‘è´¦æˆ·ä¸‹çš„æ‰€æœ‰èµ„é‡‘æ± 
    */
   public Collection<ECACashPool> findByExternalCapitalAccountId(Long externalCapitalAccountId) {
 
@@ -34,14 +34,14 @@ public class ECACashPoolService {
   }
 
   /*
-   * ²éÕÒËùÓĞµÄ×Ê½ğ³Ø
+   * æŸ¥æ‰¾æ‰€æœ‰çš„èµ„é‡‘æ± 
    */
   public Collection<ECACashPool> findAll() {
     return ecaCashPoolRepository.findAll();
   }
 
   /*
-   * ²éÕÒÌØ¶¨µÄ×Ê½ğ³Ø
+   * æŸ¥æ‰¾ç‰¹å®šçš„èµ„é‡‘æ± 
    */
   public ECACashPool findOne(Long eCACashPoolId) {
 
@@ -49,7 +49,7 @@ public class ECACashPoolService {
   }
 
   /*
-   * Ìí¼ÓÒ»¸ö×Ê½ğ³Ø
+   * æ·»åŠ ä¸€ä¸ªèµ„é‡‘æ± 
    */
   public ECACashPool addECACashPool(CreateCashPoolCommand createCashPoolCommand) {
     ECACashPool ecaCashPool = ecaCashPoolRepository.findByExternalCapitalAccountIdAndCurrency(
@@ -67,7 +67,7 @@ public class ECACashPoolService {
   }
 
   /*
-   * ´Ó×Ê½ğ·â±ÕÈ¦ÍâÔö¼Ó×Ê½ğ
+   * ä»èµ„é‡‘å°é—­åœˆå¤–å¢åŠ èµ„é‡‘
    */
   @Transactional
   public ECACashPool transferTo(Long ecaCashPoolId, TransferAccountCommand transferAccountCommand) {
@@ -91,7 +91,7 @@ public class ECACashPoolService {
   }
 
   /*
-   * ´Ó×Ê½ğ·â±ÕÈ¦ÄÚ×ª³ö×Ê½ğ
+   * ä»èµ„é‡‘å°é—­åœˆå†…è½¬å‡ºèµ„é‡‘
    */
   @Transactional
   public ECACashPool transferFrom(Long ecaCashPoolId,
@@ -117,7 +117,7 @@ public class ECACashPoolService {
   }
 
   /*
-   * Á½¸ö×Ê½ğ³ØÖ®¼äµÄ»¥×ª
+   * ä¸¤ä¸ªèµ„é‡‘æ± ä¹‹é—´çš„äº’è½¬
    */
   @Transactional
   public Collection<ECACashPool> allot(Long dstEcaCashPoolId, Long srcEcaCashPoolId,

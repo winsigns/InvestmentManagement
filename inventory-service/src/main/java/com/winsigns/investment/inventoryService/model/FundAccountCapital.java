@@ -22,28 +22,28 @@ import lombok.Setter;
 public class FundAccountCapital extends AbstractEntity {
 
   /*
-   * 产品账户序号
+   * 浜у搧璐︽埛搴忓彿
    */
   @Getter
   @Setter
   private Long fundAccountId;
 
   /*
-   * 外部资金账户类型
+   * 澶栭儴璧勯噾璐︽埛绫诲瀷
    */
   @Getter
   @Setter
   private String externalCapitalAccountType;
 
   /*
-   * 币种
+   * 甯佺
    */
   @Getter
   @Setter
   private Currency currency;
 
   /*
-   * 投资限额
+   * 鎶曡祫闄愰
    */
   @Getter
   @Setter
