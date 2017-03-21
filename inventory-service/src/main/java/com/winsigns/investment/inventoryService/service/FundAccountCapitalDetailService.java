@@ -2,6 +2,7 @@ package com.winsigns.investment.inventoryService.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.winsigns.investment.inventoryService.command.AssignAccountCommand;
 import com.winsigns.investment.inventoryService.command.CreateFundAccountCapitalDetailCommand;
 import com.winsigns.investment.inventoryService.model.ECACashPool;
+import com.winsigns.investment.inventoryService.model.ECACashSerial;
 import com.winsigns.investment.inventoryService.model.FundAccountCapital;
 import com.winsigns.investment.inventoryService.model.FundAccountCapitalDetail;
+import com.winsigns.investment.inventoryService.model.FundAccountCapitalSerial;
 import com.winsigns.investment.inventoryService.repository.ECACashPoolRepository;
+import com.winsigns.investment.inventoryService.repository.ECACashSerialRepository;
 import com.winsigns.investment.inventoryService.repository.FundAccountCapitalDetailRepository;
 import com.winsigns.investment.inventoryService.repository.FundAccountCapitalRepository;
+import com.winsigns.investment.inventoryService.repository.FundAccountCapitalSerialRepository;
 
 @Service
 public class FundAccountCapitalDetailService {
@@ -28,10 +33,22 @@ public class FundAccountCapitalDetailService {
   @Autowired
   private ECACashPoolRepository ecaCashPoolRepository;
 
+  @Autowired
+  private FundAccountCapitalSerialRepository fundAccountCapitalSerialRepository;
+
+  @Autowired
+  private ECACashSerialRepository ecaCashSerialRepository;
+
+  /*
+   * 查询所有产品账户资金明细
+   */
   public Collection<FundAccountCapitalDetail> findAll() {
     return fundAccountCapitalDetailRepository.findAll();
   }
 
+  /*
+   * 查询特定产品账户资金的明细
+   */
   public Collection<FundAccountCapitalDetail> findByFACapitalId(Long faCapitalId) {
 
     FundAccountCapital fundAccountCapital = fundAccountCapitalRepository.findOne(faCapitalId);
@@ -41,10 +58,16 @@ public class FundAccountCapitalDetailService {
     return fundAccountCapitalDetailRepository.findByFundAccountCapital(fundAccountCapital);
   }
 
+  /*
+   * 查询特定产品账户资金明细
+   */
   public FundAccountCapitalDetail findOne(Long fundAccountCapitalDetailId) {
     return fundAccountCapitalDetailRepository.findOne(fundAccountCapitalDetailId);
   }
 
+  /*
+   * 增加产品账户明细
+   */
   public FundAccountCapitalDetail addFundAccountCapitalDetail(Long fundAccountCapitalId,
       CreateFundAccountCapitalDetailCommand crtFundAccountCapitalDetailCmd) {
 
@@ -63,13 +86,15 @@ public class FundAccountCapitalDetailService {
       fundAccountCapitalDetail.setFundAccountCapital(fundAccountCapital);
       fundAccountCapitalDetail.setExternalCapitalAccountId(
           crtFundAccountCapitalDetailCmd.getExternalCapitalAccountId());
-      fundAccountCapitalDetail.setCash(0.0);
 
       fundAccountCapitalDetail = fundAccountCapitalDetailRepository.save(fundAccountCapitalDetail);
     }
     return fundAccountCapitalDetail;
   }
 
+  /*
+   * 从外部资金账户资金池分配资金到产品账户资金明细中
+   */
   public FundAccountCapitalDetail assignFrom(Long faCapitalDetailId,
       AssignAccountCommand assignAccountCommand) {
     FundAccountCapitalDetail fundAccountCapitalDetail =
@@ -77,9 +102,13 @@ public class FundAccountCapitalDetailService {
     if (fundAccountCapitalDetail == null)
       return null;
 
-    fundAccountCapitalDetail
-        .setCash(fundAccountCapitalDetail.getCash() + assignAccountCommand.getAssignedCash());
-    fundAccountCapitalDetail = fundAccountCapitalDetailRepository.save(fundAccountCapitalDetail);
+    FundAccountCapitalSerial fundAccountCapitalSerial = new FundAccountCapitalSerial();
+    fundAccountCapitalSerial.setEcaCashPoolId(assignAccountCommand.getEcaCashPoolId());
+    fundAccountCapitalSerial.setFundAccountCapitalDetail(fundAccountCapitalDetail);
+    fundAccountCapitalSerial.setAssignedCash(Math.floor(assignAccountCommand.getAssignedCash()));
+    fundAccountCapitalSerial.setAssignedDate(new Date());
+    fundAccountCapitalSerial.operator(fundAccountCapitalDetail, false);
+    fundAccountCapitalSerial = fundAccountCapitalSerialRepository.save(fundAccountCapitalSerial);
 
     ECACashPool ecaCashPool =
         ecaCashPoolRepository.findOne(assignAccountCommand.getEcaCashPoolId());
@@ -88,11 +117,23 @@ public class FundAccountCapitalDetailService {
 
     ecaCashPool.setUnassignedCapital(
         ecaCashPool.getUnassignedCapital() - assignAccountCommand.getAssignedCash());
+
+    ECACashSerial ecaCashSerial = new ECACashSerial();
+    ecaCashSerial.setEcaCashPool(ecaCashPool);
+    ecaCashSerial.setAssignedDate(new Date());
+    ecaCashSerial.setAssignedCash(-Math.abs(assignAccountCommand.getAssignedCash()));
+    ecaCashSerial.setLinkedFASerialId(fundAccountCapitalSerial.getId());
+    ecaCashSerial.operator(ecaCashPool, false);
+    ecaCashSerial = ecaCashSerialRepository.save(ecaCashSerial);
+
     ecaCashPoolRepository.save(ecaCashPool);
 
     return fundAccountCapitalDetail;
   }
 
+  /*
+   * 从产品账户资金明细归还资金到外部资金账户资金池中
+   */
   public FundAccountCapitalDetail assignTo(Long faCapitalDetailId,
       AssignAccountCommand assignAccountCommand) {
     FundAccountCapitalDetail fundAccountCapitalDetail =
@@ -100,9 +141,13 @@ public class FundAccountCapitalDetailService {
     if (fundAccountCapitalDetail == null)
       return null;
 
-    fundAccountCapitalDetail
-        .setCash(fundAccountCapitalDetail.getCash() - assignAccountCommand.getAssignedCash());
-    fundAccountCapitalDetail = fundAccountCapitalDetailRepository.save(fundAccountCapitalDetail);
+    FundAccountCapitalSerial fundAccountCapitalSerial = new FundAccountCapitalSerial();
+    fundAccountCapitalSerial.setEcaCashPoolId(assignAccountCommand.getEcaCashPoolId());
+    fundAccountCapitalSerial.setFundAccountCapitalDetail(fundAccountCapitalDetail);
+    fundAccountCapitalSerial.setAssignedCash(-Math.floor(assignAccountCommand.getAssignedCash()));
+    fundAccountCapitalSerial.setAssignedDate(new Date());
+
+    fundAccountCapitalSerialRepository.save(fundAccountCapitalSerial);
 
     ECACashPool ecaCashPool =
         ecaCashPoolRepository.findOne(assignAccountCommand.getEcaCashPoolId());
@@ -113,9 +158,20 @@ public class FundAccountCapitalDetailService {
         ecaCashPool.getUnassignedCapital() + assignAccountCommand.getAssignedCash());
     ecaCashPoolRepository.save(ecaCashPool);
 
+    ECACashSerial ecaCashSerial = new ECACashSerial();
+    ecaCashSerial.setEcaCashPool(ecaCashPool);
+    ecaCashSerial.setAssignedDate(new Date());
+    ecaCashSerial.setAssignedCash(Math.abs(assignAccountCommand.getAssignedCash()));
+    ecaCashSerial.setLinkedFASerialId(fundAccountCapitalSerial.getId());
+    ecaCashSerial.operator(ecaCashPool, false);
+    ecaCashSerial = ecaCashSerialRepository.save(ecaCashSerial);
+
     return fundAccountCapitalDetail;
   }
 
+  /*
+   * 产品账户之间的资金互转
+   */
   @Transactional
   public Collection<FundAccountCapitalDetail> enfeoff(Long dstFACapitalDetailId,
       Long srcFACapitalDetailId, Double assignedCash) {
@@ -136,17 +192,27 @@ public class FundAccountCapitalDetailService {
         .getCurrency() != srcFundAccountCapitalDetail.getFundAccountCapital().getCurrency())
       return null;
 
-    dstFundAccountCapitalDetail.setCash(dstFundAccountCapitalDetail.getCash() + assignedCash);
-    dstFundAccountCapitalDetail =
-        fundAccountCapitalDetailRepository.save(dstFundAccountCapitalDetail);
-    result.add(dstFundAccountCapitalDetail);
+    FundAccountCapitalSerial dstfundAccountCapitalSerial = new FundAccountCapitalSerial();
+    FundAccountCapitalSerial srcfundAccountCapitalSerial = new FundAccountCapitalSerial();
 
-    srcFundAccountCapitalDetail.setCash(srcFundAccountCapitalDetail.getCash() - assignedCash);
-    srcFundAccountCapitalDetail =
-        fundAccountCapitalDetailRepository.save(srcFundAccountCapitalDetail);
+    Date date = new Date();
+    dstfundAccountCapitalSerial.setFundAccountCapitalDetail(dstFundAccountCapitalDetail);
+    dstfundAccountCapitalSerial.setAssignedCash(Math.floor(assignedCash));
+    dstfundAccountCapitalSerial.setLinkedSerialId(srcfundAccountCapitalSerial.getId());
+    dstfundAccountCapitalSerial.setAssignedDate(date);
+
+    srcfundAccountCapitalSerial.setFundAccountCapitalDetail(srcFundAccountCapitalDetail);
+    srcfundAccountCapitalSerial.setAssignedCash(-Math.floor(assignedCash));
+    srcfundAccountCapitalSerial.setLinkedSerialId(dstfundAccountCapitalSerial.getId());
+    srcfundAccountCapitalSerial.setAssignedDate(date);
+
+    fundAccountCapitalSerialRepository.save(dstfundAccountCapitalSerial);
+    fundAccountCapitalSerialRepository.save(srcfundAccountCapitalSerial);
+
+    result.add(dstFundAccountCapitalDetail);
     result.add(srcFundAccountCapitalDetail);
+
 
     return result;
   }
-
 }
