@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS fund_account_capital_serial;
+DROP TABLE IF EXISTS eca_cash_serial;
 DROP TABLE IF EXISTS fund_account_capital_detail;
 DROP TABLE IF EXISTS fund_account_capital;
 DROP TABLE IF EXISTS external_capital_account_cash_pool;
@@ -19,9 +21,21 @@ CREATE TABLE fund_account_capital
 CREATE TABLE fund_account_capital_detail
 (
 	id BIGINT NOT NULL auto_increment,
-	cash DOUBLE PRECISION,
 	external_capital_account_id BIGINT NOT NULL,
 	fund_account_capital_id BIGINT NOT NULL,
+	PRIMARY KEY (id)
+)CHARACTER SET = utf8;
+
+--产品账户资金流水
+CREATE TABLE fund_account_capital_serial
+(
+	id BIGINT NOT NULL auto_increment,
+	fund_account_capital_detail_id BIGINT NOT NULL,
+	assigned_cash DOUBLE PRECISION,
+	assigned_date DATE NOT NULL,
+	eca_cash_pool_id BIGINT,
+	linked_serial_id BIGINT,
+	operator_sequence VARCHAR(20),
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 
@@ -32,6 +46,19 @@ CREATE TABLE external_capital_account_cash_pool
 	unassigned_capital DOUBLE PRECISION,
 	currency VARCHAR(3)  NOT NULL,
 	external_capital_account_id BIGINT NOT NULL,
+	PRIMARY KEY (id)
+)CHARACTER SET = utf8;
+
+--外部账户资金流水
+CREATE TABLE eca_cash_serial
+(
+	id BIGINT NOT NULL auto_increment,
+	eca_cash_pool_id BIGINT NOT NULL,
+	assigned_cash DOUBLE PRECISION,
+	assigned_date DATE NOT NULL,
+	linked_eca_serial_id BIGINT,
+	linked_fa_serial_id BIGINT,
+	operator_sequence VARCHAR(20),
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 
@@ -47,3 +74,5 @@ CREATE TABLE position
 )CHARACTER SET = utf8;
 --外键
 ALTER TABLE fund_account_capital_detail ADD CONSTRAINT fk_fund_account_capital FOREIGN KEY (fund_account_capital_id) REFERENCES fund_account_capital (id);
+ALTER TABLE fund_account_capital_serial ADD CONSTRAINT fk_fund_account_capital_detail FOREIGN KEY (fund_account_capital_detail_id) REFERENCES fund_account_capital_detail (id);
+ALTER TABLE eca_cash_serial ADD CONSTRAINT fk_eca_cash_serial FOREIGN KEY (eca_cash_pool_id) REFERENCES external_capital_account_cash_pool (id);

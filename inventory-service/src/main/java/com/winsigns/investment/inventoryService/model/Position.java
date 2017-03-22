@@ -5,50 +5,24 @@ import javax.persistence.Entity;
 import org.springframework.hateoas.core.Relation;
 
 import com.winsigns.investment.framework.model.AbstractEntity;
-import com.winsigns.investment.inventoryService.constant.PositionType;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Relation(value = "position", collectionRelation = "positions")
 public class Position extends AbstractEntity {
 
+  @Getter
+  @Setter
   private Long portfolioId;
 
+  @Getter
+  @Setter
   private Long externalTradeAccountId;
 
+  @Getter
+  @Setter
   private Long securityId;
-
-  private PositionType positionType;
-
-  public Long getPortfolioId() {
-    return portfolioId;
-  }
-
-  public void setPortfolioId(Long portfolioId) {
-    this.portfolioId = portfolioId;
-  }
-
-  public Long getExternalTradeAccountId() {
-    return externalTradeAccountId;
-  }
-
-  public void setExternalTradeAccountId(Long externalTradeAccountId) {
-    this.externalTradeAccountId = externalTradeAccountId;
-  }
-
-  public Long getSecurityId() {
-    return securityId;
-  }
-
-  public void setSecurityId(Long securityId) {
-    this.securityId = securityId;
-  }
-
-  public PositionType getPositionType() {
-    return positionType;
-  }
-
-  public void setPositionType(PositionType positionType) {
-    this.positionType = positionType;
-  }
 
 }

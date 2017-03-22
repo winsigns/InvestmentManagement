@@ -20,11 +20,9 @@ public class PositionService {
   }
 
   public Position addPosition(CreatePositionCommand createPositionCommand) {
-    Position position =
-        positionRepository.findByPortfolioIdAndExternalTradeAccountIdAndSecurityIdAndPositionType(
-            createPositionCommand.getPortfolioId(),
-            createPositionCommand.getExternalTradeAccountId(),
-            createPositionCommand.getSecurityId(), createPositionCommand.getPositionType());
+    Position position = positionRepository.findByPortfolioIdAndExternalTradeAccountIdAndSecurityId(
+        createPositionCommand.getPortfolioId(), createPositionCommand.getExternalTradeAccountId(),
+        createPositionCommand.getSecurityId());
 
     if (position == null) {
       position = new Position();
@@ -32,7 +30,6 @@ public class PositionService {
       position.setPortfolioId(createPositionCommand.getPortfolioId());
       position.setExternalTradeAccountId(createPositionCommand.getExternalTradeAccountId());
       position.setSecurityId(createPositionCommand.getSecurityId());
-      position.setPositionType(createPositionCommand.getPositionType());
       position = positionRepository.save(position);
     }
     return position;

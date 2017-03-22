@@ -14,62 +14,46 @@ import org.springframework.hateoas.core.Relation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.model.AbstractEntity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Relation(value = "fa-capital", collectionRelation = "fa-capitals")
 public class FundAccountCapital extends AbstractEntity {
 
+  /*
+   * 产品账户序号
+   */
+  @Getter
+  @Setter
   private Long fundAccountId;
 
+  /*
+   * 外部资金账户类型
+   */
+  @Getter
+  @Setter
   private String externalCapitalAccountType;
 
+  /*
+   * 币种
+   */
+  @Getter
+  @Setter
   private Currency currency;
 
+  /*
+   * 投资限额
+   */
+  @Getter
+  @Setter
   private Double investmentLimit;
 
   @OneToMany(mappedBy = "fundAccountCapital", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JsonIgnore
+  @Getter
+  @Setter
   private List<FundAccountCapitalDetail> fundAccountCapitalDetails =
       new ArrayList<FundAccountCapitalDetail>();
-
-  public Long getFundAccountId() {
-    return fundAccountId;
-  }
-
-  public void setFundAccountId(Long fundAccountId) {
-    this.fundAccountId = fundAccountId;
-  }
-
-  public String getExternalCapitalAccountType() {
-    return externalCapitalAccountType;
-  }
-
-  public void setExternalCapitalAccountType(String externalCapitalAccountType) {
-    this.externalCapitalAccountType = externalCapitalAccountType;
-  }
-
-  public Currency getCurrency() {
-    return currency;
-  }
-
-  public void setCurrency(Currency currency) {
-    this.currency = currency;
-  }
-
-  public Double getInvestmentLimit() {
-    return investmentLimit;
-  }
-
-  public void setInvestmentLimit(Double investmentLimit) {
-    this.investmentLimit = investmentLimit;
-  }
-
-  public List<FundAccountCapitalDetail> getFundAccountCapitalDetails() {
-    return fundAccountCapitalDetails;
-  }
-
-  public void setFundAccountCapitalDetails(
-      List<FundAccountCapitalDetail> fundAccountCapitalDetails) {
-    this.fundAccountCapitalDetails = fundAccountCapitalDetails;
-  }
 
 }

@@ -2,6 +2,7 @@ package com.winsigns.investment.inventoryService.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,28 +12,41 @@ import org.springframework.transaction.annotation.Transactional;
 import com.winsigns.investment.inventoryService.command.CreateCashPoolCommand;
 import com.winsigns.investment.inventoryService.command.TransferAccountCommand;
 import com.winsigns.investment.inventoryService.model.ECACashPool;
+import com.winsigns.investment.inventoryService.model.ECACashSerial;
 import com.winsigns.investment.inventoryService.repository.ECACashPoolRepository;
 
 @Service
 public class ECACashPoolService {
 
   @Autowired
-  private ECACashPoolRepository ecaCashPoolRepository;
+  ECACashPoolRepository ecaCashPoolRepository;
 
+  /*
+   * 查找特定外部资金账户下的所有资金池
+   */
   public Collection<ECACashPool> findByExternalCapitalAccountId(Long externalCapitalAccountId) {
 
     return ecaCashPoolRepository.findByExternalCapitalAccountId(externalCapitalAccountId);
   }
 
+  /*
+   * 查找所有的资金池
+   */
   public Collection<ECACashPool> findAll() {
     return ecaCashPoolRepository.findAll();
   }
 
+  /*
+   * 查找特定的资金池
+   */
   public ECACashPool findOne(Long eCACashPoolId) {
 
     return ecaCashPoolRepository.findOne(eCACashPoolId);
   }
 
+  /*
+   * 添加一个资金池
+   */
   public ECACashPool addECACashPool(CreateCashPoolCommand createCashPoolCommand) {
     ECACashPool ecaCashPool = ecaCashPoolRepository.findByExternalCapitalAccountIdAndCurrency(
         createCashPoolCommand.getExternalCapitalAccountId(), createCashPoolCommand.getCurrency());
@@ -48,6 +62,10 @@ public class ECACashPoolService {
     return ecaCashPool;
   }
 
+  /*
+   * 从资金封闭圈外增加资金
+   */
+  @Transactional
   public ECACashPool transferTo(Long ecaCashPoolId, TransferAccountCommand transferAccountCommand) {
 
     ECACashPool ecaCashPool = ecaCashPoolRepository.findOne(ecaCashPoolId);
@@ -57,9 +75,20 @@ public class ECACashPoolService {
 
     ecaCashPool.setUnassignedCapital(
         ecaCashPool.getUnassignedCapital() + transferAccountCommand.getChangedCapital());
+
+    ECACashSerial ecaCashSerial = new ECACashSerial();
+    ecaCashSerial.setEcaCashPool(ecaCashPool);
+    ecaCashSerial.setAssignedDate(new Date());
+    ecaCashSerial.setAssignedCash(Math.abs(transferAccountCommand.getChangedCapital()));
+    ecaCashSerial.operator(ecaCashPool, false);
+
     return ecaCashPoolRepository.save(ecaCashPool);
   }
 
+  /*
+   * 从资金封闭圈内转出资金
+   */
+  @Transactional
   public ECACashPool transferFrom(Long ecaCashPoolId,
       TransferAccountCommand transferAccountCommand) {
 
@@ -70,10 +99,19 @@ public class ECACashPoolService {
 
     ecaCashPool.setUnassignedCapital(
         ecaCashPool.getUnassignedCapital() - transferAccountCommand.getChangedCapital());
-    return ecaCashPoolRepository.save(ecaCashPool);
 
+    ECACashSerial ecaCashSerial = new ECACashSerial();
+    ecaCashSerial.setEcaCashPool(ecaCashPool);
+    ecaCashSerial.setAssignedDate(new Date());
+    ecaCashSerial.setAssignedCash(-Math.abs(transferAccountCommand.getChangedCapital()));
+    ecaCashSerial.operator(ecaCashPool, false);
+
+    return ecaCashPoolRepository.save(ecaCashPool);
   }
 
+  /*
+   * 两个资金池之间的互转
+   */
   @Transactional
   public Collection<ECACashPool> allot(Long dstEcaCashPoolId, Long srcEcaCashPoolId,
       Double changedCapital) {
@@ -89,6 +127,12 @@ public class ECACashPoolService {
         .setUnassignedCapital(dstEcaCashPool.getUnassignedCapital() + Math.abs(changedCapital));
     result.add(ecaCashPoolRepository.save(dstEcaCashPool));
 
+    ECACashSerial dstECACashSerial = new ECACashSerial();
+    dstECACashSerial.setEcaCashPool(dstEcaCashPool);
+    dstECACashSerial.setAssignedDate(new Date());
+    dstECACashSerial.setAssignedCash(Math.abs(changedCapital));
+    dstECACashSerial.operator(dstEcaCashPool, false);
+
     ECACashPool srcEcaCashPool = ecaCashPoolRepository.findOne(srcEcaCashPoolId);
     if (srcEcaCashPool == null)
       return null;
@@ -96,6 +140,12 @@ public class ECACashPoolService {
         .setUnassignedCapital(srcEcaCashPool.getUnassignedCapital() - Math.abs(changedCapital));
 
     result.add(ecaCashPoolRepository.save(srcEcaCashPool));
+
+    ECACashSerial srcECACashSerial = new ECACashSerial();
+    srcECACashSerial.setEcaCashPool(srcEcaCashPool);
+    srcECACashSerial.setAssignedDate(new Date());
+    srcECACashSerial.setAssignedCash(-Math.abs(changedCapital));
+    srcECACashSerial.operator(srcEcaCashPool, false);
 
     return result;
   }
