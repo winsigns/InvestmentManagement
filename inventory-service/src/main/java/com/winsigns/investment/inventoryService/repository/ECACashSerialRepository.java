@@ -6,12 +6,10 @@ import java.util.Date;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.winsigns.investment.inventoryService.model.ECACashPool;
 import com.winsigns.investment.inventoryService.model.ECACashSerial;
 
-@Transactional
 public interface ECACashSerialRepository extends JpaRepository<ECACashSerial, Long> {
 
   @Query("select sum(assignedCash) from ECACashSerial a where a.ecaCashPool = :ecaCashPool and a.assignedDate = :assignedDate")
