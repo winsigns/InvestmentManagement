@@ -21,7 +21,7 @@ public class MeasureRegistry {
     this.measures = new ArrayList<Measure>();
   }
 
-  // ÒòMeasureHostTypeÊÇÒ»¸öbean£¬Òò´Ë²»ÄÜÔÚ¹¹Ôìº¯ÊıÖĞ»ñµÃ£¬Ôö¼ÓÁíÒ»¸ö´æ´¢½á¹¹
+  // å› MeasureHostTypeæ˜¯ä¸€ä¸ªbeanï¼Œå› æ­¤ä¸èƒ½åœ¨æ„é€ å‡½æ•°ä¸­è·å¾—ï¼Œå¢åŠ å¦ä¸€ä¸ªå­˜å‚¨ç»“æ„
   private List<Measure> measures;
 
   public void register(Measure measure) {
