@@ -11,14 +11,18 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.processor.TopologyBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 
-import com.winsigns.investment.framework.kafka.KafkaConfiguration;
 import com.winsigns.investment.framework.measure.ICalculateFactor;
 import com.winsigns.investment.framework.measure.Measure;
 import com.winsigns.investment.framework.measure.MeasureRegistry;
 
-public class MeasureTopologyBuilder {
+import lombok.Setter;
+
+/*
+ * 瀹炵幇璇ユ帴鍙ｆ槸涓轰簡鍏秙tart涓�瀹氬湪鍏朵粬measure鐨刡ean鏋勫缓瀹屾垚涔嬪悗杩愯 璇﹁DefaultListableBeanFactory.preInstantiateSingletons
+ */
+public class MeasureTopologyBuilder implements SmartInitializingSingleton {
 
   private static final String SOURCE_SUFFIX = ".source";
   private static final String PROCESS_SUFFIX = ".processor";
@@ -26,8 +30,8 @@ public class MeasureTopologyBuilder {
 
   private Logger log = LoggerFactory.getLogger(MeasureTopologyBuilder.class);
 
-  @Autowired
-  KafkaConfiguration kafkaConfiguration;
+  @Setter
+  KafkaStreamsConfiguration kafkaStreamsConfiguration;
 
   private KafkaStreams streams;
 
@@ -49,25 +53,26 @@ public class MeasureTopologyBuilder {
     valueSerde = new ProcessorValueJsonSerde();
 
     Properties config = new Properties();
-    config.put(StreamsConfig.APPLICATION_ID_CONFIG, kafkaConfiguration.getAppId());
-    config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConfiguration.getBrokerHost());
-    config.put(StreamsConfig.ZOOKEEPER_CONNECT_CONFIG, kafkaConfiguration.getZookeeperHost());
+    config.put(StreamsConfig.APPLICATION_ID_CONFIG, kafkaStreamsConfiguration.getAppId());
+    config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaStreamsConfiguration.getBrokerHost());
+    config.put(StreamsConfig.ZOOKEEPER_CONNECT_CONFIG,
+        kafkaStreamsConfiguration.getZookeeperHost());
     config.put(StreamsConfig.KEY_SERDE_CLASS_CONFIG, keySerde.getClass().getName());
     config.put(StreamsConfig.VALUE_SERDE_CLASS_CONFIG, valueSerde.getClass().getName());
 
     TopologyBuilder builder = new TopologyBuilder();
 
-    // 先进行重排列
+    // 鍏堣繘琛岄噸鎺掑垪
     MeasureRegistry.getInstance().rehash();
 
     HashSet<String> sourceNames = new HashSet<String>();
     for (Measure measure : MeasureRegistry.getInstance().getMeasures()) {
-      // 遍历指标的所有计算因子，如果不在本地指标库，则为source
+      // 閬嶅巻鎸囨爣鐨勬墍鏈夎绠楀洜瀛愶紝濡傛灉涓嶅湪鏈湴鎸囨爣搴擄紝鍒欎负source
       List<ICalculateFactor> factors = measure.getCalculateFactors();
       if (factors != null) {
         for (ICalculateFactor facotr : factors) {
           if (!MeasureRegistry.getInstance().contains(facotr.getName())) {
-            // 如果没有创建过该source，则创建
+            // 濡傛灉娌℃湁鍒涘缓杩囪source锛屽垯鍒涘缓
             if (!sourceNames.contains(facotr.getName())) {
               log.info(String.format("addSource: name:%s, source:%s",
                   facotr.getName() + SOURCE_SUFFIX, facotr.getName()));
@@ -82,7 +87,7 @@ public class MeasureTopologyBuilder {
       // builder.addSource(measure.getName() + SOURCE_SUFFIX, keyDeserializer, valueDeserializer,
       // getSourcesTopic(measure));
 
-      // 为本地的指标建立process
+      // 涓烘湰鍦扮殑鎸囨爣寤虹珛process
       String processorName = measure.getName() + PROCESS_SUFFIX;
       String sinkName = measure.getName() + SINK_SUFFIX;
       log.info(String.format("addProcessor: name:%s, deps:%s", processorName,
@@ -117,5 +122,10 @@ public class MeasureTopologyBuilder {
     }
 
     return calculateFactors.toArray(new String[calculateFactors.size()]);
+  }
+
+  @Override
+  public void afterSingletonsInstantiated() {
+    start();
   }
 }

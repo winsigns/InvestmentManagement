@@ -1,0 +1,6 @@
+task copyFile(dependsOn: ":web-frontend:npm_run") << {
+    copy {
+        from "web-frontend/dist"
+        into "web-gateway/src/main/resources/public"
+    }
+}

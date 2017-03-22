@@ -23,7 +23,7 @@ public abstract class OperatorEntity extends AbstractEntity implements ICalculat
 
     doOperator(measureHost, isFloat);
 
-    // Íùkafka ·¢ËÍÒì²½ÏûÏ¢
+    // å¾€kafka å‘é€å¼‚æ­¥æ¶ˆæ¯
     KafKaTrigger kafKaTrigger = SpringManager.getApplicationContext().getBean(KafKaTrigger.class);
 
     kafKaTrigger.raiseKafka(measureHost.getId(), isFloat, operatorSequence,

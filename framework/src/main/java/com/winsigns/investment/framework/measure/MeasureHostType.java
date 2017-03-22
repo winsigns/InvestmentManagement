@@ -32,7 +32,7 @@ public abstract class MeasureHostType {
   // String version = (String) record.key();
   // OperatorMessage operatorMessage = (OperatorMessage) record.value();
   //
-  // // 遍历该MHT下的所有的指标，如果存在关心的操作，则发送消息
+  // 
   // for (Measure measure : MeasureRegistry.getInstance()
   // .getMeasures(operatorMessage.getHostTypeName())) {
   // kafKaTrigger.raiseKafka(operatorMessage.getMeasureHostId(), operatorMessage.isFloat(),
