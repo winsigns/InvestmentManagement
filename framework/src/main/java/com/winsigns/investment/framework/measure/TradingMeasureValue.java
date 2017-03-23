@@ -21,7 +21,7 @@ public class TradingMeasureValue extends MeasureValue {
   private String version;
 
   public TradingMeasureValue(MeasureHost measureHost, Measure measure, boolean isFloat,
-      String version, Double value) {
+      String version, double value) {
     super(measureHost, measure, value);
     this.version = version;
     this.isFloat = isFloat;

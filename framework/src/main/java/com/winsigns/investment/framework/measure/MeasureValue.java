@@ -15,5 +15,6 @@ public abstract class MeasureValue {
   @JsonIgnore
   private Measure measure;
 
-  private Double value;
+  private double value;
+
 }

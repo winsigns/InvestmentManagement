@@ -7,7 +7,7 @@ public class ClearanceMeasureValue extends MeasureValue {
 
   private int offsetDays;
 
-  public ClearanceMeasureValue(MeasureHost measureHost, Measure measure, Double value,
+  public ClearanceMeasureValue(MeasureHost measureHost, Measure measure, double value,
       int offsetDays) {
     super(measureHost, measure, value);
     this.offsetDays = offsetDays;
