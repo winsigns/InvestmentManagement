@@ -16,13 +16,12 @@ echo "cd ${COMMIT_WORKSPACE}"
 
 cd ${COMMIT_WORKSPACE}
 docker-compose -f infrastructure-cd.yml down
-docker-compose -f infrastructure-cd.yml up -d
+docker-compose -f infrastructure-cd.yml up --build -d
 
 HOST_IP=$(ip route|awk '/default/ { print $3 }')
 
 # wait for infrastructures startup complete. 
 bash ./wait-for-it.sh -t 0 ${HOST_IP}:3306
-sleep 10
 
 ./createdb.sh ${HOST_IP}
 ./migratedb.sh ${HOST_IP}

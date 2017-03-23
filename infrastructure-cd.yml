@@ -2,7 +2,7 @@ version: '2'
 services:
 
   database:
-    image: mariadb
+    build: mariadb-docker
     container_name: database
     ports:
       - 3306:3306
