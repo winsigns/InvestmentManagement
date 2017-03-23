@@ -22,7 +22,7 @@ services:
       - ADVERTISED_PORT=9092
 
   discovery-service:
-    build: docker-registry:5000/discovery-service
+    image: docker-registry:5000/discovery-service
     container_name: discovery-service
     mem_limit: 512M
     ports:

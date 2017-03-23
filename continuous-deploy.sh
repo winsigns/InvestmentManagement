@@ -15,10 +15,16 @@ docker images
 echo "cd ${COMMIT_WORKSPACE}"
 
 cd ${COMMIT_WORKSPACE}
+docker-compose -f infrastructure-cd.yml down
 docker-compose -f infrastructure-cd.yml up -d
+
+# wait for infrastructures startup complete. 
+# need to be replaced by wait-for-it
 sleep 10
 
 HOST_IP=$(ip route|awk '/default/ { print $3 }')
 ./createdb.sh ${HOST_IP}
 ./migratedb.sh ${HOST_IP}
+
+docker-compose -f application-cd.yml down
 docker-compose -f application-cd.yml up -d
