@@ -3,7 +3,7 @@ CURR_TAG=${COMMIT_BUILD_TYPE}${COMMIT_BUILD_NUMBER}
 echo "BEFORE:"
 docker images
 
-for name in "discovery-service fund-service trade-service invest-service inventory-service web-gateway sequence-service"
+for name in discovery-service fund-service trade-service invest-service inventory-service web-gateway sequence-service
 do
     echo "docker tag docker-registry:5000/${name}:${CURR_TAG} docker-registry:5000/${name}:latest"
     docker tag docker-registry:5000/${name}:${CURR_TAG} docker-registry:5000/${name}:latest
