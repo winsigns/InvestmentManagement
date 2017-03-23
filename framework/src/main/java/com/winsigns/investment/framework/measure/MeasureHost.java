@@ -1,5 +1,6 @@
 package com.winsigns.investment.framework.measure;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,21 @@ public abstract class MeasureHost extends AbstractEntity {
     return MeasureRegistry.getInstance().getMeasures(this.getType());
   }
 
-  public Map<String, Double> getMeasureValues() {
+  @JsonIgnore
+  public List<MeasureValue> getMeasureValues() {
+    List<MeasureValue> measureValues = new ArrayList<MeasureValue>();
+
+    List<Measure> measures = getMeasures();
+    for (Measure measure : measures) {
+      MeasureValue measureValue = measure.getValue(this, false);
+      if (measureValue != null) {
+        measureValues.add(measureValue);
+      }
+    }
+    return measureValues;
+  }
+
+  public Map<String, Double> getShowMeasureValues() {
     Map<String, Double> measureValues = new HashMap<String, Double>();
 
     List<Measure> measures = getMeasures();

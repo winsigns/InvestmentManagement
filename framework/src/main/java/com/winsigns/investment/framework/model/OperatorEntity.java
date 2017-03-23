@@ -26,11 +26,13 @@ public abstract class OperatorEntity extends AbstractEntity implements ICalculat
           .getBean(OperatorSequenceIntegration.class).getSequence();
     }
 
-    /* 这里需要手动开启事务 */
+    /*
+     * 这里需要手动开启事务 PROPAGATION_REQUIRES_NEW 表示挂起当前事务，重新启动一个新事务
+     */
     PlatformTransactionManager platformTransactionManager =
         SpringManager.getApplicationContext().getBean(PlatformTransactionManager.class);
     DefaultTransactionDefinition transactionDefinition =
-        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
+        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
     TransactionStatus status = platformTransactionManager.getTransaction(transactionDefinition);
 
     try {

@@ -62,7 +62,8 @@ public class MeasureValueRepository {
     if (tmp == null) {
       tmp = 0.0;
     }
-    measureRepository.opsForValue().set(getKey(value), value.getValue());
+
+    measureRepository.opsForValue().set(getKey(value), tmp);
 
     // 更新索引，索引存放该类指标的最新版本
     String key = getKey(value);
