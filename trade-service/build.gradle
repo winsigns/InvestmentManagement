@@ -20,7 +20,7 @@ flyway {
     def mysql_ip_addr = env.MYSQL_IP_ADDR?env.MYSQL_IP_ADDR:"127.0.0.1"
 
     url = "jdbc:mysql://$mysql_ip_addr:3306/tradedb"
-    print "mysql url: $url"    
+    println "mysql url: $url"    
     
 	user = 'mariadb'
 	password = "mariadb"
