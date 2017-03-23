@@ -58,6 +58,7 @@ public class MeasureValueRepository {
   }
 
   public void save(TradingMeasureValue value) {
+
     measureRepository.opsForValue().set(getKey(value), value.getValue());
 
     // 更新索引，索引存放该类指标的最新版本
