@@ -1,4 +1,4 @@
-FROM: mariadb
+FROM mariadb
 
 # comment out a few problematic configuration values
 # don't reverse lookup hostnames, they are usually another container
