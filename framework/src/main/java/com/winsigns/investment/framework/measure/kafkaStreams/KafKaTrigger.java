@@ -9,14 +9,13 @@ import org.aspectj.lang.JoinPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.winsigns.investment.framework.kafka.KafkaConfiguration;
 import com.winsigns.investment.framework.measure.ICalculateFactor;
 
 @Component
 public class KafKaTrigger {
 
   @Autowired
-  KafkaConfiguration kafkaConfiguration;
+  KafkaStreamsConfiguration kafkaConfiguration;
 
   public void raiseKafka(JoinPoint joinPoint) throws Throwable {
 

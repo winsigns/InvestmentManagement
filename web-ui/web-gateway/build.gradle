@@ -99,6 +99,10 @@ task buildDocker(type: Docker) {
     push = true
 }
 
+assemble{
+    dependsOn ":copyFile"
+}
+
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:Dalston.BUILD-SNAPSHOT"

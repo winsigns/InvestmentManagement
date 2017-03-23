@@ -23,7 +23,7 @@ public class MeasureProcessor extends AbstractProcessor<ProcessorKey, ProcessorV
   public void process(ProcessorKey key, ProcessorValue value) {
 
     /*
-     * 如果该指标关心该操作
+     * 濡傛灉璇ユ寚鏍囧叧蹇冭鎿嶄綔
      */
     if ((key.getOperatorName() != null && measure.isConcerned(key.getOperatorName()))
         || key.getOperatorName() == null) {
@@ -33,7 +33,7 @@ public class MeasureProcessor extends AbstractProcessor<ProcessorKey, ProcessorV
 
       if (tradingMeasureValue != null) {
         key.setMeasureHostId(tradingMeasureValue.getMeasureHost().getId());
-        key.setOperatorName(null); // 一旦计算过一次之后，就不再关心了
+        key.setOperatorName(null); // 涓�鏃﹁绠楄繃涓�娆′箣鍚庯紝灏变笉鍐嶅叧蹇冧簡
         value.setName(tradingMeasureValue.getMeasure().getName());
         context().forward(key, value);
       }

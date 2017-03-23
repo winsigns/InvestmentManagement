@@ -1,0 +1,19 @@
+buildscript {
+    repositories {
+        maven { url "http://repo.winsigns-dev.com/artifactory/m2/" }
+    }
+    dependencies {
+        classpath "com.moowork.gradle:gradle-node-plugin:1.1.1"
+    }
+}
+
+apply plugin: 'com.moowork.node'
+
+node {
+    distBaseUrl = "https://nodejs.org/dist"
+    download = true
+}
+
+npm_run {
+    args = ['build']
+}
