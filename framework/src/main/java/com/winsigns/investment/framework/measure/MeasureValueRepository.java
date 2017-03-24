@@ -37,7 +37,7 @@ public class MeasureValueRepository {
     String latestVersion = indexRepository.opsForValue().get(lasterKey);
 
     if (latestVersion == null) {
-      return null;
+      return new TradingMeasureValue(measureHost, measure, isFloat, latestVersion, 0.0);
     }
 
     String key = measureHost.getType().getName() + ":" + measureHost.getId() + ":"
