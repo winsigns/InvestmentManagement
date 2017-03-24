@@ -2,6 +2,10 @@
 
 ## 系统架构
 
+
+
+![architecture](images/architecture.png)
+
 * 以微服务架构为指导原则，将系统拆分成一系列组件。
 * 组件之间以同步调用为主，使用 http+HAL(json) 进行接口交互。
 * 一部分异步操作，通过Kafka进行交互。目前需要异步推送的地方主要有：
@@ -10,8 +14,45 @@
   * 指标的前台推送显示（已实现）
 * 指标计算基于 Kafka Streams 框架进行分布式流式计算。
 * 前台跟后台间通过web gateway进行隔离，前台请求应答模式通过http+HAL，推送的部分使用websocket。
-* 后台主用框架为 Spring Boot + Spring Cloud。
-* 前台主用框架为 vuejs。
+* 支持 i18n。
+
+### 使用的技术
+
+#### 流程管理
+
+* 版本管理：github，未来会替换成gitlab
+* issue管理：github issue，未来会替换成jira
+* 持续集成：jenkins
+
+#### 基础设施
+
+* 数据库： mariadb
+* 缓存： redis
+* 异步处理/消息队列：kafka
+* 容器： docker + docker registry
+* 容器编排：docker-compose，未来会替换为kubernetes或docker swarm
+
+#### 后台
+
+* 主用框架： Spring Boot + Spring Cloud
+* 交互协议：http REST
+* 报文格式：HAL (json)
+* 日志：slf4j on logback with logstash's JSON encoder
+* 服务发现：Eureka
+* 流式计算：Kafka Streams
+* 网关：Zuul
+* 依赖包管理：gradle + maven registry
+
+#### 前台
+* 主用框架：vuejs
+  * vue-router
+  * vue-i18n
+  * vuex
+* 组件管理：webpack
+* 样式、组件库：elementUI
+* 交互协议：
+  * 请求应答：http REST
+  * 消息推送：websocket
 
 ### 同步调用示意
 
@@ -35,11 +76,11 @@ sequenceDiagram
 	invest service ->> trade service: 指令分发
 	trade service ->> queue: 资源申请
 	queue -->> trade service: 资源申请已接受
+	Note over queue, inventory service: 队列处理
 	queue ->> inventory service: 处理资源申请
 	inventory service -->> trade service: 资源申请处理完成
 	trade service -->> invest service: 指令分发完成
 	invest service -->> frontend: 指令提交完成
-
 ```
 
 
@@ -50,7 +91,7 @@ sequenceDiagram
 
 下图是系统中设计的部分指标：
 
-![measure-overview](/home/jmx/project/InvestmentManagement/docs/images/measure-overview.png)
+![measure-overview](images/measure-overview.png)
 
 ### 指标计算模型
 
