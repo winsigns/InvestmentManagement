@@ -8,6 +8,9 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.model.AbstractEntity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 /**
  * Created by colin on 2017/3/2.
  */
@@ -45,28 +48,26 @@ public abstract class MeasureHost extends AbstractEntity {
     return measureValues;
   }
 
-  public Map<String, Double> getShowMeasureValues() {
-    Map<String, Double> measureValues = new HashMap<String, Double>();
+  @Data
+  @AllArgsConstructor
+  public static class MeasureInfo {
+    Double value;
+    String key;
+  }
+
+  public Map<String, MeasureInfo> getMeasureInfo() {
+    Map<String, MeasureInfo> measureValues = new HashMap<String, MeasureInfo>();
 
     List<Measure> measures = getMeasures();
     for (Measure measure : measures) {
       TradingMeasureValue measureValue = measure.getValue(this, false);
       if (measureValue != null) {
-        measureValues.put(measure.getName(), measure.getValue(this, false).getValue());
+
+        measureValues.put(measure.getName(),
+            new MeasureInfo(measure.getValue(this, false).getValue(), measureValue.key()));
       }
     }
     return measureValues;
-  }
-
-  public Map<String, String> getMeasureKeys() {
-    Map<String, String> measureKeys = new HashMap<String, String>();
-
-    List<Measure> measures = getMeasures();
-    for (Measure measure : measures) {
-      measureKeys.put(measure.getName(), measure.getValue(this, false).key());
-
-    }
-    return measureKeys;
   }
 
   public TradingMeasureValue calculate(Measure mesaure, boolean isFloat, String version) {

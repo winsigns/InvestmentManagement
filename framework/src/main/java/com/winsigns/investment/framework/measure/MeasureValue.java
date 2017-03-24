@@ -18,8 +18,8 @@ public abstract class MeasureValue {
   private double value;
 
   public String key() {
-    return this.getMeasureHost().getType().getName() + ":" + this.getMeasureHost().getId() + ":"
-        + this.getMeasure().getName().split(".")[1];
+    return this.getMeasureHost().getType().getName() + ":"
+        + this.getMeasureHost().getId().toString() + ":" + this.getMeasure().getName();
   }
 
 }
