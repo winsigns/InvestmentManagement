@@ -5,5 +5,5 @@ fi
 
 echo "MYSQL_IP_ADDR=${MYSQL_IP_ADDR}"
 echo "mysql -h${MYSQL_IP_ADDR} -uroot -ppassword < createdb.sql"
-#mysql -h${MYSQL_IP_ADDR} -uroot -ppassword < createdb.sql
-mysql -h${MYSQL_IP_ADDR} -uroot -ppassword -e "show databases;"
+mysql -h${MYSQL_IP_ADDR} -uroot -ppassword < createdb.sql
+#mysql -h${MYSQL_IP_ADDR} -uroot -ppassword -e "show databases;"
