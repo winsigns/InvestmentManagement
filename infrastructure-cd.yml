@@ -24,7 +24,6 @@ services:
   discovery-service:
     image: docker-registry:5000/discovery-service
     container_name: discovery-service
-    mem_limit: 512M
     ports:
       - 10100:10100
     environment:
