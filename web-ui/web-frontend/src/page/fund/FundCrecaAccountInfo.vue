@@ -125,6 +125,7 @@
                     })  
             },
             moneySubscribe: function(message){
+                console.log(message)
                 var _self=this;
                 var tempData =  [];
                 for (var i=0;i<=_self.fundCreaAccontInfoCapList.length-1;i++){
@@ -136,14 +137,16 @@
                             'id':_self.fundCreaAccontInfoCapList[i].id,
                             'currency':_self.fundCreaAccontInfoCapList[i].currency,
                             'unassignedCapital':_self.fundCreaAccontInfoCapList[i].unassignedCapital,
-                            'ecma':message.body
+                            'ecma':message.body,
+                            'measureInfo':_self.fundCreaAccontInfoCapList[i].measureInfo
                         })
                     } else{
                         tempData.push({
                             'id':_self.fundCreaAccontInfoCapList[i].id,
                             'currency':_self.fundCreaAccontInfoCapList[i].currency,
                             'unassignedCapital':_self.fundCreaAccontInfoCapList[i].unassignedCapital,
-                            'ecma':_self.fundCreaAccontInfoCapList[i].ecma
+                            'ecma':_self.fundCreaAccontInfoCapList[i].ecma,
+                            'measureInfo':_self.fundCreaAccontInfoCapList[i].measureInfo
                         })
                     }
                 }
