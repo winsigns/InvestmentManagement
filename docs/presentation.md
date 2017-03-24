@@ -21,7 +21,7 @@
 #### 流程管理
 
 * 版本管理：github，未来会替换成gitlab
-* issue管理：github issue，未来会替换成jira
+* issue管理：github issue，未来会替换成gitlab issue
 * 持续集成：jenkins
 
 #### 基础设施
