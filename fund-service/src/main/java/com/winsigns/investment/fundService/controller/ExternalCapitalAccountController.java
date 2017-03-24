@@ -6,7 +6,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +31,8 @@ import com.winsigns.investment.fundService.constant.ExternalCapitalAccountType;
 import com.winsigns.investment.fundService.integration.InventoryServiceIntegration;
 import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
 import com.winsigns.investment.fundService.model.ExternalTradeAccount;
+import com.winsigns.investment.fundService.resource.ECATypeResource;
+import com.winsigns.investment.fundService.resource.ECATypeResourceAssembler;
 import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResource;
 import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResourceAssembler;
 import com.winsigns.investment.fundService.resource.ExternalTradeAccountResource;
@@ -53,16 +55,27 @@ public class ExternalCapitalAccountController {
   InventoryServiceIntegration inventoryServiceIntegration;
 
   // 获取外部资金账户类型
-  @GetMapping("/eca-types")
-  public HashMap<ExternalCapitalAccountType, String> getECAAccountTypes() {
+  // @GetMapping("/eca-types")
+  // public List<ECATypeResource> getECAAccountTypes() {
+  //
+  // ArrayList<ExternalCapitalAccountType> types = new ArrayList<ExternalCapitalAccountType>();
+  // for (ExternalCapitalAccountType type : ExternalCapitalAccountType.values()) {
+  // types.add(type);
+  // }
+  //
+  // return new ECATypeResourceAssembler().toResources(types);
+  // }
 
-    HashMap<ExternalCapitalAccountType, String> resources =
-        new HashMap<ExternalCapitalAccountType, String>();
+  @GetMapping("/eca-types")
+  public Resources<ECATypeResource> getECAAccountTypes() {
+    Link link =
+        linkTo(methodOn(ExternalCapitalAccountController.class).getECAAccountTypes()).withSelfRel();
+    List<ExternalCapitalAccountType> types = new ArrayList<ExternalCapitalAccountType>();
     for (ExternalCapitalAccountType type : ExternalCapitalAccountType.values()) {
-      resources.put(type, type.i18n());
+      types.add(type);
     }
 
-    return resources;
+    return new Resources<ECATypeResource>(new ECATypeResourceAssembler().toResources(types), link);
   }
 
   // 获取外部资金账户
