@@ -6,7 +6,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.winsigns.investment.fundService.integration.InventoryServiceIntegration;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.fundService.command.CreateExternalTradeAccountCommand;
 import com.winsigns.investment.fundService.command.UpdateExternalCapitalAccountCommand;
+import com.winsigns.investment.fundService.constant.ExternalCapitalAccountType;
+import com.winsigns.investment.fundService.integration.InventoryServiceIntegration;
 import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
 import com.winsigns.investment.fundService.model.ExternalTradeAccount;
 import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResource;
@@ -50,14 +52,29 @@ public class ExternalCapitalAccountController {
   @Autowired
   InventoryServiceIntegration inventoryServiceIntegration;
 
+  // 获取外部资金账户类型
+  @GetMapping("/eca-types")
+  public HashMap<ExternalCapitalAccountType, String> getECAAccountTypes() {
+
+    HashMap<ExternalCapitalAccountType, String> resources =
+        new HashMap<ExternalCapitalAccountType, String>();
+    for (ExternalCapitalAccountType type : ExternalCapitalAccountType.values()) {
+      resources.put(type, type.i18n());
+    }
+
+    return resources;
+  }
+
   // 获取外部资金账户
   @GetMapping
   public Resources<ExternalCapitalAccountResource> readExternalCapitalAccounts() {
     Link link = linkTo(ExternalCapitalAccountController.class).withSelfRel();
+    Link link2 = linkTo(methodOn(ExternalCapitalAccountController.class).getECAAccountTypes())
+        .withRel("eca-account-types");
     return new Resources<ExternalCapitalAccountResource>(
         new ExternalCapitalAccountResourceAssembler()
             .toResources(externalCapitalAccountService.findAll()),
-        link);
+        link, link2);
   }
 
   // 获取指定外部资金账户

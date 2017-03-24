@@ -26,4 +26,9 @@ public class TradingMeasureValue extends MeasureValue {
     this.version = version;
     this.isFloat = isFloat;
   }
+
+  @Override
+  public String key() {
+    return super.key() + ":" + isFloat;
+  }
 }

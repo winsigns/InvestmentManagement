@@ -21,4 +21,9 @@ public class ClearanceMeasureValue extends MeasureValue {
     this.offsetDays = offsetDays;
   }
 
+  @Override
+  public String key() {
+    return super.key() + ":" + offsetDays;
+  }
+
 }
