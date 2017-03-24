@@ -29,6 +29,6 @@ public class TradingMeasureValue extends MeasureValue {
 
   @Override
   public String key() {
-    return super.key() + ":" + isFloat;
+    return super.key() /* + ":" */ + isFloat;
   }
 }

@@ -20,9 +20,13 @@ public class MeasureValueRepository {
 
   public TradingMeasureValue getMeasureValue(MeasureHost measureHost, Measure measure,
       boolean isFloat, String version) {
+    String tmp = measure.getName();
+    tmp = tmp.substring(tmp.lastIndexOf('.') + 1, tmp.length());
 
-    String key = measureHost.getType().getName() + ":" + measureHost.getId() + ":"
-        + measure.getName() + ":" + isFloat + ":" + version;
+    String key = measureHost.getType().getName() /* + ":" */ + measureHost.getId()
+        + /*
+           * ":" +
+           */ tmp/* + ":" */ + isFloat + ":" + version;
 
     Double value = measureRepository.opsForValue().get(key);
 
@@ -32,16 +36,21 @@ public class MeasureValueRepository {
   public TradingMeasureValue getMeasureValue(MeasureHost measureHost, Measure measure,
       boolean isFloat) {
 
-    String lasterKey = measureHost.getType().getName() + ":" + measureHost.getId() + ":"
-        + measure.getName() + ":" + isFloat + ":latest";
+    String tmp = measure.getName();
+    tmp = tmp.substring(tmp.lastIndexOf('.') + 1, tmp.length());
+
+    String lasterKey = measureHost.getType().getName() + /* ":" + */ measureHost.getId() /* + ":" */
+        + tmp/* + ":" */ + isFloat + ":latest";
     String latestVersion = indexRepository.opsForValue().get(lasterKey);
 
     if (latestVersion == null) {
       return new TradingMeasureValue(measureHost, measure, isFloat, latestVersion, 0.0);
     }
 
-    String key = measureHost.getType().getName() + ":" + measureHost.getId() + ":"
-        + measure.getName() + ":" + isFloat + ":" + latestVersion;
+    String key = measureHost.getType().getName() + /* ":" + */ measureHost.getId() + /*
+                                                                                      * ":" +
+                                                                                      */ tmp
+        + /* ":" + */ isFloat + ":" + latestVersion;
 
     Double value = measureRepository.opsForValue().get(key);
 

@@ -21,8 +21,8 @@ public abstract class MeasureValue {
     String tmp = this.getMeasure().getName();
     tmp = tmp.substring(tmp.lastIndexOf('.') + 1, tmp.length());
 
-    return this.getMeasureHost().getType().getName() + ":"
-        + this.getMeasureHost().getId().toString() + ":" + tmp;
+    return this.getMeasureHost().getType().getName() /* + ":" */
+        + this.getMeasureHost().getId().toString() + /* ":" + */tmp;
   }
 
 }
