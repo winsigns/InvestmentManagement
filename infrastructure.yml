@@ -4,6 +4,7 @@ services:
   database:
     image: mariadb
     container_name: database
+    mem_limit: 512M
     ports:
       - 3306:3306
     environment:
@@ -14,6 +15,7 @@ services:
   kafka:
     image: spotify/kafka
     container_name: kafka
+    mem_limit: 512M
     ports:
       - 9092:9092
       - 2181:2181
@@ -33,6 +35,7 @@ services:
   redis:
     image: redis
     container_name: redis
+    mem_limit: 512M
     ports:
       - 6379:6379
 

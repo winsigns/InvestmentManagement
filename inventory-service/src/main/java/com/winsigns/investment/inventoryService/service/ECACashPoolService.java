@@ -112,7 +112,6 @@ public class ECACashPoolService {
   /*
    * 两个资金池之间的互转
    */
-  @Transactional
   public Collection<ECACashPool> allot(Long dstEcaCashPoolId, Long srcEcaCashPoolId,
       Double changedCapital) {
 

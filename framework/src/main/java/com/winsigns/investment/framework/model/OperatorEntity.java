@@ -2,6 +2,11 @@ package com.winsigns.investment.framework.model;
 
 import javax.persistence.MappedSuperclass;
 
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+
 import com.winsigns.investment.framework.measure.ICalculateFactor;
 import com.winsigns.investment.framework.measure.MeasureHost;
 import com.winsigns.investment.framework.measure.kafkaStreams.KafKaTrigger;
@@ -21,13 +26,31 @@ public abstract class OperatorEntity extends AbstractEntity implements ICalculat
           .getBean(OperatorSequenceIntegration.class).getSequence();
     }
 
-    doOperator(measureHost, isFloat);
+    /*
+     * 这里需要手动开启事务 PROPAGATION_REQUIRES_NEW 表示挂起当前事务，重新启动一个新事务
+     */
+    PlatformTransactionManager platformTransactionManager =
+        SpringManager.getApplicationContext().getBean(PlatformTransactionManager.class);
+    DefaultTransactionDefinition transactionDefinition =
+        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+    TransactionStatus status = platformTransactionManager.getTransaction(transactionDefinition);
 
-    // 往kafka 发送异步消息
-    KafKaTrigger kafKaTrigger = SpringManager.getApplicationContext().getBean(KafKaTrigger.class);
+    try {
 
-    kafKaTrigger.raiseKafka(measureHost.getId(), isFloat, operatorSequence,
-        this.getClass().getSimpleName(), this.getClass().getSimpleName());
+      doOperator(measureHost, isFloat);
+
+      platformTransactionManager.commit(status);
+
+      // 往kafka 发送异步消息
+      KafKaTrigger kafKaTrigger = SpringManager.getApplicationContext().getBean(KafKaTrigger.class);
+
+      kafKaTrigger.raiseKafka(measureHost.getId(), isFloat, operatorSequence,
+          this.getClass().getSimpleName(), this.getClass().getSimpleName());
+
+    } catch (Exception e) {
+      // 异常回归事物
+      platformTransactionManager.rollback(status);
+    }
 
   }
 

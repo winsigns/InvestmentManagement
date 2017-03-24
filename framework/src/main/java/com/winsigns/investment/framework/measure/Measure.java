@@ -3,9 +3,14 @@ package com.winsigns.investment.framework.measure;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winsigns.investment.framework.measure.kafkaStreams.JsonSerializer;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 /**
  * Created by colin on 2017/3/2.
@@ -13,8 +18,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Component
 public abstract class Measure implements ICalculateFactor {
 
+  static private String MEASURE_TOPIC = "measures";
+
+  JsonSerializer<MessageKey> keyserializer = JsonSerializer.defaultConfig(MessageKey.class);
+
   @Autowired
   protected MeasureValueRepository measureValueRepository;
+
+  @Autowired
+  protected KafkaTemplate<Object, Object> kafkaTemplate;
 
   public Measure() {
     register();
@@ -57,10 +69,28 @@ public abstract class Measure implements ICalculateFactor {
         offsetDays);
   }
 
+  @Data
+  @AllArgsConstructor
+  protected static class MessageKey {
+    String measureHostType;
+    Long measureHostId;
+    String measureName;
+    boolean isFlost;
+    String version;
+  }
+
   public TradingMeasureValue calculate(Long measureHostId, boolean isFloat, String version) {
 
     TradingMeasureValue measureValue = doCalculate(measureHostId, isFloat, version);
     this.measureValueRepository.save(measureValue);
+
+    // 保存之后发送一个消息
+    MessageKey key = new MessageKey(measureValue.getMeasureHost().getType().getName(),
+        measureHostId, measureValue.getMeasure().getName(), isFloat, version);
+
+    kafkaTemplate.send(MEASURE_TOPIC, keyserializer.serialize(key),
+        String.valueOf(measureValue.getValue()));
+
     return measureValue;
   }
 

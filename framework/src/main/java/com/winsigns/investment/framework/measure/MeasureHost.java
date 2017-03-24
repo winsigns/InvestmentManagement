@@ -1,7 +1,9 @@
 package com.winsigns.investment.framework.measure;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.model.AbstractEntity;
@@ -29,6 +31,7 @@ public abstract class MeasureHost extends AbstractEntity {
     return MeasureRegistry.getInstance().getMeasures(this.getType());
   }
 
+  @JsonIgnore
   public List<MeasureValue> getMeasureValues() {
     List<MeasureValue> measureValues = new ArrayList<MeasureValue>();
 
@@ -36,7 +39,20 @@ public abstract class MeasureHost extends AbstractEntity {
     for (Measure measure : measures) {
       MeasureValue measureValue = measure.getValue(this, false);
       if (measureValue != null) {
-        measureValues.add(measure.getValue(this, false));
+        measureValues.add(measureValue);
+      }
+    }
+    return measureValues;
+  }
+
+  public Map<String, Double> getShowMeasureValues() {
+    Map<String, Double> measureValues = new HashMap<String, Double>();
+
+    List<Measure> measures = getMeasures();
+    for (Measure measure : measures) {
+      MeasureValue measureValue = measure.getValue(this, false);
+      if (measureValue != null) {
+        measureValues.put(measure.getName(), measure.getValue(this, false).getValue());
       }
     }
     return measureValues;
