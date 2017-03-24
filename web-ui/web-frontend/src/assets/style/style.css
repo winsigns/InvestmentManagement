@@ -2,5 +2,9 @@
     border-bottom:1px solid #eee;
 }
 .line_margin_top{
-    margin-top:20px;
+    margin-top:20px
 }
+.float_right{
+    float:right
+}
+

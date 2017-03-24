@@ -77,6 +77,8 @@ module.exports = {
   externals: {
     'jquery2':'$',
     'vue-i18n':'VueI18n',
-    'vue-router': 'VueRouter'
+    'vue-router': 'VueRouter',
+    'Stomp':'Stomp',
+    'SockJS':'SockJS'
   }
 }

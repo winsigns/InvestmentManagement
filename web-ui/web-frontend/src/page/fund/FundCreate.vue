@@ -1,16 +1,14 @@
 <template> 
     <div>
-        <el-row>
-            <el-col :span="2">&nbsp;</el-col>
-            <el-col :span="20">
+    <el-row></el-row>
+        <el-row>       
+            <el-col :offset="5" :span="10">    
                 <div class="line_bottom"><h1>创设基金产品</h1> </div>     
                 <div class="line_margin_top"></div>
-            </el-col>
-            <el-col :span="2">&nbsp;</el-col>
+            </el-col>     
         </el-row>
         <el-row>    
-            <el-col :span="3">&nbsp;</el-col>	             
-            <el-col :xs="16" :sm="14" :md="12" :lg="8">
+            <el-col :offset="7" :span="6">
                 <el-form :label-position="right" :rules="rules" ref="fundProp" label-width="100px" :model="fundProp">
                     <el-form-item label="基金代码" prop="code">                    
                         <el-input v-model="fundProp.code"></el-input>

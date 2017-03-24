@@ -19,11 +19,23 @@ import style from "./assets/style/style.css"
 //js
 import routerConfig from './router/router.config.js'
 import wslang from './common/lang.js'
+import ds from './common/ds'
+import api from './config/api.json'
+// import wsocket from './common/websocket/websocket'
  
 Vue.use(ElementUI)
 Vue.use(VueRouter)
 Vue.use(VueI18n)
 Vue.use(Vuex)
+/*wsocket.connect();*/
+Vue.prototype.winsigns = {
+    ds: ds,
+    api: api,
+    websocket:{
+        // wsocket: wsocket,
+        // wsocket_con: new wsocket.connect()
+    }
+};
 //实例化I18n
 var i18n = new VueI18n({
     locale: wslang.readLanguage(),
@@ -42,6 +54,7 @@ router.beforeEach((to, from, next) => {
 router.afterEach(transition => {
     NProgress.done();
 });
+
 //启动app
 new Vue({
     el: '#app',

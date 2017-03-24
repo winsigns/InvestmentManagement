@@ -4,14 +4,14 @@
             <el-row>
                 <el-col :span="2">&nbsp;</el-col>
                 <el-col :span="20">      
-                    <div class="line_bottom"><h1>{{ $t("message.fund.fd_title") }}</h1> </div>              
+                    <div class="line_bottom"><h1>{{ $t("message.fund.fd_title") }}</h1> </div>  
                 </el-col>  
             </el-row>
             <el-row v-loading="loading">                
                 <el-col :span="3">&nbsp;</el-col>	   
                 <el-col :span="20">
                     <div class="line_margin_top">
-                        <div v-for="item in funds" class="fund_one_block " @click="goFundDetail(item)">                                                     
+                        <div v-for="item in funds" class="fund_one_block " @click="goFundProperties(item)">                                                     
                             <div class="line_bottom log1" style="height:40px;">
                                 <span v-text="item.shortName" class="cls_fundName"></span>
                                 <small v-text="item.code" class="cls_fundCode"></small>   
@@ -26,14 +26,14 @@
                         </div>                                                           
                     </div>    
                 </el-col> 
-            </el-row>                             
+            </el-row>
         </div>
-    </section>
-   
+    </section>   
 </template>
 <script>
-    import api from '../../config/api.json'
-    import ds from '../../common/ds'    
+    // import api from '../../config/api.json'
+    // import ds from '../../common/ds' 
+    import wsocket from '../../common/websocket/websocket'
     export default{
         data(){
             return {
@@ -42,19 +42,17 @@
             }
         },
         created: function(){                      
-            var _self = this;  
-            ds.GET({url:api.fundURL.funds,
-                    data:{}},function(data){
+            var _self = this;
+            this.winsigns.ds.GET({url:this.winsigns.api.fundURL.funds,
+                    data:{},v:_self},function(data){
                 _self.loading = false;
-                if ( data._embedded){
-                     _self.funds = data._embedded.funds;                        
-                }                                    
+                _self.funds = data._embedded? data._embedded.funds:[];                                                          
             })             
         },
         methods:{
-            goFundDetail: function(item){
-                this.$router.push({ name: 'FundDetail', params: { 
-                    fundId: item.id}});                   
+            goFundProperties: function(item){
+                this.$router.push({ name: 'FundProperties', params: { 
+                    fundId: item.id}});
             }
         }
     }

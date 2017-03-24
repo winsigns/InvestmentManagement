@@ -38,8 +38,10 @@ configurations {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
 	compile('org.springframework.boot:spring-boot-starter-undertow')
+	compile("org.springframework.boot:spring-boot-starter-websocket")
     compile('org.springframework.cloud:spring-cloud-starter-zuul')
     compile('org.springframework.cloud:spring-cloud-starter-eureka')
+    compile('org.springframework.kafka:spring-kafka')
 
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-logging')
@@ -62,12 +64,12 @@ task updateVersion << {
     def workspace = env.WORKSPACE
 
     if (!workspace?.trim()){
-        workspace = "../.."
+        workspace = ".."
     }
 
     def version = getVersion()
     println "[updateVersion]version= $version"
-    def app_yml = String.format("%s/web-ui/%s/src/main/resources/application.yml", workspace, jar.baseName)
+    def app_yml = String.format("%s/%s/src/main/resources/application.yml", workspace, jar.baseName)
     String contents = new File(app_yml).getText("UTF-8")
 
     contents = contents.replaceAll('%%VERSION%%', version)
@@ -97,10 +99,6 @@ task buildDocker(type: Docker) {
     println "[docker]version= $tagVersion"
     dockerfile = "Dockerfile"
     push = true
-}
-
-assemble{
-    dependsOn ":copyFile"
 }
 
 dependencyManagement {
