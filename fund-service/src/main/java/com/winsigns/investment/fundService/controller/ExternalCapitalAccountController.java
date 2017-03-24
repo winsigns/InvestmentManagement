@@ -54,18 +54,6 @@ public class ExternalCapitalAccountController {
   @Autowired
   InventoryServiceIntegration inventoryServiceIntegration;
 
-  // 获取外部资金账户类型
-  // @GetMapping("/eca-types")
-  // public List<ECATypeResource> getECAAccountTypes() {
-  //
-  // ArrayList<ExternalCapitalAccountType> types = new ArrayList<ExternalCapitalAccountType>();
-  // for (ExternalCapitalAccountType type : ExternalCapitalAccountType.values()) {
-  // types.add(type);
-  // }
-  //
-  // return new ECATypeResourceAssembler().toResources(types);
-  // }
-
   @GetMapping("/eca-types")
   public Resources<ECATypeResource> getECAAccountTypes() {
     Link link =
