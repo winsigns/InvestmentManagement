@@ -22,7 +22,7 @@ HOST_IP=$(ip route|awk '/default/ { print $3 }')
 
 # wait for infrastructures startup complete. 
 bash ./wait-for-it.sh -t 0 ${HOST_IP}:3306
-sleep 10s
+sleep 20s
 
 ./createdb.sh ${HOST_IP}
 ./migratedb.sh ${HOST_IP}
