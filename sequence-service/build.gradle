@@ -7,6 +7,7 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
 	}
 }
 
@@ -14,6 +15,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'docker'
 
 jar {
 	baseName = 'sequence-service'
@@ -54,6 +56,57 @@ dependencies {
 	compile('org.projectlombok:lombok')
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+def getVersion() {
+    def env = System.getenv()
+    def buildNumber = env.BUILD_NUMBER?.toInteger()
+    def buildType = env.BUILD_TYPE
+
+    def version = String.format("%s%d", buildType?buildType:"dev", buildNumber?buildNumber:0)
+    return version
+}
+
+task updateVersion << {
+    def env = System.getenv()
+    def workspace = env.WORKSPACE
+
+    if (!workspace?.trim()){
+        workspace = ".."
+    }
+
+    def version = getVersion()
+    println "[updateVersion]version= $version"
+    def app_yml = String.format("%s/%s/src/main/resources/application.yml", workspace, jar.baseName)
+    String contents = new File(app_yml).getText("UTF-8")
+
+    contents = contents.replaceAll('%%VERSION%%', version)
+    new File(app_yml).write(contents, "UTF-8")
+}
+
+docker {
+    registry = "docker-registry:5000"
+}
+
+task copyJar(dependsOn: 'jar') << {
+    copy {
+        from "."
+        into "build/docker"
+        include "wait-for-it.sh"
+        include "start.sh"
+        include "build/libs/${jar.baseName}-${jar.version}.jar"
+    }
+}
+
+task buildDocker(type: Docker) {
+    dependsOn copyJar
+
+    project.group = docker.registry
+    applicationName = jar.baseName
+    tagVersion = getVersion()
+    println "[docker]version= $tagVersion"
+    dockerfile = "Dockerfile"
+    push = true
 }
 
 dependencyManagement {

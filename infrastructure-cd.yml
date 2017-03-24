@@ -1,0 +1,39 @@
+version: '2'
+services:
+
+  database:
+    image: mariadb
+    container_name: database
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_USER: mariadb
+      MYSQL_PASSWORD: mariadb
+      MYSQL_ROOT_PASSWORD: password
+
+  kafka:
+    image: spotify/kafka
+    container_name: kafka
+    ports:
+      - 9092:9092
+      - 2181:2181
+    environment:
+      - ADVERTISED_HOST=127.0.0.1
+      - ADVERTISED_PORT=9092
+
+  discovery-service:
+    image: docker-registry:5000/discovery-service
+    container_name: discovery-service
+    mem_limit: 512M
+    ports:
+      - 10100:10100
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+
+  
