@@ -21,3 +21,8 @@ sleep 30s
 
 docker-compose -f application-cd.yml down
 docker-compose -f application-cd.yml up -d
+
+#再次重启，为了使kafka主题生效
+docker-compose -f application-cd.yml down
+docker-compose -f application-cd.yml up -d
+
