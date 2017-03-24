@@ -8,7 +8,7 @@ done
 
 cd ${COMMIT_WORKSPACE}
 docker-compose -f infrastructure-cd.yml down
-docker-compose -f infrastructure-cd.yml up --build -d
+docker-compose -f infrastructure-cd.yml up -d
 
 HOST_IP=$(ip route|awk '/default/ { print $3 }')
 
