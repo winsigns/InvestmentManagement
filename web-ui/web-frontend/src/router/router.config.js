@@ -6,7 +6,8 @@
 //引入模块
 import Fund from "../page/fund/Fund.vue"
 import FundCreate from "../page/fund/FundCreate.vue"
-import FundDetail from "../page/fund/FundDetail.vue"
+import FundProperties from "../page/fund/FundProperties.vue"
+import FundCrecaAccountInfo from "../page/fund/FundCrecaAccountInfo.vue"
 
 module.exports =
      [
@@ -21,10 +22,15 @@ module.exports =
             name: 'FundCreate'           
         },
         {
-            path: '/FundDetail/:fundId',
-            component: FundDetail,
-            name: 'FundDetail'           
-        }        
+            path: '/FundProperties/:fundId',
+            component: FundProperties,
+            name: 'FundProperties'           
+        },
+        {
+            path: '/FundCrecaAccountInfo/:fundCreacaAccountId',
+            component: FundCrecaAccountInfo,
+            name: 'FundCrecaAccountInfo'           
+        }         
     ]
 
 

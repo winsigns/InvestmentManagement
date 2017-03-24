@@ -1,27 +1,12 @@
 <template> 
     <div>
         <el-row>
-            <el-col :span="2">&nbsp;</el-col>
-            <el-col :span="20">                 
-                <div style="float:right">
-                    <el-dropdown @command="deleteFund">
-                        <el-button style="width:150px">
-                            更多功能<i class="el-icon-caret-bottom el-icon--right"></i>
-                        </el-button>
-                        <el-dropdown-menu slot="dropdown" style="width:150px">                     
-                            <el-dropdown-item command="d">删除基金产品</el-dropdown-item>                                                 
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                </div>
-                <div class="line_bottom"><h1>基本信息</h1> </div>    
-                <div class="line_margin_top"></div>
-            </el-col>
-            <el-col :span="2">&nbsp;</el-col>
+            <div class="line_bottom"><h1>基本信息</h1> </div>    
+            <div class="line_margin_top"></div>
         </el-row>
-        <el-row>    
-            <el-col :span="3">&nbsp;</el-col>	    
-            <el-col :xs="16" :sm="14" :md="12" :lg="8">
-                <el-form :label-position="right" :rules="rules" ref="fundDetail" label-width="100px" :model="fundDetail">
+        <el-row>        
+            <el-col :xs="16" :sm="14" :md="12" :lg="8" :offset="3">                
+                <el-form v-loading="loading" :label-position="right" :rules="rules" ref="fundDetail" label-width="100px" :model="fundDetail">
                     <el-form-item label="基金代码" prop="code">
                         <el-input v-model="fundDetail.code"></el-input>
                     </el-form-item>
@@ -49,6 +34,7 @@
     export default{
         data(){
             return {
+                loading:true,
                 fundDetail:{
                     code: '',
                     name: '',
@@ -68,9 +54,10 @@
             }
         },
         mounted: function(){
-           var _self = this;  
+           var _self = this;             
             ds.GET({url:api.fundURL.funds+_self.$route.params.fundId,
-                    data:{}},function(data){   
+                    data:{}},function(data){ 
+                _self.loading = false;  
                 _self.fundDetail = data;             
             })   
         },
@@ -100,33 +87,7 @@
                 });
             },cancelForm(){
                 this.$router.push({ name: 'Fund', params: {}})
-            },deleteFund(command){
-                var _self = this;
-                if (command=='d'){
-                        this.$confirm('您正在删除基金 是否继续?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).then(() => {
-                        ds.DELETE({url:api.fundURL.funds+'/'+_self.$route.params.fundId},
-                        function(data){                                          
-                            //删除成功
-                            _self.$message({
-                                message: '删除成功',
-                                type: 'success'
-                            });
-                            _self.$router.push({ name: 'Fund', params: {}})
-                        },function(data){
-                            _self.$message.error('删除基金产品失败');
-                        })                        
-                    }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: '已取消删除'
-                        });          
-                    });
-                }                
-            }        
+            }
         }
     }
 </script>

@@ -1,18 +1,23 @@
 <template>
 	<div id="app">
-		<el-row>
-			<top-menu></top-menu>
-			<router-view></router-view>
-		</el-row>		
+		<top-menu></top-menu>
+		<el-row>			
+			<el-col :offset="2" :span="18">
+				<router-view></router-view>
+			</el-col>			
+		</el-row>	
+		<main-footer></main-footer>
 	</div>
 </template>
 
 <script>
 	import TopMmenu from "./page/head/TopMenu.vue"
+	import MainFooter from "./page/head/MainFooter.vue"
 	export default {
 		name: 'app',
 		components: {
-			"top-menu":TopMmenu
+			"top-menu":TopMmenu,
+			"main-footer": MainFooter
 		},
 		created: function () {
 			this.$router.replace('/Fund')

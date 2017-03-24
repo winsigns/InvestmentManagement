@@ -24,13 +24,20 @@ module.exports = {
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {            
-            '/api': {
+            '/fund-service': {
                 target: dataURL,
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/api': 'api'
+                    '^/fund-service': 'fund-service'
                 }
-            }   
+            },
+            '/inventory-service': {
+                target: dataURL,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/inventory-service': 'inventory-service'
+                }
+            }     
         },
         cssSourceMap: false
     }

@@ -1,4 +1,4 @@
-package com.winsigns.investment.edgeService;
+package com.winsigns.investment.webGateway;
 
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
