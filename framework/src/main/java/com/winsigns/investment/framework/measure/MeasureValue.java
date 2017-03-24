@@ -19,7 +19,7 @@ public abstract class MeasureValue {
 
   public String key() {
     return this.getMeasureHost().getType().getName() + ":" + this.getMeasureHost().getId() + ":"
-        + this.getMeasure().getName();
+        + this.getMeasure().getName().split(".")[1];
   }
 
 }
