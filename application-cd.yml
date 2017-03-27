@@ -1,0 +1,62 @@
+version: '2'
+services:
+
+
+  fund-service:
+    image: docker-registry:5000/fund-service
+    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && /app/start /app/fund-service-latest.jar"
+    mem_limit: 512M
+    network_mode: "host"
+    ports:
+      - 10010:10010
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+
+  inventory-service:
+    image: docker-registry:5000/inventory-service
+    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && /app/start /app/inventory-service-latest.jar"
+    mem_limit: 512M
+    network_mode: "host"
+    ports:
+      - 10011:10011
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+ 
+  invest-service:
+    image: docker-registry:5000/invest-service
+    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && /app/start /app/invest-service-latest.jar"
+    mem_limit: 512M
+    network_mode: "host"
+    ports:
+      - 10012:10012
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+
+  trade-service:
+    image: docker-registry:5000/trade-service
+    command: /bin/bash -c "wait-for-it -t 0 localhost:3306 && /app/start /app/trade-service-latest.jar"
+    mem_limit: 512M
+    network_mode: "host"
+    ports:
+      - 10013:10013
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+
+  web-gateway:
+    image: docker-registry:5000/web-gateway
+    mem_limit: 512M
+    network_mode: "host"
+    ports:
+      - 8088:8088
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+
+  sequence-service:
+    image: docker-registry:5000/sequence-service
+    container_name: sequence-service
+    mem_limit: 512M
+    network_mode: "host"
+    ports:
+      - 10200:10200
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
