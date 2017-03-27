@@ -3,6 +3,8 @@
 
     },
     "fundURL":{
-        "funds": "api/funds/"
+        "funds": "fund-service/funds/",
+        "fundaccounts":"fund-service/fund-accounts",
+        "fundCreaAccounts":"fund-service/external-capital-accounts"
     }
 }

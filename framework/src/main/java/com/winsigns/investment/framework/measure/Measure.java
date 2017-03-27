@@ -2,6 +2,8 @@ package com.winsigns.investment.framework.measure;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,8 @@ import lombok.Data;
  */
 @Component
 public abstract class Measure implements ICalculateFactor {
+
+  private Logger log = LoggerFactory.getLogger(Measure.class);
 
   static private String MEASURE_TOPIC = "measures";
 
@@ -85,11 +89,8 @@ public abstract class Measure implements ICalculateFactor {
     this.measureValueRepository.save(measureValue);
 
     // 保存之后发送一个消息
-    MessageKey key = new MessageKey(measureValue.getMeasureHost().getType().getName(),
-        measureHostId, measureValue.getMeasure().getName(), isFloat, version);
-
-    kafkaTemplate.send(MEASURE_TOPIC, keyserializer.serialize(key),
-        String.valueOf(measureValue.getValue()));
+    log.info(measureValue.key());
+    kafkaTemplate.send(MEASURE_TOPIC, measureValue.key(), String.valueOf(measureValue.getValue()));
 
     return measureValue;
   }

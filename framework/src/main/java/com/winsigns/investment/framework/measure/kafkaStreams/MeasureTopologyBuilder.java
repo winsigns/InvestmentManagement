@@ -99,7 +99,11 @@ public class MeasureTopologyBuilder implements SmartInitializingSingleton {
     }
 
     streams = new KafkaStreams(builder, config);
-    streams.start();
+
+    // 防止没有任何指标的时候，启动
+    if (!builder.sourceTopics(kafkaStreamsConfiguration.getAppId()).isEmpty()) {
+      streams.start();
+    }
 
   }
 

@@ -8,8 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import org.springframework.hateoas.core.Relation;
+
 import com.winsigns.investment.framework.i18n.i18nHelper;
 
+@Relation(value = "eca-type", collectionRelation = "eca-types")
 public enum ExternalCapitalAccountType {
 
   // 普通资金账户

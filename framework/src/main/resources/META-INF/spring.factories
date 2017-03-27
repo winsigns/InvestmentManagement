@@ -5,4 +5,5 @@ com.winsigns.investment.framework.measure.MeasureConfiguration,\
 com.winsigns.investment.framework.measure.MeasureValueRepository,\
 com.winsigns.investment.framework.measure.kafkaStreams.KafKaTrigger,\
 com.winsigns.investment.framework.integration.RestConfiguration,\
-com.winsigns.investment.framework.spring.SpringManager
+com.winsigns.investment.framework.spring.SpringManager,\
+com.winsigns.investment.framework.i18n.i18nConfiguration
