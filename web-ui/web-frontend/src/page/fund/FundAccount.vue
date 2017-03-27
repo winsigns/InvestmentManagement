@@ -3,8 +3,8 @@
         <el-row>        
             <div class="line_bottom">
                 <el-button type="text" class="float_right right_button"
-                @click="openDialog(row)">添加产品账户</el-button>
-                <h1>产品账户</h1>              
+                @click="openDialog(row)">{{ $t("message.fundAccount.add_fund_account") }}</el-button>
+                <h1>{{ $t("message.fundAccount.fund_account") }}</h1>
             </div>                
             <div class="line_margin_top"></div>            
         </el-row>
@@ -13,18 +13,17 @@
                 <el-table v-loading="loading" :data="fundAccontList" style="width: 100%" stripe>
                     <el-table-column sortable
                         prop="name"
-                        label="名称">
+                        :label=" $t('message.fundAccount.fund_account_name') ">
                     </el-table-column>   
-                    <el-table-column label="操作">
+                    <el-table-column :label=" $t('message.system.operation') ">
                         <template scope="scope">
                             <el-button
                             size="small"
-                            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                            @click="handleEdit(scope.$index, scope.row)">{{ $t("message.system.edit") }}</el-button>
                             <el-button
                             size="small"
                             type="danger"
-                            @click="handleDelete(scope.$index, scope.row)"
-                            >删除</el-button>                                                   
+                            @click="handleDelete(scope.$index, scope.row)">{{ $t("message.system.delete") }}</el-button>
                         </template>
                     </el-table-column>                 
                 </el-table>
@@ -33,13 +32,13 @@
 
         <el-dialog :title="dlg.dlgTitle" v-model="dlg.dlgVisible" size="tiny">
             <el-form :model="dlg">
-                <el-form-item label="产品账户名称" label-width="100px">
+                <el-form-item :label=" $t('message.fundAccount.fund_account_name') " label-width="100px">
                      <el-input v-model="dlg.dlgFundAccountName"></el-input>
                 </el-form-item>               
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dlg.dlgVisible=false">取 消</el-button>
-                <el-button @click="postFundAccount()">确 定</el-button>
+                <el-button @click="dlg.dlgVisible=false">{{ $t("message.system.cancel") }}</el-button>
+                <el-button @click="postFundAccount()">{{ $t("message.system.ok") }}</el-button>
             </div>
         </el-dialog>        
     </div>
@@ -74,7 +73,7 @@
                 })  
             },
             openDialog: function(){
-                this.dlg.dlgTitle = "添加产品账户";
+                this.dlg.dlgTitle = this.$t('message.fundAccount.add_fund_account'),
                 this.dlg.dlgVisible = true; 
                 this.dlg.dlgFundAccountId="";
                 this.dlg.dlgFundAccountName="";              
@@ -89,7 +88,7 @@
                         _self.dlg.dlgFundAccountId="";
                         _self.dlg.dlgFundAccountName="";
                         _self.$message({
-                            message: '创建产品帐号成功',
+                            message: _self.$t('message.fundAccount.fund_account_create_sucess'),
                             type: 'success'
                         });                                             
                     },function(err){
@@ -103,7 +102,7 @@
                         _self.dlg.dlgFundAccountName="";
                         _self.dlg.dlgFundAccountId="";
                         _self.$message({
-                            message: '修改产品帐号成功',
+                            message: _self.$t('message.fundAccount.fund_account_edit_sucess'),
                             type: 'success'
                         });                                             
                     },function(err){
@@ -116,29 +115,30 @@
                 this.dlg.dlgFundAccountId = row.id,
                 this.dlg.dlgFundAccountName = row.name,
                 this.dlg.dlgVisible = true;
-                this.dlg.dlgTitle = "编辑产品账户";
+                this.dlg.dlgTitle = this.$t('message.fundAccount.edit_fund_account')
             },
             handleDelete(index, row) {
                 var _self = this;
-                _self.$confirm('您正在删除产品账户 是否继续?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
+                _self.$confirm(_self.$t('message.fundAccount.fund_account_delete_confim'),
+                    _self.$t('message.system.prompt'), {
+                        confirmButtonText: _self.$t('message.system.ok'),
+                        cancelButtonText: _self.$t('message.system.cancel'),
                         type: 'warning'
                     }).then(() => {
                         ds.DELETE({url:api.fundURL.fundaccounts+'/'+row.id,
                         data:{}},function(data){
                             _self.getFundAccounts();                 
                             _self.$message({
-                                message: '删除产品帐号成功',
+                                message: _self.$t('message.fundAccount.und_account_delete_sucess'),
                                 type: 'success'
                             });                                             
                         },function(err){
                             
                         })                   
                     }).catch(() => {
-                        this.$message({
+                     _self.$message({
                             type: 'info',
-                            message: '已取消删除'
+                            message: _self.$t('message.system.cancel_delete')
                         });          
                     });                
             }

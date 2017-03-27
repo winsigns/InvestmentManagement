@@ -3,8 +3,8 @@
         <el-row>
             <el-col :offset="5" :span="19">
                 <div class="line_bottom">                
-                    <h1>资金互转</h1>
-                    <h3>当前外部资金帐号：{{fundCreaAccontInfoList.accountNo}}</h3>                             
+                    <h1>{{ $t("message.fundCreacaAccInfo.cap_inout") }}</h1>
+                    <h3>{{ $t("message.fundCreacaAccInfo.curr_cap_no") }}：{{fundCreaAccontInfoList.accountNo}}</h3>
                 </div>                
                 <div class="line_margin_top"></div>
             </el-col>            
@@ -15,37 +15,38 @@
                 stripe>
                     <el-table-column sortable
                         prop="currency"
-                        label="币种">
+                        :label=" $t('message.fundCreacaAccInfo.currency') ">
                     </el-table-column>  
                     <el-table-column sortable
                         prop="unassignedCapital"
-                        label="未分配">
+                        :label=" $t('message.fundCreacaAccInfo.unallocated') ">
                     </el-table-column>  
-                    <el-table-column sortable label="现金" prop="ecma">
+                    <el-table-column sortable :label=" $t('message.fundCreacaAccInfo.ecma') "
+                                     prop="ecma">
                     </el-table-column>                    
-                    <el-table-column label="操作" sortable="false">
+                    <el-table-column :label=" $t('message.system.operation') " sortable="false">
                         <template scope="scope">
                             <el-button
                             size="small"
-                            type="text" @click="handleIn(scope.row)">资金调拨</el-button>                                                                                                          
+                            type="text" @click="handleIn(scope.row)">{{ $t("message.fundCreacaAccInfo.cap_in") }}</el-button>
                         </template>
                     </el-table-column>                 
                 </el-table>
             </el-col>	                     
         </el-row>  
 
-         <el-dialog title="资金转入" v-model="dlg.dlgVisible" size="tiny">
-            <el-form :model="dlg" v-loading="loading" element-loading-text="提交中">
-                <el-form-item label="对手方账户" label-width="140px">
+         <el-dialog :title="$t('message.fundCreacaAccInfo.cap_in')" v-model="dlg.dlgVisible" size="tiny">
+            <el-form :model="dlg" v-loading="loading" :element-loading-text=" $t('message.system.commit') ">
+                <el-form-item :label=" $t('message.fundCreacaAccInfo.counter_acc') " label-width="140px">
                      <el-input v-model="dlg.dlgFundCreaAccount"></el-input>
                 </el-form-item>                      
-                 <el-form-item label="金额" label-width="140px">
+                 <el-form-item :label=" $t('message.system.amount') " label-width="140px">
                      <el-input v-model="dlg.dlgFundCreaMoney"></el-input>
                 </el-form-item>          
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dlg.dlgVisible=false">取 消</el-button>
-                <el-button @click="capitalIn()">确 定</el-button>
+                <el-button @click="dlg.dlgVisible=false">{{ $t("message.system.cancel") }}</el-button>
+                <el-button @click="capitalIn()">{{ $t("message.system.ok") }}</el-button>
             </div>
         </el-dialog>    
     </div>
@@ -59,7 +60,6 @@
             return {
                 nextNum: 10,
                 loading: false,
-                timeCtrl: null,            
                 fundCreaAccontInfoList:[],
                 fundCreaAccontInfoCapList: [],
                 //对话框  
@@ -73,14 +73,7 @@
             }
         },
         mounted: function(){         
-            var _self = this;
-
-            _self.getFundCreaAccountsInfo(); 
-            /*if (!_self.timeCtrl){
-                _self.timeCtrl = setInterval(function(){
-                    _self.getFundCreaAccountsInfo();
-                },5000)
-            }   */
+            this.getFundCreaAccountsInfo();
         },
         methods:{
             handleIn: function(row){
@@ -119,7 +112,7 @@
                         _self.dlg.dlgVisible= false;
                         _self.dlg.dlgFundCreaMoney="";
                         _self.$message({
-                            message: '调拨成功',
+                            message: _self.$t('message.fundCreacaAccInfo.cap_in_success'),
                             type: 'success'
                         });                                             
                     })  
@@ -154,24 +147,10 @@
             }
         },
         beforeDestroy: function(){
-            if (this.timeCtrl){
-                clearInterval(this.timeCtrl);
-            }
+
         }
     }
 </script>
 <style scoped>
-    .list-item {
-        /*display: inline-block;*/
-        margin-right: 10px;
-    }
-    .list-enter-active, .list-leave-active {
-        transition: all 1s;
-    }
-    .list-enter, .list-leave-active {
-        opacity: 0;
 
-        transition: opacity 1s ease-in-out;
-        color: red;
-    }
 </style>

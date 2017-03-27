@@ -3,24 +3,24 @@
     <el-row></el-row>
         <el-row>       
             <el-col :offset="5" :span="10">    
-                <div class="line_bottom"><h1>创设基金产品</h1> </div>     
+                <div class="line_bottom"><h1>{{ $t("message.fundCreate.fund_create") }}</h1> </div>
                 <div class="line_margin_top"></div>
             </el-col>     
         </el-row>
         <el-row>    
             <el-col :offset="7" :span="6">
                 <el-form :label-position="right" :rules="rules" ref="fundProp" label-width="100px" :model="fundProp">
-                    <el-form-item label="基金代码" prop="code">                    
+                    <el-form-item :label=" $t('message.fundCreate.fund_code') " prop="code">
                         <el-input v-model="fundProp.code"></el-input>
                     </el-form-item>
-                    <el-form-item label="基金名称" prop="name">
+                    <el-form-item :label=" $t('message.fundCreate.fund_name') " prop="name">
                         <el-input v-model="fundProp.name"></el-input>
                     </el-form-item>
-                    <el-form-item label="基金简称" prop="shortName">
+                    <el-form-item :label=" $t('message.fundCreate.fund_shortname') " prop="shortName">
                         <el-input v-model="fundProp.shortName"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button style="width:150px" type="success" @click="submitForm('fundProp')">创设</el-button>
+                        <el-button style="width:150px" type="success" @click="submitForm('fundProp')">{{ $t("message.fundCreate.fund_crt") }}</el-button>
                     </el-form-item>
                 </el-form>   
             </el-col>	                     
@@ -39,21 +39,16 @@
                     shortName: ''
                 },
                 rules:{
-                    code: [
-                        { required: true, message: '请输入基金代码', trigger: 'blur' }                    
-                    ],
-                    name: [
-                        { required: true, message: '请输入基金名称', trigger: 'blur' }                    
-                    ],
-                    shortName: [
-                        { required: true, message: '请输入基金简称', trigger: 'blur' }                    
-                    ]            
+                    code: [{ required: true, message: '', trigger: 'blur' }],
+                    name: [{ required: true, message: '', trigger: 'blur' }],
+                    shortName: [{ required: true, message: '', trigger: 'blur' }]
                 }
             }
         },
         mounted: function(){
-            //  console.log(this.rules.code)
-            //  this.rules.code = [{ required: true, message: this.$t('message.fundCreate.fd_crt_setsuccess'), trigger: 'blur' }];
+            this.rules.code[0].message=this.$t('message.fundCreate.fund_req_code');
+            this.rules.name[0].message=this.$t('message.fundCreate.fund_req_name');
+            this.rules.shortName[0].message=this.$t('message.fundCreate.fund_req_shortname');
         },
         methods: {
            submitForm(fundProp) {
@@ -68,12 +63,12 @@
                         function(data){                                          
                             //创设成功
                             _self.$message({
-                                message: _self.$t('message.fundCreate.fd_crt_setsuccess'),
+                                message: _self.$t('message.fundCreate.fund_create_setsuccess'),
                                 type: 'success'
                             });
                             _self.$router.push({ name: 'Fund', params: {}})
                         },function(data){
-                            _self.$message.error(_self.$t('message.fundCreate.fd_crt_error'));
+                            _self.$message.error(_self.$t('message.fundCreate.fund_create_error'));
                         }) 
                     } else {                        
                         return false;

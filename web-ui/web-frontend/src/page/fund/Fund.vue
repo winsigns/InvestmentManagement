@@ -20,8 +20,8 @@
                                 <el-tag type="primary">{{$t("message.fund.fd_life_cycle")}}</el-tag>
                             </div>   
                             <div style="margin-top:20px;">
-                                <el-tag type="primary">净值</el-tag>
-                                <el-tag type="primary" style="margin-left:60px">累计净值</el-tag>
+                                <el-tag type="primary">{{$t("message.fund.jingzhi")}}</el-tag>
+                                <el-tag type="primary" style="margin-left:60px">{{$t("message.fund.leijijingzhi")}}</el-tag>
                             </div>                                                                              
                         </div>                                                           
                     </div>    

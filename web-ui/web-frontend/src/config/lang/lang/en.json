@@ -1,9 +1,77 @@
 {
+    "system":{
+        "title":"紫山资管系统_en",
+        "operation":"操作_en",
+        "edit":"编辑_en",
+        "delete":"删除_en",
+        "details":"详情_en",
+        "ok":"确定_en",
+        "cancel":"取消_en",
+        "save":"保存_en",
+        "prompt":"提示_en",
+        "cancel_delete":"已取消删除_en",
+        "select_tip":"请选择_en",
+        "commit":"提交中_en",
+        "amount":"金额_en",
+        "success":"成功_en",
+        "fail":"失败_en"
+    },
     "fund":{
-        "fd_title":"All Funds",
-        "fd_life_cycle":"Creation period"
+        "fd_title":"所有基金产品_en",
+        "fd_life_cycle":"创设期_en",
+        "jingzhi":"净值_en",
+        "leijijingzhi":"累计净值_en"
     },
     "fundCreate":{
-        "fd_crt_setsuccess":"The success of the creation of fund products"
+        "base_info":"基本信息_en",
+        "fund_crt":"创设_en",
+        "fund_create":"创设基金产品_en",
+        "fund_create_setsuccess":"创设基金产品成功_en",
+        "fund_create_error":"创设基金产品失败_en",
+        "fund_code":"基金代码_en",
+        "fund_name":"基金名称_en",
+        "fund_shortname":"基金简称_en",
+        "fund_share":"份额_en",
+        "fund_req_code":"请输入基金代码_en",
+        "fund_req_name":"请输入基金名称_en",
+        "fund_req_shortname":"请输入基金简称_en"
+    },
+    "fundAccount":{
+        "fund_account":"产品账户_en",
+        "add_fund_account":"添加产品账户_en",
+        "edit_fund_account":"编辑产品账户_en",
+        "fund_account_name":"产品账户名称_en",
+        "fund_account_create_sucess":"创建产品帐号成功_en",
+        "fund_account_edit_sucess":"修改产品帐号成功_en",
+        "und_account_delete_sucess":"删除产品帐号成功_en",
+        "fund_account_delete_confim":"您正在删除产品账户 是否继续?_en"
+    },
+    "fundCreacaAcc":{
+        "add_fcreac_acc":"添加外部资金账户_en",
+        "edit_fcreac_acc":"编辑外部资金账户_en",
+        "add_fcreac_acc_success":"创建外部资金账户成功_en",
+        "edit_fcreac_acc_success":"修改外部资金账户成功_en",
+        "delete_fcreac_acc_success":"删除外部资金账户成功_en",
+        "fcreac_account":"外部资金账户_en",
+        "fcreac_acc_type":"外部资金账户类型_en",
+        "fcreac_acc_no":"外部资金账号_en",
+        "fcreac_acc_ex":"开户经纪商_en",
+        "fcreac_acc_delete_confim":"您正在删除外部资金账户 是否继续?_en"
+    },
+    "fundCreacaAccInfo":{
+        "cap_inout":"资金互转_en",
+        "curr_cap_no":"当前外部资金帐号_en",
+        "currency":"币种_en",
+        "unallocated":"未分配_en",
+        "ecma":"现金_en",
+        "cap_in":"资金转入_en",
+        "counter_acc":"对手方账户_en",
+        "cap_in":"资金转入_en",
+        "cap_in_success":"调拨成功_en"
+    },
+    "fundProperty":{
+        "fund_more_func":"更多功能_en",
+        "fund_delete":"删除基金产品_en",
+        "fund_delete_confim":"您正在删除基金 是否继续?_en"
     }
 }

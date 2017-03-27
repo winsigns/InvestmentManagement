@@ -5,10 +5,10 @@
             <el-col :span="18">
                <el-dropdown class="float_right"  @command="handleCommand">
                     <el-button>
-                        更多功能<i class="el-icon-caret-bottom el-icon--right"></i>
+                        {{ $t("message.fundProperty.fund_more_func") }}<i class="el-icon-caret-bottom el-icon--right"></i>
                     </el-button>
                     <el-dropdown-menu slot="dropdown">                     
-                        <el-dropdown-item command="d">删除基金产品</el-dropdown-item>                                                 
+                        <el-dropdown-item command="d">{{ $t("message.fundProperty.fund_delete") }}</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-col>                            
@@ -52,26 +52,27 @@
           handleCommand(command){
                 var _self = this;
                 if (command=='d'){
-                        this.$confirm('您正在删除基金 是否继续?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
+                        this.$confirm(_self.$t('message.fundProperty.fund_delete_confim'),
+                            _self.$t('message.system.prompt'), {
+                        confirmButtonText: _self.$t('message.system.ok'),
+                        cancelButtonText: _self.$t('message.system.cancel'),
                         type: 'warning'
                     }).then(() => {
                         ds.DELETE({url:api.fundURL.funds+'/'+_self.$route.params.fundId},
                         function(data){                                          
                             //删除成功
                             _self.$message({
-                                message: '删除成功',
+                                message: _self.$t('message.system.success'),
                                 type: 'success'
                             });
                             _self.$router.push({ name: 'Fund', params: {}})
                         },function(data){
-                            _self.$message.error('删除基金产品失败');
+                            _self.$message.error(_self.$t('message.system.fail'));
                         })                        
                     }).catch(() => {
                         this.$message({
                             type: 'info',
-                            message: '已取消删除'
+                            message: _self.$t('message.system.cancel_delete')
                         });          
                     });
                 }                
