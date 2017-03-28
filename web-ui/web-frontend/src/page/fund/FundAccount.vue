@@ -44,8 +44,6 @@
     </div>
 </template>
 <script>
-    import api from '../../config/api.json'
-    import ds from '../../common/ds'
     export default{
         data(){
             return {
@@ -65,8 +63,8 @@
         },
         methods:{
             getFundAccounts: function(){
-                var _self = this;  
-                ds.GET({url:api.fundURL.funds + '/'+_self.$route.params.fundId+'/fund-accounts',
+                var _self = this;
+                _self.winsigns.ds.GET({url:_self.winsigns.api.fundURL.funds + '/'+_self.$route.params.fundId+'/fund-accounts',
                         data:{}},function(data){
                     _self.loading = false;
                     _self.fundAccontList = data._embedded?data._embedded["fund-accounts"]:[];                                                                    
@@ -81,7 +79,7 @@
             postFundAccount: function(){
                 var _self = this;
                 if (_self.dlg.dlgFundAccountId==''){//新增
-                    ds.POST({url:api.fundURL.funds + '/'+_self.$route.params.fundId+'/fund-accounts',
+                    _self.winsigns.ds.POST({url:_self.winsigns.api.fundURL.funds + '/'+_self.$route.params.fundId+'/fund-accounts',
                         data:{"name":_self.dlg.dlgFundAccountName}},function(data){
                         _self.getFundAccounts(); 
                         _self.dlg.dlgVisible= false;
@@ -95,7 +93,7 @@
                         
                     })  
                 } else{//修改
-                    ds.PUT({url:api.fundURL.fundaccounts+'/'+_self.dlg.dlgFundAccountId,
+                    _self.winsigns.ds.PUT({url:_self.winsigns.api.fundURL.fundaccounts+'/'+_self.dlg.dlgFundAccountId,
                         data:{"name":_self.dlg.dlgFundAccountName}},function(data){
                         _self.getFundAccounts(); 
                         _self.dlg.dlgVisible= false;
@@ -125,7 +123,7 @@
                         cancelButtonText: _self.$t('message.system.cancel'),
                         type: 'warning'
                     }).then(() => {
-                        ds.DELETE({url:api.fundURL.fundaccounts+'/'+row.id,
+                    _self.winsigns.ds.DELETE({url:_self.winsigns.api.fundURL.fundaccounts+'/'+row.id,
                         data:{}},function(data){
                             _self.getFundAccounts();                 
                             _self.$message({

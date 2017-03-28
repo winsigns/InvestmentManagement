@@ -31,9 +31,6 @@
     </section>   
 </template>
 <script>
-    // import api from '../../config/api.json'
-    // import ds from '../../common/ds' 
-    import wsocket from '../../common/websocket/websocket'
     export default{
         data(){
             return {

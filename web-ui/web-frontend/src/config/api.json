@@ -5,6 +5,8 @@
     "fundURL":{
         "funds": "fund-service/funds/",
         "fundaccounts":"fund-service/fund-accounts",
-        "fundCreaAccounts":"fund-service/external-capital-accounts"
+        "fundCreaAccounts":"fund-service/external-capital-accounts",
+        "fundEcaTypes":"fund-service/external-capital-accounts/eca-types",
+        "fundECPools":"inventory-service/eca-cash-pools/"
     }
 }

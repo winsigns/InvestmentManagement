@@ -18,9 +18,6 @@
 		components: {
 			"top-menu":TopMmenu,
 			"main-footer": MainFooter
-		},
-		created: function () {
-			this.$router.replace('/Fund')
 		}
 	}
 </script>

@@ -1,4 +1,4 @@
-package com.winsigns.investment.webGateway.controller;
+package com.winsigns.investment.webGateway.webGateway.http.controller;
 
 import javax.servlet.http.HttpServletRequest;
 

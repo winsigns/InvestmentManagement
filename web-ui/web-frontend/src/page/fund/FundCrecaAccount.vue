@@ -72,9 +72,7 @@
         </el-dialog>        
     </div>
 </template>
-<script>    
-    import api from '../../config/api.json'
-    import ds from '../../common/ds'
+<script>
     export default{       
         data(){
             return {
@@ -111,8 +109,8 @@
                 this.getCaptialType();  
             },
             getFundCreaAccounts: function(){
-                var _self = this;  
-                ds.GET({url:api.fundURL.funds + '/'+_self.$route.params.fundId+'/external-capital-accounts',
+                var _self = this;
+                _self.winsigns.ds.GET({url:_self.winsigns.api.fundURL.funds + '/'+_self.$route.params.fundId+'/external-capital-accounts',
                         data:{}},function(data){
                     _self.loading = false;
                     _self.fundCreaAccontList = data._embedded?data._embedded["external-capital-accounts"]:[];                                                                     
@@ -121,7 +119,7 @@
             postFundCreaAccount: function(){
                 var _self = this;
                 if (_self.dlg.dlgFundCreaAccountId==''){//新增
-                    ds.POST({url:api.fundURL.funds+_self.$route.params.fundId+'/external-capital-accounts',
+                    _self.winsigns.ds.POST({url:_self.winsigns.api.fundURL.funds+_self.$route.params.fundId+'/external-capital-accounts',
                         data:{"accountType":_self.dlg.dlgFundCreaAccountType,
                         "accountNo":_self.dlg.dlgFundCreaAccountNo,
                         "externalOpenOrganization":_self.dlg.dlgFundCreaOrganization}},function(data){
@@ -139,7 +137,7 @@
                         console.log(err)
                     })  
                 }else{
-                    ds.PUT({url:api.fundURL.fundCreaAccounts+'/'+_self.dlg.dlgFundCreaAccountId,
+                    _self.winsigns.ds.PUT({url:_self.winsigns.api.fundURL.fundCreaAccounts+'/'+_self.dlg.dlgFundCreaAccountId,
                         data:{"accountType":_self.dlg.dlgFundCreaAccountType,
                         "accountNo":_self.dlg.dlgFundCreaAccountNo,
                         "externalOpenOrganization":_self.dlg.dlgFundCreaOrganization}},function(data){
@@ -159,13 +157,9 @@
                 }
             },
             getCaptialType: function () {
-                /*this.captialTypeList = [
-                    { name: 'CHINA_GENERAL_CAPITAL_ACCOUNT', displayname: '普通资金账户' },
-                    { name: 'CHINA_FUTURE_CAPITAL_ACCOUNT', displayname: '期货保证金账户' }
-                ]*/
                 var _self =this;
                 console.log( this.captialTypeList)
-                ds.GET({url:'fund-service/external-capital-accounts/eca-types',
+                _self.winsigns.ds.GET({url:_self.winsigns.api.fundURL.fundEcaTypes,
                     data:{}},function (data) {
 
                     _self.captialTypeList=
@@ -188,7 +182,7 @@
                         cancelButtonText: _self.$t('message.system.cancel'),
                         type: 'warning'
                     }).then(() => {
-                        ds.DELETE({url:api.fundURL.fundCreaAccounts+'/'+row.id,
+                    _self.winsigns.ds.DELETE({url:_self.winsigns.api.fundURL.fundCreaAccounts+'/'+row.id,
                         data:{}},function(data){
                             _self.getFundCreaAccounts();             
                             _self.$message({

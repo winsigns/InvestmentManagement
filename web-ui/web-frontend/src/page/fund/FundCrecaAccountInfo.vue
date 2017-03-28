@@ -52,8 +52,6 @@
     </div>
 </template>
 <script>
-    import api from '../../config/api.json'
-    import ds from '../../common/ds'
     import wsocket from '../../common/websocket/websocket'
     export default{
         data(){
@@ -81,30 +79,32 @@
                 this.dlg.dlgId = row.id;
             },
             getFundCreaAccountsInfo: function(){
-                var _self = this;  
-                ds.GET({url:api.fundURL.fundCreaAccounts + '/'+ _self.$route.params.fundCreacaAccountId,
+                var _self = this;
+                _self.winsigns.ds.GET({url:_self.winsigns.api.fundURL.fundCreaAccounts + '/'+ _self.$route.params.fundCreacaAccountId,
                         data:{}},function(data){                    
                     _self.fundCreaAccontInfoList = data;  
                     _self.fundCreaAccontInfoCapList = [];
                     if ( data._embedded){
                         if (data._embedded["eca-cash-pools"]){                            
-                            var tempData = data._embedded["eca-cash-pools"];  
+                            var tempData = data._embedded["eca-cash-pools"];
+                            var topicKey = [];
                             for (var i=0;i<=tempData.length-1;i++){
                                     tempData[i].ecma =[]
                                     tempData[i].ecma=tempData[i].measureInfo?
                                         tempData[i].measureInfo["ECACashPoolMHT.ECACashMeasure"].value:[];
   
                                 _self.fundCreaAccontInfoCapList.push(tempData[i]);
+                                topicKey.push({"topicKey":'/topic/'+tempData[i].measureInfo["ECACashPoolMHT.ECACashMeasure"].key});
                             }
-                            wsocket.connect(_self.fundCreaAccontInfoCapList,_self.moneySubscribe);
+                            wsocket.connect('/endpointWisely',topicKey,_self.moneySubscribe);
                         }                                                
                     }                                               
                 })  
             },
             capitalIn: function(){
                 var _self = this;
-                _self.loading = true; 
-                ds.POST({url:"inventory-service/eca-cash-pools/" + _self.dlg.dlgId +'/allot-in',
+                _self.loading = true;
+                _self.winsigns.ds.POST({url:_self.winsigns.api.fundURL.fundECPools + _self.dlg.dlgId +'/allot-in',
                         data:{"changedCapital":_self.dlg.dlgFundCreaMoney,
                         "matchECACashPoolId":_self.dlg.dlgFundCreaAccount},v:_self},function(data){
                         _self.loading = false; 
@@ -147,7 +147,7 @@
             }
         },
         beforeDestroy: function(){
-
+            wsocket.disconnect()
         }
     }
 </script>

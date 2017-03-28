@@ -34,8 +34,6 @@
     import FundInfo from "./FundInfo.vue"
     import FundAccount from "./FundAccount.vue"
     import FundCrecaAccount from "./FundCrecaAccount.vue"
-    import api from '../../config/api.json'
-    import ds from '../../common/ds'
     export default{
         data(){
             return {
@@ -58,7 +56,7 @@
                         cancelButtonText: _self.$t('message.system.cancel'),
                         type: 'warning'
                     }).then(() => {
-                        ds.DELETE({url:api.fundURL.funds+'/'+_self.$route.params.fundId},
+                            _self.winsigns.ds.DELETE({url:_self.winsigns.api.fundURL.funds+'/'+_self.$route.params.fundId},
                         function(data){                                          
                             //删除成功
                             _self.$message({

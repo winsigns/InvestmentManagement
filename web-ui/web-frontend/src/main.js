@@ -21,7 +21,6 @@ import routerConfig from './router/router.config.js'
 import wslang from './common/lang.js'
 import ds from './common/ds'
 import api from './config/api.json'
-// import wsocket from './common/websocket/websocket'
  
 Vue.use(ElementUI)
 Vue.use(VueRouter)

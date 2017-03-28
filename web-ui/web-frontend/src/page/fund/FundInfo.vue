@@ -29,8 +29,6 @@
     </div>
 </template>
 <script>
-    import api from '../../config/api.json'
-    import ds from '../../common/ds'
     export default{
         data(){
             return {
@@ -58,7 +56,7 @@
             _self.rules.code[0].message=_self.$t('message.fundCreate.fund_req_code');
             _self.rules.name[0].message=_self.$t('message.fundCreate.fund_req_name');
             _self.rules.shortName[0].message=_self.$t('message.fundCreate.fund_req_shortname');
-            ds.GET({url:api.fundURL.funds+_self.$route.params.fundId,
+            _self.winsigns.ds.GET({url:_self.winsigns.api.fundURL.funds+_self.$route.params.fundId,
                     data:{}},function(data){ 
                 _self.loading = false;  
                 _self.fundDetail = data;             
@@ -69,7 +67,7 @@
                 var _self = this;            
                 _self.$refs[fundProp].validate((valid) => {
                     if (valid) {
-                         ds.PUT({url:api.fundURL.funds+'/'+_self.$route.params.fundId,
+                        _self.winsigns.ds.PUT({url:_self.winsigns.api.fundURL.funds+'/'+_self.$route.params.fundId,
                                 data:{
                                     code:_self.fundDetail.code, 
                                     name:_self.fundDetail.name,

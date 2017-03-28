@@ -28,8 +28,6 @@
     </div>
 </template>
 <script>
-    import api from '../../config/api.json'
-    import ds from '../../common/ds'
     export default{
         data(){
             return {
@@ -55,7 +53,7 @@
                 var _self = this;            
                 _self.$refs[fundProp].validate((valid) => {
                     if (valid) {
-                         ds.POST({url:api.fundURL.funds,
+                        _self.winsigns.ds.POST({url:_self.winsigns.api.fundURL.funds,
                                 data:{
                                     code:_self.fundProp.code, 
                                     name:_self.fundProp.name,
