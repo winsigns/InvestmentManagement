@@ -36,7 +36,7 @@ public class OperatorSequenceService {
   }
 
   private String formatSequence(String date, Long nowVersion) {
-    return String.format("%s%012d", date, nowVersion);
+    return String.format("%s%012d", date.substring(2), nowVersion);
   }
 
 }
