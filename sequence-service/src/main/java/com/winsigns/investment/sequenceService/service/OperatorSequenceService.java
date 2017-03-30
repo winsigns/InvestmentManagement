@@ -6,7 +6,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +15,7 @@ public class OperatorSequenceService {
   Logger log = LoggerFactory.getLogger(OperatorSequenceService.class);
 
   @Autowired
-  private RedisTemplate<String, Integer> redisTemplate;
+  private StringRedisTemplate redisTemplate;
 
   private static final String STR_OPERATOR_SEQUENCE_FIX = "operator-sequence:";
 
