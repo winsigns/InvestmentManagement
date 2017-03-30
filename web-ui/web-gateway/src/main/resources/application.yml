@@ -9,10 +9,10 @@ zuul:
   routes:
     fund-service:
       path: /fund-service/**
-      url: http://120.77.178.46:10010/
+      url: http://localhost:10010/
     inventory-service:
       path: /inventory-service/**
-      url: http://120.77.178.46:10011/
+      url: http://localhost:10011/
 
 eureka:
   instance:
@@ -29,7 +29,7 @@ spring:
   kafka:
     consumer:
       group-id: "test"
-    bootstrap-servers: 120.77.178.46:9092
+    bootstrap-servers: localhost:9092
       
 
 
@@ -46,7 +46,7 @@ hystrix:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://120.77.178.46:10100/eureka/
+      defaultZone: http://localhost:10100/eureka/
 
 ---
 

@@ -21,7 +21,6 @@ import routerConfig from './router/router.config.js'
 import wslang from './common/lang.js'
 import ds from './common/ds'
 import api from './config/api.json'
-// import wsocket from './common/websocket/websocket'
  
 Vue.use(ElementUI)
 Vue.use(VueRouter)
@@ -31,10 +30,6 @@ Vue.use(Vuex)
 Vue.prototype.winsigns = {
     ds: ds,
     api: api,
-    websocket:{
-        // wsocket: wsocket,
-        // wsocket_con: new wsocket.connect()
-    }
 };
 //实例化I18n
 var i18n = new VueI18n({
