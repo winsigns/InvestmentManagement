@@ -1,4 +1,4 @@
-package com.winsigns.investment.webGateway.webGateway.websocket;
+package com.winsigns.investment.webGateway.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

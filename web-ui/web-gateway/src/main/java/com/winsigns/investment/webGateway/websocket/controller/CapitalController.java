@@ -1,4 +1,4 @@
-package com.winsigns.investment.webGateway.webGateway.websocket.controller;
+package com.winsigns.investment.webGateway.websocket.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -16,7 +16,6 @@ public class CapitalController {
 
     @KafkaListener(topics = {"measures"})
 	public void listen(ConsumerRecord<String, String> record) {
-		System.out.println(record);
         messagingTemplate.send("/topic/"+record.key(),
                 new GenericMessage(record.value().getBytes()));
 	}
