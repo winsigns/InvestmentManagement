@@ -4,7 +4,7 @@
             <el-row>
                 <el-col :span="2">&nbsp;</el-col>
                 <el-col :span="20">      
-                    <div class="line_bottom"><h1>{{ $t("message.fund.fd_title") }}</h1> </div>  
+                    <div class="line_bottom"><h1>{{ $t("message.fund.title") }}</h1> </div>
                 </el-col>  
             </el-row>
             <el-row v-loading="loading">                
@@ -17,11 +17,11 @@
                                 <small v-text="item.code" class="cls_fundCode"></small>   
                             </div>    
                             <div style="margin-top:20px;">
-                                <el-tag type="primary">{{$t("message.fund.fd_life_cycle")}}</el-tag>
+                                <el-tag type="primary">{{$t("message.fund.life_cycle")}}</el-tag>
                             </div>   
                             <div style="margin-top:20px;">
-                                <el-tag type="primary">{{$t("message.fund.jingzhi")}}</el-tag>
-                                <el-tag type="primary" style="margin-left:60px">{{$t("message.fund.leijijingzhi")}}</el-tag>
+                                <el-tag type="primary">{{$t("message.fund.nav")}}</el-tag>
+                                <el-tag type="primary" style="margin-left:60px">{{$t("message.fund.nav_ttl")}}</el-tag>
                             </div>                                                                              
                         </div>                                                           
                     </div>    
@@ -48,7 +48,7 @@
         },
         methods:{
             goFundProperties: function(item){
-                this.$router.push({ name: 'FundProperties', params: { 
+                this.$router.push({ name: 'fund-properties', params: {
                     fundId: item.id}});
             }
         }

@@ -3,8 +3,8 @@
         <el-row>        
             <div class="line_bottom">
                 <el-button type="text" class="float_right right_button"
-                @click="openDialog(row)">{{ $t("message.fundCreacaAcc.add_fcreac_acc") }}</el-button>
-                <h1>{{ $t("message.fundCreacaAcc.fcreac_account") }}</h1>
+                @click="openDialog(row)">{{ $t("message.fund.eca_add") }}</el-button>
+                <h1>{{ $t("message.fund.eca") }}</h1>
             </div>                
             <div class="line_margin_top"></div>            
         </el-row>
@@ -14,32 +14,32 @@
                 stripe>
                     <el-table-column sortable
                         prop="ecaTypeShowName"
-                        :label=" $t('message.fundCreacaAcc.fcreac_acc_type') ">
+                        :label=" $t('message.fund.eca_type') ">
                     </el-table-column>  
                     <el-table-column sortable
                         prop="accountNo"
-                        :label=" $t('message.fundCreacaAcc.fcreac_acc_no') ">
+                        :label=" $t('message.fund.eca_no') ">
                     </el-table-column>
                     
                     <el-table-column sortable
                         prop="externalOpenOrganization"
-                        :label=" $t('message.fundCreacaAcc.fcreac_acc_ex') ">
+                        :label=" $t('message.fund.eca_finder') ">
                     </el-table-column>  
-                    <el-table-column :label=" $t('message.system.operation') ">
+                    <el-table-column :label=" $t('message.global.operation') ">
                         <template scope="scope">
                             <el-button
                             size="small"
                             type="text"
                             @click="goFundCreaAccountProperties(scope.$index, scope.row)"
-                            >{{ $t("message.system.details") }}</el-button>
+                            >{{ $t("message.global.details") }}</el-button>
                             <el-button
                             size="small"
-                            @click="handleEdit(scope.$index, scope.row)">{{ $t("message.system.edit") }}</el-button>
+                            @click="handleEdit(scope.$index, scope.row)">{{ $t("message.global.edit") }}</el-button>
                             <el-button
                             size="small"
                             type="danger"
                             @click="handleDelete(scope.$index, scope.row)"
-                            >{{ $t("message.system.delete") }}</el-button>
+                            >{{ $t("message.global.delete") }}</el-button>
                         </template>
                     </el-table-column>                 
                 </el-table>
@@ -48,8 +48,8 @@
 
         <el-dialog :title="dlg.dlgTitle" v-model="dlg.dlgVisible" size="tiny">
             <el-form :model="dlg" label-width="140px">
-                <el-form-item :label=" $t('message.fundCreacaAcc.fcreac_acc_type') ">
-                    <el-select v-model="dlg.dlgFundCreaAccountType" :placeholder=" $t('message.system.select_tip') ">
+                <el-form-item :label=" $t('message.fund.eca_type') ">
+                    <el-select v-model="dlg.dlgFundCreaAccountType" :placeholder=" $t('message.global.select_tip') ">
                         <el-option
                                 v-for="item in captialTypeList"
                                 :label="item.displayname"
@@ -58,16 +58,16 @@
                     </el-select>
                     <!-- <el-input v-model="dlg.dlgFundCreaAccountType"></el-input>-->
                 </el-form-item>      
-                 <el-form-item :label=" $t('message.fundCreacaAcc.fcreac_acc_no') ">
+                 <el-form-item :label=" $t('message.fund.eca_no') ">
                      <el-input v-model="dlg.dlgFundCreaAccountNo"></el-input>
                 </el-form-item> 
-                 <el-form-item :label=" $t('message.fundCreacaAcc.fcreac_acc_ex') " >
+                 <el-form-item :label=" $t('message.fund.eca_finder') " >
                      <el-input v-model="dlg.dlgFundCreaOrganization"></el-input>
                 </el-form-item>          
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dlg.dlgVisible=false">{{ $t("message.system.cancel") }}</el-button>
-                <el-button @click="postFundCreaAccount()">{{ $t("message.system.ok") }}</el-button>
+                <el-button @click="dlg.dlgVisible=false">{{ $t("message.global.cancel") }}</el-button>
+                <el-button @click="postFundCreaAccount()">{{ $t("message.global.confirm") }}</el-button>
             </div>
         </el-dialog>        
     </div>
@@ -96,11 +96,11 @@
         },
         methods:{
             goFundCreaAccountProperties: function(index, row){
-                this.$router.push({ name: 'FundCrecaAccountInfo', params: { 
+                this.$router.push({ name: 'fund-creca-account-info', params: {
                     fundCreacaAccountId: row.id}});                   
             },
              openDialog: function(){
-                this.dlg.dlgTitle = this.$t('message.fundCreacaAcc.add_fcreac_acc');
+                this.dlg.dlgTitle = this.$t('message.fund.account_add');
                 this.dlg.dlgVisible = true; 
                 this.dlg.dlgFundCreaAccountId="";
                 this.dlg.dlgFundCreaAccountType="";
@@ -130,7 +130,7 @@
                         _self.dlg.dlgFundCreaAccountNo="";    
                         _self.dlg.dlgFundCreaOrganization="0";  
                         _self.$message({
-                            message: _self.$t('message.fundCreacaAcc.add_fcreac_acc_success'),
+                            message: _self.$t('message.global.success'),
                             type: 'success'
                         });                                             
                     },function(err){
@@ -148,7 +148,7 @@
                         _self.dlg.dlgFundCreaAccountNo="";    
                         _self.dlg.dlgFundCreaOrganization="0";  
                         _self.$message({
-                            message: _self.$t('message.fundCreacaAcc.edit_fcreac_acc_success'),
+                            message: _self.$t('message.global.success'),
                             type: 'success'
                         });                                                    
                     },function(err){
@@ -167,7 +167,7 @@
                 })
             },
             handleEdit(index, row) {
-                this.dlg.dlgTitle = this.$t('message.fundCreacaAcc.edit_fcreac_acc');
+                this.dlg.dlgTitle = this.$t('message.fund.eca_edit');
                 this.dlg.dlgVisible = true; 
                 this.dlg.dlgFundCreaAccountId=row.id
                 this.dlg.dlgFundCreaAccountType=row.accountType;              
@@ -177,16 +177,16 @@
             },
             handleDelete(index, row) {
                var _self = this;
-                _self.$confirm(_self.$t('message.fundCreacaAcc.fcreac_acc_delete_confim'), _self.$t('message.system.prompt'), {
-                        confirmButtonText: _self.$t('message.system.ok'),
-                        cancelButtonText: _self.$t('message.system.cancel'),
+                _self.$confirm(_self.$t('message.fund.eca_delete_confim'), _self.$t('message.global.prompt'), {
+                        confirmButtonText: _self.$t('message.global.confirm'),
+                        cancelButtonText: _self.$t('message.global.cancel'),
                         type: 'warning'
                     }).then(() => {
                     _self.winsigns.ds.DELETE({url:_self.winsigns.api.fundURL.fundCreaAccounts+'/'+row.id,
                         data:{}},function(data){
                             _self.getFundCreaAccounts();             
                             _self.$message({
-                                message: _self.$t('message.fundCreacaAcc.delete_fcreac_acc_success'),
+                                message: _self.$t('message.global.success'),
                                 type: 'success'
                             });                                             
                         },function(err){
@@ -195,7 +195,7 @@
                     }).catch(() => {
                         this.$message({
                             type: 'info',
-                            message: _self.$t('message.system.cancel_delete')
+                            message: _self.$t('message.global.cancel_delete')
                         });          
                     });             
             }

@@ -7,8 +7,7 @@
 import { use } from 'element-ui/lib/locale';
 import zhLocale from 'element-ui/lib/locale/lang/zh-CN';
 import enLocale from 'element-ui/lib/locale/lang/en'
-import jaLocale from 'element-ui/lib/locale/lang/ja'
-import zh from '../config/lang/lang/zh-cn.json'
+import zh from '../config/lang/lang/zh.json'
 import en from '../config/lang/lang/en.json'
 
 export default {

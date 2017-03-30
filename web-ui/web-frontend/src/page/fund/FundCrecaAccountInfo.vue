@@ -3,8 +3,8 @@
         <el-row>
             <el-col :offset="5" :span="19">
                 <div class="line_bottom">                
-                    <h1>{{ $t("message.fundCreacaAccInfo.cap_inout") }}</h1>
-                    <h3>{{ $t("message.fundCreacaAccInfo.curr_cap_no") }}：{{fundCreaAccontInfoList.accountNo}}</h3>
+                    <h1>{{ $t("message.fund.eca_cap_transfer") }}</h1>
+                    <h3>{{ $t("message.fund.eca_no_curr") }}：{{fundCreaAccontInfoList.accountNo}}</h3>
                 </div>                
                 <div class="line_margin_top"></div>
             </el-col>            
@@ -15,38 +15,38 @@
                 stripe>
                     <el-table-column sortable
                         prop="currency"
-                        :label=" $t('message.fundCreacaAccInfo.currency') ">
+                        :label=" $t('message.global.currency') ">
                     </el-table-column>  
                     <el-table-column sortable
                         prop="unassignedCapital"
-                        :label=" $t('message.fundCreacaAccInfo.unallocated') ">
+                        :label=" $t('message.global.unallocated') ">
                     </el-table-column>  
-                    <el-table-column sortable :label=" $t('message.fundCreacaAccInfo.ecma') "
+                    <el-table-column sortable :label=" $t('message.global.ecma') "
                                      prop="ecma">
                     </el-table-column>                    
-                    <el-table-column :label=" $t('message.system.operation') " sortable="false">
+                    <el-table-column :label=" $t('message.global.operation') " sortable="false">
                         <template scope="scope">
                             <el-button
                             size="small"
-                            type="text" @click="handleIn(scope.row)">{{ $t("message.fundCreacaAccInfo.cap_in") }}</el-button>
+                            type="text" @click="handleIn(scope.row)">{{ $t("message.fund.eca_cap_in") }}</el-button>
                         </template>
                     </el-table-column>                 
                 </el-table>
             </el-col>	                     
         </el-row>  
 
-         <el-dialog :title="$t('message.fundCreacaAccInfo.cap_in')" v-model="dlg.dlgVisible" size="tiny">
-            <el-form :model="dlg" v-loading="loading" :element-loading-text=" $t('message.system.commit') ">
-                <el-form-item :label=" $t('message.fundCreacaAccInfo.counter_acc') " label-width="140px">
+         <el-dialog :title="$t('message.fund.eca_cap_in')" v-model="dlg.dlgVisible" size="tiny">
+            <el-form :model="dlg" v-loading="loading" :element-loading-text=" $t('message.global.commit') ">
+                <el-form-item :label=" $t('message.fund.eca_counter_acc') " label-width="140px">
                      <el-input v-model="dlg.dlgFundCreaAccount"></el-input>
                 </el-form-item>                      
-                 <el-form-item :label=" $t('message.system.amount') " label-width="140px">
+                 <el-form-item :label=" $t('message.global.amount') " label-width="140px">
                      <el-input v-model="dlg.dlgFundCreaMoney"></el-input>
                 </el-form-item>          
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dlg.dlgVisible=false">{{ $t("message.system.cancel") }}</el-button>
-                <el-button @click="capitalIn()">{{ $t("message.system.ok") }}</el-button>
+                <el-button @click="dlg.dlgVisible=false">{{ $t("message.global.cancel") }}</el-button>
+                <el-button @click="capitalIn()">{{ $t("message.global.confirm") }}</el-button>
             </div>
         </el-dialog>    
     </div>
@@ -112,7 +112,7 @@
                         _self.dlg.dlgVisible= false;
                         _self.dlg.dlgFundCreaMoney="";
                         _self.$message({
-                            message: _self.$t('message.fundCreacaAccInfo.cap_in_success'),
+                            message: _self.$t('message.global.success'),
                             type: 'success'
                         });                                             
                     })  

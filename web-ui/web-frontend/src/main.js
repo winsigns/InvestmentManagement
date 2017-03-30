@@ -30,10 +30,6 @@ Vue.use(Vuex)
 Vue.prototype.winsigns = {
     ds: ds,
     api: api,
-    websocket:{
-        // wsocket: wsocket,
-        // wsocket_con: new wsocket.connect()
-    }
 };
 //实例化I18n
 var i18n = new VueI18n({

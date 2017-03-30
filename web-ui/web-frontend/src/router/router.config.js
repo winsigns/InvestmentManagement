@@ -12,24 +12,24 @@ import FundCrecaAccountInfo from "../page/fund/FundCrecaAccountInfo.vue"
 let defaultPath = '/Fund'
 let routes = [
                 {
-                    path: '/Fund',
+                    path: '/fund',
                     component: Fund,
-                    name: 'Fund'
+                    name: 'fund'
                 },
                 {
-                    path: '/FundCreate',
+                    path: '/fund-create',
                     component: FundCreate,
-                    name: 'FundCreate'
+                    name: 'fund-create'
                 },
                 {
-                    path: '/FundProperties/:fundId',
+                    path: '/fund-properties/:fundId',
                     component: FundProperties,
-                    name: 'FundProperties'
+                    name: 'fund-properties'
                 },
                 {
-                    path: '/FundCrecaAccountInfo/:fundCreacaAccountId',
+                    path: '/fund-creca-accountInfo/:fundCreacaAccountId',
                     component: FundCrecaAccountInfo,
-                    name: 'FundCrecaAccountInfo'
+                    name: 'fund-creca-account-info'
                 }
             ]
 

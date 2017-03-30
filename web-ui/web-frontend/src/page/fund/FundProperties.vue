@@ -5,26 +5,26 @@
             <el-col :span="18">
                <el-dropdown class="float_right"  @command="handleCommand">
                     <el-button>
-                        {{ $t("message.fundProperty.fund_more_func") }}<i class="el-icon-caret-bottom el-icon--right"></i>
+                        {{ $t("message.global.more_func") }}<i class="el-icon-caret-bottom el-icon--right"></i>
                     </el-button>
                     <el-dropdown-menu slot="dropdown">                     
-                        <el-dropdown-item command="d">{{ $t("message.fundProperty.fund_delete") }}</el-dropdown-item>
+                        <el-dropdown-item command="d">{{ $t("message.fund.delete") }}</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-col>                            
         </el-row>
         <el-row>
-            <el-col :offset="5" :span="19">
+            <el-col :offset="2" :span="20">
                 <fund-info></fund-info>
             </el-col>            
         </el-row>
         <el-row>
-            <el-col :offset="5" :span="19">
+            <el-col :offset="2" :span="20">
                 <fund-account></fund-account>
             </el-col>            
         </el-row>
         <el-row>
-            <el-col :offset="5" :span="19">
+            <el-col :offset="2" :span="20">
                 <fund-crea-account></fund-crea-account>
             </el-col>            
         </el-row>
@@ -50,27 +50,27 @@
           handleCommand(command){
                 var _self = this;
                 if (command=='d'){
-                        this.$confirm(_self.$t('message.fundProperty.fund_delete_confim'),
-                            _self.$t('message.system.prompt'), {
-                        confirmButtonText: _self.$t('message.system.ok'),
-                        cancelButtonText: _self.$t('message.system.cancel'),
+                        this.$confirm(_self.$t('message.fund.delete_confim'),
+                            _self.$t('message.global.prompt'), {
+                        confirmButtonText: _self.$t('message.global.confirm'),
+                        cancelButtonText: _self.$t('message.global.cancel'),
                         type: 'warning'
                     }).then(() => {
                             _self.winsigns.ds.DELETE({url:_self.winsigns.api.fundURL.funds+'/'+_self.$route.params.fundId},
                         function(data){                                          
                             //删除成功
                             _self.$message({
-                                message: _self.$t('message.system.success'),
+                                message: _self.$t('message.global.success'),
                                 type: 'success'
                             });
                             _self.$router.push({ name: 'Fund', params: {}})
                         },function(data){
-                            _self.$message.error(_self.$t('message.system.fail'));
+                            _self.$message.error(_self.$t('message.global.fail'));
                         })                        
                     }).catch(() => {
                         this.$message({
                             type: 'info',
-                            message: _self.$t('message.system.cancel_delete')
+                            message: _self.$t('message.global.cancel_delete')
                         });          
                     });
                 }                
