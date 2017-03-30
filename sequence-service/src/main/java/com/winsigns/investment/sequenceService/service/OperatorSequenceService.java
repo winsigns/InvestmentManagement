@@ -19,69 +19,24 @@ public class OperatorSequenceService {
 
   private static final String STR_OPERATOR_SEQUENCE_FIX = "operator-sequence:";
 
-  /*
-   * 每次从redis获取10000个序列
+  /**
+   * 获取一个操作序号
+   * 
+   * @param date 指定日期，空则取系统日期
+   * @return 序列化后的操作序号
    */
-  private static final Integer INTERVAL = 10000;
+  public synchronized String getOperatorSequence(String date) {
+    String nowDate = date == null ? new SimpleDateFormat("yyyyMMdd").format(new Date()) : date;
+    String key =
+        date == null ? STR_OPERATOR_SEQUENCE_FIX + nowDate : STR_OPERATOR_SEQUENCE_FIX + date;
 
-  private Integer currentSequence = 0;
+    Long currentSequence = redisTemplate.opsForValue().increment(key, 1L);
+    return formatSequence(nowDate, currentSequence);
 
-  private Integer surplusSequence = 0;
-
-  private String nowDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
-
-  /*
-   * 获取一个指标版本
-   */
-  public synchronized String getOperatorSequence() {
-    if (isSameDay()) {
-      String key = STR_OPERATOR_SEQUENCE_FIX + nowDate;
-      if (!isEnough()) {
-        currentSequence = redisTemplate.opsForValue().get(key);
-        if (currentSequence == null)
-          currentSequence = 0;
-        incSequence();
-        redisTemplate.opsForValue().set(key, currentSequence + surplusSequence);
-      }
-    }
-    // 如果不是同一天，则需要从0开始
-    else {
-      nowDate = getDate();
-      initSequence();
-      return getOperatorSequence();
-    }
-    String sequence = formatSequence(currentSequence++);
-    surplusSequence--;
-    return sequence;
   }
 
-  private String getDate() {
-    SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");// 设置日期格式
-    return df.format(new Date());
-  }
-
-  private String formatSequence(Integer nowVersion) {
-    return String.format("%s%012d", nowDate, nowVersion);
-  }
-
-  private boolean isEnough() {
-    if (surplusSequence == 0) {
-      return false;
-    }
-    return true;
-  }
-
-  private void initSequence() {
-    currentSequence = 0;
-    surplusSequence = 0;
-  }
-
-  private void incSequence() {
-    surplusSequence = surplusSequence + INTERVAL;
-  }
-
-  private boolean isSameDay() {
-    return nowDate.equals(getDate());
+  private String formatSequence(String date, Long nowVersion) {
+    return String.format("%s%012d", date, nowVersion);
   }
 
 }
