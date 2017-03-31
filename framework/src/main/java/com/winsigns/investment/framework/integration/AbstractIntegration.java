@@ -6,7 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.web.client.RestOperations;
 
-public abstract class AbstractIntegration implements IIntegration {
+/**
+ * 服务间调用的基类
+ * 
+ * <p>
+ * 注入了LoadBalancerClient和RestOperations
+ * 
+ * @author yimingjin
+ * @since 0.0.1
+ */
+public abstract class AbstractIntegration {
 
   @Autowired
   LoadBalancerClient loadBalancer;
@@ -18,4 +27,10 @@ public abstract class AbstractIntegration implements IIntegration {
     return loadBalancer.choose(getIntegrationName()).getUri();
   }
 
+  /**
+   * 子类定义该交互的名字
+   * 
+   * @return 交互的服务名
+   */
+  public abstract String getIntegrationName();
 }

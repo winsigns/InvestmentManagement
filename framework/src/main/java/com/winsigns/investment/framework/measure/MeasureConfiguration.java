@@ -10,8 +10,12 @@ import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+
 /**
- * Created by colin on 2017/3/3.
+ * 指标体系的自动配置
+ * 
+ * @author Created by colin on 2017/3/3.
+ * @since 0.0.2
  */
 
 @Configuration

@@ -7,7 +7,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
-@Service // 注入spring容器
+/**
+ * 注入spring容器
+ * 
+ * @author yimingjin
+ * @since 0.0.2
+ */
+@Service
 public class SpringManager implements ApplicationListener<ContextRefreshedEvent> {
   private static ApplicationContext applicationContext = null;
 
