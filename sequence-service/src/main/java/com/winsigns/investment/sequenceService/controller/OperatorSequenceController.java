@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.sequenceService.service.OperatorSequenceService;
@@ -21,12 +20,11 @@ public class OperatorSequenceController {
   OperatorSequenceService operatorSequenceService;
 
   @GetMapping
-  public ResponseEntity<?> getOperatorSequence(
-      @RequestParam(value = "date", required = false) String date) {
+  public ResponseEntity<?> getOperatorSequence() {
 
     HttpHeaders responseHeaders = new HttpHeaders();
 
-    String sequence = operatorSequenceService.getOperatorSequence(date);
+    String sequence = operatorSequenceService.getOperatorSequence();
 
     return new ResponseEntity<Object>(sequence, responseHeaders, HttpStatus.OK);
   }

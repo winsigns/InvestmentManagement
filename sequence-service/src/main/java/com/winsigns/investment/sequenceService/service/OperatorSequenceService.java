@@ -25,10 +25,9 @@ public class OperatorSequenceService {
    * @param date 指定日期，空则取系统日期
    * @return 序列化后的操作序号
    */
-  public synchronized String getOperatorSequence(String date) {
-    String nowDate = date == null ? new SimpleDateFormat("yyyyMMdd").format(new Date()) : date;
-    String key =
-        date == null ? STR_OPERATOR_SEQUENCE_FIX + nowDate : STR_OPERATOR_SEQUENCE_FIX + date;
+  public synchronized String getOperatorSequence() {
+    String nowDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+    String key = STR_OPERATOR_SEQUENCE_FIX + nowDate;
 
     Long currentSequence = redisTemplate.opsForValue().increment(key, 1L);
     return formatSequence(nowDate, currentSequence);
