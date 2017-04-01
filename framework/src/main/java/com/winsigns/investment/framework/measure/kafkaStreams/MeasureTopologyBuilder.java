@@ -87,14 +87,20 @@ public class MeasureTopologyBuilder implements SmartInitializingSingleton {
     HashSet<String> sourceNames = new HashSet<String>();
     for (Measure thisMeasure : measureRepository.getMeasures()) {
       // 查看指标是否关心某个操作，如果关心，则为其增加一个源
-      Class<? extends OperatorEntity> operator = thisMeasure.getConcernedOperator();
-      if (operator != null) {
-        log.info(String.format("addSource: name:%s, source:%s",
-            thisMeasure.getFullName() + SOURCE_SUFFIX,
-            thisMeasure.getFullName() + "." + operator.getSimpleName()));
-        builder.addSource(thisMeasure.getFullName() + SOURCE_SUFFIX, keyDeserializer,
-            valueDeserializer, thisMeasure.getFullName() + "." + operator.getSimpleName());
-        sourceNames.add(thisMeasure.getFullName());
+      if (thisMeasure.getConcernedOperator() != null) {
+        List<String> operatorTopics = new ArrayList<String>();
+        for (Class<? extends OperatorEntity> operator : thisMeasure.getConcernedOperator()) {
+          if (operator != null) {
+            log.info(String.format("addSource: name:%s, source:%s",
+                thisMeasure.getFullName() + SOURCE_SUFFIX,
+                thisMeasure.getFullName() + "." + operator.getSimpleName()));
+            operatorTopics.add(thisMeasure.getFullName() + "." + operator.getSimpleName());
+
+          }
+          builder.addSource(thisMeasure.getFullName() + SOURCE_SUFFIX, keyDeserializer,
+              valueDeserializer, operatorTopics.toArray(new String[operatorTopics.size()]));
+          sourceNames.add(thisMeasure.getFullName());
+        }
       }
 
       // 遍历指标的所有依赖，如果不在本地指标库，则为source

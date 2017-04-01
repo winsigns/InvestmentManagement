@@ -73,7 +73,7 @@ public abstract class Measure implements IMeasure {
    * @return 关心的操作
    */
   @JsonIgnore
-  public abstract Class<? extends OperatorEntity> getConcernedOperator();
+  public abstract List<Class<? extends OperatorEntity>> getConcernedOperator();
 
   /**
    * 由子类定义指标的依赖关系
@@ -89,9 +89,11 @@ public abstract class Measure implements IMeasure {
    * @param operatorName 操作名
    * @return 是否关心
    */
-  public boolean isConcerned(String operatorName) {
-    if (getConcernedOperator().getSimpleName().equals(operatorName)) {
-      return true;
+  private boolean isConcerned(String operatorName) {
+    for (Class<? extends OperatorEntity> clazz : getConcernedOperator()) {
+      if (clazz.getSimpleName().equals(operatorName)) {
+        return true;
+      }
     }
     return false;
   }
@@ -163,27 +165,34 @@ public abstract class Measure implements IMeasure {
 
     if (value.getIsFloat() != null) { // 交易指标
       TradingMeasureValue measureValue = null;
-      if (affectedMHT == currentMHT) { // 由操作触发的指标或者与其类型相同的
 
-        if (key.getAffectedMeasureHostId() == value.getMeasureHostId()) {
+      if (!this.isConcerned(key.getOperatorName())) { // 如果操作不是该指标关心的，那么直接更新
+        measureValue =
+            new TradingMeasureValue(currentHost, this, value.isFloat, key.getOperatorSequence());
+        this.measureValueRepository.saveNoChange(measureValue);
+      } else {
+        if (affectedMHT == currentMHT) { // 由操作触发的指标或者与其类型相同的
 
-          measureValue = doCalculate(currentHost, value.getIsFloat(), key.getOperatorSequence());
-          this.measureValueRepository.save(measureValue);
-          measureValue.setReady(true);
-        } else { // 因为当前的宿主id与操作影响的id不同，因此可以直接写入值
-          measureValue =
-              new TradingMeasureValue(currentHost, this, value.isFloat, key.getOperatorSequence());
-          this.measureValueRepository.saveNoChange(measureValue);
-        }
-      } else { // 上层指标且不是同类型的
-        MeasureHost parent = affectedHost;
-        while ((parent = parent.parent()) != null) {
-          if (parent.getHostType() == currentMHT) {
+          if (key.getAffectedMeasureHostId() == value.getMeasureHostId()) {
 
-            measureValue = doCalculate(parent, value.getIsFloat(), key.getOperatorSequence());
+            measureValue = doCalculate(currentHost, value.getIsFloat(), key.getOperatorSequence());
             this.measureValueRepository.save(measureValue);
             measureValue.setReady(true);
-            break;
+          } else { // 因为当前的宿主id与操作影响的id不同，因此可以直接写入值
+            measureValue = new TradingMeasureValue(currentHost, this, value.isFloat,
+                key.getOperatorSequence());
+            this.measureValueRepository.saveNoChange(measureValue);
+          }
+        } else { // 上层指标且不是同类型的
+          MeasureHost parent = affectedHost;
+          while ((parent = parent.parent()) != null) {
+            if (parent.getHostType() == currentMHT) {
+
+              measureValue = doCalculate(parent, value.getIsFloat(), key.getOperatorSequence());
+              this.measureValueRepository.save(measureValue);
+              measureValue.setReady(true);
+              break;
+            }
           }
         }
       }

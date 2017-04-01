@@ -7,8 +7,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.stereotype.Component;
 
-import com.winsigns.investment.framework.model.OperatorEntity;
-
 /**
  * 指标宿主类型的基类
  * <p>
@@ -42,13 +40,6 @@ public abstract class MeasureHostType {
   }
 
   /**
-   * 获取该宿主类型关心的操作
-   * 
-   * @return 操作类型
-   */
-  public abstract Class<? extends OperatorEntity> getConcernedOperator();
-
-  /**
    * 获取该宿主类型使用的宿主仓库
    * 
    * @return 使用的宿主仓库
@@ -76,35 +67,20 @@ public abstract class MeasureHostType {
 
     ProcessorKey key = keyDeserializer.deserialize("", record.key().getBytes());
 
-    if (isConcernedOperator(key.getOperatorName())) {
-      for (Measure measure : measureRepository.getMeasures(this)) {
-        if (measure.isConcerned(key.getOperatorName())) {
-          // 遍历所有的宿主
-          for (MeasureHost measureHost : getRepository().findAll()) {
+    for (Measure measure : measureRepository.getMeasures(this)) {
 
-            if (key.getIsAffectedFloatMeasure()) {
-              send(key, measureHost, measure, true);
-            }
+      // 遍历所有的宿主
+      for (MeasureHost measureHost : getRepository().findAll()) {
 
-            if (key.getIsAffectedNomalMeasure()) {
-              send(key, measureHost, measure, false);
-            }
-          }
+        if (key.getIsAffectedFloatMeasure()) {
+          send(key, measureHost, measure, true);
+        }
+
+        if (key.getIsAffectedNomalMeasure()) {
+          send(key, measureHost, measure, false);
         }
       }
     }
-  }
-
-  /**
-   * @param type 操作类型
-   * @return 是否关心的操作
-   * @since 0.0.3
-   */
-  boolean isConcernedOperator(String type) {
-    if (getConcernedOperator() == null) {
-      return false;
-    }
-    return getConcernedOperator().getSimpleName().equals(type);
   }
 
   /**
