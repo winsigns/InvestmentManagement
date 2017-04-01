@@ -24,7 +24,7 @@ import com.winsigns.investment.framework.model.OperatorEntity;
  *
  */
 @Component
-public abstract class Measure {
+public abstract class Measure implements IMeasure {
 
   private Logger log = LoggerFactory.getLogger(Measure.class);
 
@@ -44,6 +44,7 @@ public abstract class Measure {
    * 
    * @return 指标的全名 类型.名字
    */
+  @Override
   public String getFullName() {
     return this.getSupportedHostType().getName() + "." + this.getName();
   }
@@ -53,6 +54,7 @@ public abstract class Measure {
    * 
    * @return 指标名
    */
+  @Override
   public String getName() {
     return this.getClass().getSimpleName();
   }
