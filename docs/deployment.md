@@ -1,6 +1,6 @@
 # 持续集成系统部署文档
 
-按照[版本管理及持续集成设计](https://github.com/winsigns/InvestmentManagement/blob/master/docs/continuous-integration.md)的方案，进行持续集成系统的部署及开发。部署使用docker-compose完成。
+按照[版本管理及持续集成设计](./continuous-integration.md)的方案，进行持续集成系统的部署及开发。部署使用docker-compose完成。
 
 ## 系统要求
 
