@@ -1,5 +1,7 @@
 package com.winsigns.investment.fundService.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winsigns.investment.framework.model.AbstractEntity;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.springframework.hateoas.core.Relation;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winsigns.investment.framework.model.AbstractEntity;
 
 import lombok.Getter;
 import lombok.Setter;
