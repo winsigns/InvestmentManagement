@@ -74,9 +74,9 @@ public class FundController {
   }
 
   /**
-   * 获取基金、产品账户树
+   * 获取基金、产品账户、投资组合的关系树
    * 
-   * @param investManagerId
+   * @param investManagerId 根据投资经理过滤
    * @return
    */
   @GetMapping(path = "/tree")
