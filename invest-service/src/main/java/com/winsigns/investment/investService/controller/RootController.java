@@ -2,7 +2,6 @@ package com.winsigns.investment.investService.controller;
 
 import static org.springframework.hateoas.MediaTypes.HAL_JSON_VALUE;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -26,7 +25,7 @@ public class RootController {
       produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
   public HttpEntity<HALResponse<String>> root() {
     HALResponse<String> halResponse = new HALResponse<String>("");
-    halResponse.add(linkTo(methodOn((InstructionController.class)).readInstructions())
+    halResponse.add(linkTo((InstructionController.class))
         .withRel(Instruction.class.getAnnotation(Relation.class).collectionRelation()));
     return new ResponseEntity<>(halResponse, HttpStatus.OK);
   }
