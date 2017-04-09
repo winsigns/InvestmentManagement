@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.fundService.command.CreateExternalCapitalAccountCommand;
@@ -31,15 +32,19 @@ import com.winsigns.investment.fundService.command.UpdateFundCommand;
 import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
 import com.winsigns.investment.fundService.model.Fund;
 import com.winsigns.investment.fundService.model.FundAccount;
+import com.winsigns.investment.fundService.model.InvestManager;
 import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResource;
 import com.winsigns.investment.fundService.resource.ExternalCapitalAccountResourceAssembler;
 import com.winsigns.investment.fundService.resource.FundAccountResource;
 import com.winsigns.investment.fundService.resource.FundAccountResourceAssembler;
 import com.winsigns.investment.fundService.resource.FundResource;
 import com.winsigns.investment.fundService.resource.FundResourceAssembler;
+import com.winsigns.investment.fundService.resource.FundTreeResource;
+import com.winsigns.investment.fundService.resource.FundTreeResourceAssembler;
 import com.winsigns.investment.fundService.service.ExternalCapitalAccountService;
 import com.winsigns.investment.fundService.service.FundAccountService;
 import com.winsigns.investment.fundService.service.FundService;
+import com.winsigns.investment.fundService.service.InvestManagerService;
 
 @RestController
 @RequestMapping(path = "/funds",
@@ -56,12 +61,46 @@ public class FundController {
   @Autowired
   private ExternalCapitalAccountService externalCapitalAccountService;
 
+  @Autowired
+  InvestManagerService investManagerService;
+
   // 获取所有基金
   @GetMapping
   public Resources<FundResource> readFunds() {
     Link link = linkTo(FundController.class).withSelfRel();
+    Link treeLink = linkTo(methodOn(FundController.class).readFundTree(null)).withRel("tree");
     return new Resources<FundResource>(
-        new FundResourceAssembler().toResources(fundService.findAllFunds()), link);
+        new FundResourceAssembler().toResources(fundService.findFunds()), link, treeLink);
+  }
+
+  /**
+   * 获取基金、产品账户、投资组合的关系树
+   * 
+   * @param investManagerId 根据投资经理过滤
+   * @return
+   */
+  @GetMapping(path = "/tree")
+  public Resources<FundTreeResource> readFundTree(
+      @RequestParam(required = false) Long investManagerId) {
+    Link link = linkTo(methodOn(FundController.class).readFundTree(null)).withSelfRel();
+    if (investManagerId != null) {
+      InvestManager investManager = investManagerService.findOne(investManagerId);
+      if (investManager == null) {
+        // TODO 出错信息
+        return null;
+
+      } else {
+        List<Fund> funds = fundService.findFunds(investManager);
+        return new Resources<FundTreeResource>(
+            new FundTreeResourceAssembler(investManager).toResources(funds), link);
+      }
+
+    } else {
+      List<Fund> funds = fundService.findFunds();
+      return new Resources<FundTreeResource>(new FundTreeResourceAssembler(null).toResources(funds),
+          link);
+    }
+
   }
 
   // 创建一个新的基金
