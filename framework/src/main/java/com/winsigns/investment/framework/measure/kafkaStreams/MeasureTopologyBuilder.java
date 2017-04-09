@@ -12,15 +12,30 @@ import org.apache.kafka.streams.processor.TopologyBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.SmartInitializingSingleton;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
-import com.winsigns.investment.framework.measure.ICalculateFactor;
+import com.winsigns.investment.framework.measure.IMeasure;
 import com.winsigns.investment.framework.measure.Measure;
-import com.winsigns.investment.framework.measure.MeasureRegistry;
-
-import lombok.Setter;
+import com.winsigns.investment.framework.measure.MeasureRepository;
+import com.winsigns.investment.framework.measure.ProcessorKey;
+import com.winsigns.investment.framework.measure.ProcessorValue;
+import com.winsigns.investment.framework.model.OperatorEntity;
 
 /*
- * 实现该接口是为了其start一定在其他measure的bean构建完成之后运行 详见DefaultListableBeanFactory.preInstantiateSingletons
+ * 
+ */
+
+/**
+ * 指标的拓扑构建
+ * <p>
+ * 实现SmartInitializingSingleton是为了其start一定在其他measure的bean构建完成之后运行
+ * 详见DefaultListableBeanFactory.preInstantiateSingletons
+ * 
+ * @author yimingjin
+ * @since 0.0.2
  */
 public class MeasureTopologyBuilder implements SmartInitializingSingleton {
 
@@ -30,8 +45,14 @@ public class MeasureTopologyBuilder implements SmartInitializingSingleton {
 
   private Logger log = LoggerFactory.getLogger(MeasureTopologyBuilder.class);
 
-  @Setter
+  @Autowired
   KafkaStreamsConfiguration kafkaStreamsConfiguration;
+
+  @Autowired
+  MeasureRepository measureRepository;
+
+  @Autowired
+  KafkaTemplate<ProcessorKey, ProcessorValue> kafkaTemplate;
 
   private KafkaStreams streams;
 
@@ -40,14 +61,13 @@ public class MeasureTopologyBuilder implements SmartInitializingSingleton {
   private Serde<ProcessorValue> valueSerde;
 
   public void start() {
-    final JsonSerializer<ProcessorKey> keyDeserializer =
-        JsonSerializer.defaultConfig(ProcessorKey.class);
-    final JsonSerializer<ProcessorKey> keySerializer =
-        JsonSerializer.defaultConfig(ProcessorKey.class);
-    final JsonSerializer<ProcessorValue> valueDeserializer =
-        JsonSerializer.defaultConfig(ProcessorValue.class);
-    final JsonSerializer<ProcessorValue> valueSerializer =
-        JsonSerializer.defaultConfig(ProcessorValue.class);
+
+    final JsonSerializer<ProcessorKey> keySerializer = new JsonSerializer<ProcessorKey>();
+    final JsonSerializer<ProcessorValue> valueSerializer = new JsonSerializer<ProcessorValue>();
+    final JsonDeserializer<ProcessorKey> keyDeserializer =
+        new JsonDeserializer<ProcessorKey>(ProcessorKey.class);
+    final JsonDeserializer<ProcessorValue> valueDeserializer =
+        new JsonDeserializer<ProcessorValue>(ProcessorValue.class);
 
     keySerde = new ProcessorKeyJsonSerde();
     valueSerde = new ProcessorValueJsonSerde();
@@ -62,46 +82,68 @@ public class MeasureTopologyBuilder implements SmartInitializingSingleton {
 
     TopologyBuilder builder = new TopologyBuilder();
 
-    // 先进行重排列
-    MeasureRegistry.getInstance().rehash();
+    log.info("creating measure topo:");
 
     HashSet<String> sourceNames = new HashSet<String>();
-    for (Measure measure : MeasureRegistry.getInstance().getMeasures()) {
-      // 遍历指标的所有计算因子，如果不在本地指标库，则为source
-      List<ICalculateFactor> factors = measure.getCalculateFactors();
-      if (factors != null) {
-        for (ICalculateFactor facotr : factors) {
-          if (!MeasureRegistry.getInstance().contains(facotr.getName())) {
+    for (Measure thisMeasure : measureRepository.getMeasures()) {
+      // 查看指标是否关心某个操作，如果关心，则为其增加一个源
+      if (thisMeasure.getConcernedOperator() != null) {
+        List<String> operatorTopics = new ArrayList<String>();
+        for (Class<? extends OperatorEntity> operator : thisMeasure.getConcernedOperator()) {
+          if (operator != null) {
+            log.info(String.format("addSource: name:%s, source:%s",
+                thisMeasure.getFullName() + SOURCE_SUFFIX,
+                thisMeasure.getFullName() + "." + operator.getSimpleName()));
+            operatorTopics.add(thisMeasure.getFullName() + "." + operator.getSimpleName());
+
+          }
+          builder.addSource(thisMeasure.getFullName() + SOURCE_SUFFIX, keyDeserializer,
+              valueDeserializer, operatorTopics.toArray(new String[operatorTopics.size()]));
+          sourceNames.add(thisMeasure.getFullName());
+        }
+      }
+
+      // 遍历指标的所有依赖，如果不在本地指标库，则为source
+      List<IMeasure> measures = thisMeasure.getDependentMeasure();
+      if (measures != null) {
+        for (IMeasure measure : measures) {
+          if (!measureRepository.contains(measure.getFullName())) {
             // 如果没有创建过该source，则创建
-            if (!sourceNames.contains(facotr.getName())) {
+            if (!sourceNames.contains(measure.getFullName())) {
               log.info(String.format("addSource: name:%s, source:%s",
-                  facotr.getName() + SOURCE_SUFFIX, facotr.getName()));
-              builder.addSource(facotr.getName() + SOURCE_SUFFIX, keyDeserializer,
-                  valueDeserializer, facotr.getName());
-              sourceNames.add(facotr.getName());
+                  measure.getFullName() + SOURCE_SUFFIX, measure.getFullName()));
+              builder.addSource(measure.getFullName() + SOURCE_SUFFIX, keyDeserializer,
+                  valueDeserializer, measure.getFullName());
+              sourceNames.add(measure.getFullName());
             }
           }
         }
       }
 
-      // builder.addSource(measure.getName() + SOURCE_SUFFIX, keyDeserializer, valueDeserializer,
-      // getSourcesTopic(measure));
-
       // 为本地的指标建立process
-      String processorName = measure.getName() + PROCESS_SUFFIX;
-      String sinkName = measure.getName() + SINK_SUFFIX;
+      String processorName = thisMeasure.getFullName() + PROCESS_SUFFIX;
+      String sinkName = thisMeasure.getFullName() + SINK_SUFFIX;
       log.info(String.format("addProcessor: name:%s, deps:%s", processorName,
-          String.join(" / ", getRealDependencies(measure))));
-      builder.addProcessor(processorName, () -> new MeasureProcessor(measure),
-          getRealDependencies(measure));
+          String.join(" / ", getRealDependencies(thisMeasure))));
+      builder.addProcessor(processorName, () -> new MeasureProcessor(thisMeasure),
+          getRealDependencies(thisMeasure));
       log.info(String.format("addSink: name:%s, deps:%s", sinkName, processorName));
-      builder.addSink(sinkName, measure.getName(), keySerializer, valueSerializer, processorName);
+      builder.addSink(sinkName, thisMeasure.getFullName(), keySerializer, valueSerializer,
+          processorName);
     }
+
+    log.info("created measure topo:");
 
     streams = new KafkaStreams(builder, config);
 
     // 防止没有任何指标的时候，启动
     if (!builder.sourceTopics(kafkaStreamsConfiguration.getAppId()).isEmpty()) {
+
+      // TODO 这里要先检查kafka的主题是否存在，不然会启动失败
+      // 先往各个topic中发送一条消息，创建主题
+      for (String topic : builder.sourceTopics(kafkaStreamsConfiguration.getAppId())) {
+        kafkaTemplate.send(topic, new ProcessorKey(null, ProcessorKey.INIT), new ProcessorValue());
+      }
       streams.start();
     }
 
@@ -111,23 +153,36 @@ public class MeasureTopologyBuilder implements SmartInitializingSingleton {
     streams.close();
   }
 
+  /**
+   * 为构建拓扑扩展指标的依赖
+   * 
+   * @param measure
+   * @return
+   */
   private String[] getRealDependencies(Measure measure) {
-    ArrayList<String> calculateFactors = new ArrayList<String>();
+    ArrayList<String> dependencies = new ArrayList<String>();
 
-    List<ICalculateFactor> factors = measure.getCalculateFactors();
-    if (factors != null) {
-      factors.forEach(factor -> {
-        if (!MeasureRegistry.getInstance().contains(factor.getName())) {
-          calculateFactors.add(factor.getName() + SOURCE_SUFFIX);
+    List<IMeasure> measures = measure.getDependentMeasure();
+    if (measures != null) {
+      measures.forEach(dependentMeasure -> {
+        if (!measureRepository.contains(dependentMeasure.getFullName())) {
+          dependencies.add(dependentMeasure.getFullName() + SOURCE_SUFFIX);
         } else {
-          calculateFactors.add(factor.getName() + PROCESS_SUFFIX);
+          dependencies.add(dependentMeasure.getFullName() + PROCESS_SUFFIX);
         }
       });
     }
 
-    return calculateFactors.toArray(new String[calculateFactors.size()]);
+    if (measure.getConcernedOperator() != null) {
+      dependencies.add(measure.getFullName() + SOURCE_SUFFIX);
+    }
+
+    return dependencies.toArray(new String[dependencies.size()]);
   }
 
+  /**
+   * 当全部bean构建完成之后，由spring统一执行，保证所有指标已经被注册
+   */
   @Override
   public void afterSingletonsInstantiated() {
     start();

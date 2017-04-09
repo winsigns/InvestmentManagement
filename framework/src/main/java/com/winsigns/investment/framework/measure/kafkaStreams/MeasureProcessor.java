@@ -6,8 +6,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.winsigns.investment.framework.measure.Measure;
-import com.winsigns.investment.framework.measure.TradingMeasureValue;
+import com.winsigns.investment.framework.measure.MeasureValue;
+import com.winsigns.investment.framework.measure.ProcessorKey;
+import com.winsigns.investment.framework.measure.ProcessorValue;
 
+/**
+ * 指标处理器
+ * 
+ * @author yimingjin
+ * @since 0.0.2
+ */
 public class MeasureProcessor extends AbstractProcessor<ProcessorKey, ProcessorValue> {
 
   private Logger log = LoggerFactory.getLogger(MeasureProcessor.class);
@@ -26,22 +34,16 @@ public class MeasureProcessor extends AbstractProcessor<ProcessorKey, ProcessorV
   @Override
   public void process(ProcessorKey key, ProcessorValue value) {
 
+    // 如果是初始化，则略过
+    if (key.getOperatorName().equals(ProcessorKey.INIT)) {
+      return;
+    }
+
     try {
-      /*
-       * 如果该指标关心该操作
-       */
-      if ((key.getOperatorName() != null && measure.isConcerned(key.getOperatorName()))
-          || key.getOperatorName() == null) {
+      MeasureValue measureValue = measure.calculate(key, value);
 
-        TradingMeasureValue tradingMeasureValue =
-            measure.calculate(key.getMeasureHostId(), key.isFloat(), key.getVersion());
-
-        if (tradingMeasureValue != null) {
-          key.setMeasureHostId(tradingMeasureValue.getMeasureHost().getId());
-          key.setOperatorName(null); // 一旦计算过一次之后，就不再关心了
-          value.setName(tradingMeasureValue.getMeasure().getName());
-          context().forward(key, value);
-        }
+      if (measureValue != null) {
+        context().forward(key, value);
       }
     } catch (Exception e) {
       log.error(e.getMessage());
