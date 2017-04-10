@@ -3,18 +3,23 @@
  * date:2017-03-20
  * remark:web-socket通信
  */
-import socketutil from "./socketurl"
-import SockJS from "SockJS" 
-import Stomp from "Stomp" 
+import SockJS from "SockJS"
+import Stomp from "Stomp"
+let stompClient = null;
 export default  {
-    connect: function(arr,callBack){
+    /**
+    * url:web socket连接地址
+    * topicKeyArr：订阅地址
+    * callBack：有消息来时的回调函数
+    */
+    connect: function(url,topicKeyArr, callBack){
         try
             {
-                var socket= new SockJS('/endpointWisely');
-                socketutil.stompClient = Stomp.over(socket);
-                socketutil.stompClient.connect({}, function(frame) {
-                    for(var i=0;i<=arr.length-1;i++){
-                        socketutil.stompClient.subscribe('/topic/'+arr[i].measureInfo["ECACashPoolMHT.ECACashMeasure"].key, callBack);
+                var socket= new SockJS(url);
+                stompClient = Stomp.over(socket);
+                stompClient.connect({}, function(frame) {
+                    for(var i=0;i<=topicKeyArr.length-1;i++){
+                        stompClient.subscribe(topicKeyArr[i].topicKey, callBack);
                     }
                 });
             }
@@ -23,19 +28,8 @@ export default  {
         }
     },
     disconnect: function() {
-        if (socketutil.stompClient != null) {
-            socketutil.stompClient.disconnect();
+        if (stompClient != null) {
+            stompClient.disconnect();
         }
-    },
-    subscribe: function (socket_con) {
-        socketutil.stompClient = Stomp.over(socket_con);
-        socketutil.stompClient.connect({}, function(frame) {
-            socketutil.stompClient.subscribe('/ECACashPoolMHT/1/ECACashMeasure', function(respnose){
-                console.log(JSON.parse(respnose.body).responseMessage);
-            });
-        });
-    },
-    sendName: function(sendMsg) {
-        socketutil.stompClient.send("/security", {}, JSON.stringify(sendMsg));
     }
 }
