@@ -7,6 +7,13 @@ import org.springframework.context.annotation.Configuration;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 返回kafkastream的相关配置
+ * 
+ * @author yimingjin
+ * @since 0.0.2
+ *
+ */
 public class KafkaStreamsConfiguration {
 
   @Value("${kafka.stream.appid}")
@@ -24,8 +31,12 @@ public class KafkaStreamsConfiguration {
   @Setter
   String zookeeperHost;
 
-  /*
+  /**
+   * 
    * 创建一个为kafkastreams使用的配置bean
+   * 
+   * @author yimingjin
+   *
    */
   @Configuration
   protected static class KafkaConfiguration {
@@ -36,16 +47,19 @@ public class KafkaStreamsConfiguration {
     }
   }
 
-  /*
+  /**
+   * 
    * 创建一个MeasureTopologyBuilder拓扑的Bean
+   * 
+   * @author yimingjin
+   *
    */
   @Configuration
-  protected static class BuilderConfiguraton {
+  protected static class BuilderConfiguration {
     @Bean
     MeasureTopologyBuilder measureTopologyBuilder(
         KafkaStreamsConfiguration kafkaStreamsConfiguration) {
       MeasureTopologyBuilder measureTopologyBuilder = new MeasureTopologyBuilder();
-      measureTopologyBuilder.setKafkaStreamsConfiguration(kafkaStreamsConfiguration);
       return measureTopologyBuilder;
     }
   }
