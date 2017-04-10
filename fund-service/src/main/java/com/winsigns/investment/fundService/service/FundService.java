@@ -1,19 +1,30 @@
 package com.winsigns.investment.fundService.service;
 
-import com.winsigns.investment.fundService.command.CreateFundCommand;
-import com.winsigns.investment.fundService.command.UpdateFundCommand;
-import com.winsigns.investment.fundService.model.Fund;
-import com.winsigns.investment.fundService.repository.FundRepository;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.winsigns.investment.fundService.command.CreateFundCommand;
+import com.winsigns.investment.fundService.command.UpdateFundCommand;
+import com.winsigns.investment.fundService.model.Fund;
+import com.winsigns.investment.fundService.model.FundAccount;
+import com.winsigns.investment.fundService.model.InvestManager;
+import com.winsigns.investment.fundService.repository.FundAccountRepository;
+import com.winsigns.investment.fundService.repository.FundRepository;
 
 @Service
 public class FundService {
 
   @Autowired
   FundRepository fundRepository;
+
+  @Autowired
+  FundAccountRepository fundAccountRepository;
 
   public Fund addFund(CreateFundCommand fund) {
 
@@ -47,12 +58,34 @@ public class FundService {
     fundRepository.delete(fundId);
   }
 
-  public Collection<Fund> findAllFunds() {
-    return fundRepository.findAll();
-
-  }
 
   public Fund findOne(Long fundId) {
     return fundRepository.findOne(fundId);
   }
+
+  public List<Fund> findFunds() {
+    return fundRepository.findAll();
+  }
+
+  public List<Fund> findFunds(InvestManager investManager) {
+
+
+    if (investManager == null) {
+      return null;
+    }
+
+    List<FundAccount> fundAccounts = fundAccountRepository.findByInvestManager(investManager);
+
+    Set<Fund> funds = new HashSet<Fund>();
+
+    for (FundAccount fundAccount : fundAccounts) {
+
+      funds.add(fundAccount.getFund());
+
+    }
+
+    return new ArrayList<Fund>(funds);
+  }
+
+
 }

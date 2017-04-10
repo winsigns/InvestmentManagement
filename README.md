@@ -82,4 +82,12 @@ service discovery with Eureka
 
 /eca-cash-pools GET
 /eca-cash-pools/{ecaCashPoolId} GET/PUT/DELETE
+
+/instructions GET/POST/DELETE
+/instructions/{instructionId} GET/PUT/DELETE
+/instructions/{instructionId}/commit POST
+
+/instruction-baskets POST
+/instruction-baskets/{instructionBasketId} GET/POST/DELETE
+
 ```

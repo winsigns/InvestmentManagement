@@ -3,24 +3,24 @@
     <el-row></el-row>
         <el-row>       
             <el-col :offset="5" :span="10">    
-                <div class="line_bottom"><h1>创设基金产品</h1> </div>     
+                <div class="line_bottom"><h1>{{ $t("message.fund.create") }}</h1> </div>
                 <div class="line_margin_top"></div>
             </el-col>     
         </el-row>
         <el-row>    
             <el-col :offset="7" :span="6">
                 <el-form :label-position="right" :rules="rules" ref="fundProp" label-width="100px" :model="fundProp">
-                    <el-form-item label="基金代码" prop="code">                    
+                    <el-form-item :label=" $t('message.fund.code') " prop="code">
                         <el-input v-model="fundProp.code"></el-input>
                     </el-form-item>
-                    <el-form-item label="基金名称" prop="name">
+                    <el-form-item :label=" $t('message.fund.name') " prop="name">
                         <el-input v-model="fundProp.name"></el-input>
                     </el-form-item>
-                    <el-form-item label="基金简称" prop="shortName">
+                    <el-form-item :label=" $t('message.fund.shortname') " prop="shortName">
                         <el-input v-model="fundProp.shortName"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button style="width:150px" type="success" @click="submitForm('fundProp')">创设</el-button>
+                        <el-button style="width:150px" type="success" @click="submitForm('fundProp')">{{ $t("message.global.create") }}</el-button>
                     </el-form-item>
                 </el-form>   
             </el-col>	                     
@@ -28,8 +28,6 @@
     </div>
 </template>
 <script>
-    import api from '../../config/api.json'
-    import ds from '../../common/ds'
     export default{
         data(){
             return {
@@ -39,28 +37,23 @@
                     shortName: ''
                 },
                 rules:{
-                    code: [
-                        { required: true, message: '请输入基金代码', trigger: 'blur' }                    
-                    ],
-                    name: [
-                        { required: true, message: '请输入基金名称', trigger: 'blur' }                    
-                    ],
-                    shortName: [
-                        { required: true, message: '请输入基金简称', trigger: 'blur' }                    
-                    ]            
+                    code: [{ required: true, message: '', trigger: 'blur' }],
+                    name: [{ required: true, message: '', trigger: 'blur' }],
+                    shortName: [{ required: true, message: '', trigger: 'blur' }]
                 }
             }
         },
         mounted: function(){
-            //  console.log(this.rules.code)
-            //  this.rules.code = [{ required: true, message: this.$t('message.fundCreate.fd_crt_setsuccess'), trigger: 'blur' }];
+            this.rules.code[0].message=this.$t('message.fund.req_code');
+            this.rules.name[0].message=this.$t('message.fund.req_name');
+            this.rules.shortName[0].message=this.$t('message.fund.req_shortname');
         },
         methods: {
            submitForm(fundProp) {
                 var _self = this;            
                 _self.$refs[fundProp].validate((valid) => {
                     if (valid) {
-                         ds.POST({url:api.fundURL.funds,
+                        _self.winsigns.ds.POST({url:_self.winsigns.api.fundURL.funds,
                                 data:{
                                     code:_self.fundProp.code, 
                                     name:_self.fundProp.name,
@@ -68,12 +61,12 @@
                         function(data){                                          
                             //创设成功
                             _self.$message({
-                                message: _self.$t('message.fundCreate.fd_crt_setsuccess'),
+                                message: _self.$t('message.global.success'),
                                 type: 'success'
                             });
                             _self.$router.push({ name: 'Fund', params: {}})
                         },function(data){
-                            _self.$message.error(_self.$t('message.fundCreate.fd_crt_error'));
+                            _self.$message.error(_self.$t('message.global.fail'));
                         }) 
                     } else {                        
                         return false;

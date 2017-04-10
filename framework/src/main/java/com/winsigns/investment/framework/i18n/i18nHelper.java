@@ -14,6 +14,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
  * 在资源目录下增加i18n目录,其下增加资源文件用来国际化
  * 
  * @author Created by colin on 2017/2/23.
+ * @since 0.0.1
  */
 
 public class i18nHelper {

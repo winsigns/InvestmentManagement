@@ -2,7 +2,7 @@
 	<div id="app">
 		<top-menu></top-menu>
 		<el-row>			
-			<el-col :offset="2" :span="18">
+			<el-col :offset="2" :span="20">
 				<router-view></router-view>
 			</el-col>			
 		</el-row>	
@@ -18,9 +18,6 @@
 		components: {
 			"top-menu":TopMmenu,
 			"main-footer": MainFooter
-		},
-		created: function () {
-			this.$router.replace('/Fund')
 		}
 	}
 </script>

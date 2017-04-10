@@ -5,13 +5,23 @@ import java.util.Map;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serializer;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
+import com.winsigns.investment.framework.measure.ProcessorValue;
+
+/**
+ * 为kafkastream使用的value-serde
+ * 
+ * @author yimingjin
+ * @since 0.0.2
+ *
+ */
 public class ProcessorValueJsonSerde implements Serde<ProcessorValue> {
 
-  private JsonSerializer<ProcessorValue> serializer =
-      ProcessorKeyJsonSerializer.defaultConfig(ProcessorValue.class);
-  private JsonSerializer<ProcessorValue> deserializer =
-      ProcessorKeyJsonSerializer.defaultConfig(ProcessorValue.class);
+  private JsonSerializer<ProcessorValue> serializer = new JsonSerializer<ProcessorValue>();
+  private JsonDeserializer<ProcessorValue> deserializer =
+      new JsonDeserializer<ProcessorValue>(ProcessorValue.class);
 
   @Override
   public void configure(Map<String, ?> configs, boolean isKey) {}

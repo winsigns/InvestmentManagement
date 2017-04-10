@@ -3,8 +3,8 @@
         <el-row>        
             <div class="line_bottom">
                 <el-button type="text" class="float_right right_button"
-                @click="openDialog(row)">添加产品账户</el-button>
-                <h1>产品账户</h1>              
+                @click="openDialog(row)">{{ $t("message.fund.account_add") }}</el-button>
+                <h1>{{ $t("message.fund.account") }}</h1>
             </div>                
             <div class="line_margin_top"></div>            
         </el-row>
@@ -13,18 +13,17 @@
                 <el-table v-loading="loading" :data="fundAccontList" style="width: 100%" stripe>
                     <el-table-column sortable
                         prop="name"
-                        label="名称">
+                        :label=" $t('message.fund.account_name') ">
                     </el-table-column>   
-                    <el-table-column label="操作">
+                    <el-table-column :label=" $t('message.global.operation') ">
                         <template scope="scope">
                             <el-button
                             size="small"
-                            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                            @click="handleEdit(scope.$index, scope.row)">{{ $t("message.global.edit") }}</el-button>
                             <el-button
                             size="small"
                             type="danger"
-                            @click="handleDelete(scope.$index, scope.row)"
-                            >删除</el-button>                                                   
+                            @click="handleDelete(scope.$index, scope.row)">{{ $t("message.global.delete") }}</el-button>
                         </template>
                     </el-table-column>                 
                 </el-table>
@@ -33,20 +32,18 @@
 
         <el-dialog :title="dlg.dlgTitle" v-model="dlg.dlgVisible" size="tiny">
             <el-form :model="dlg">
-                <el-form-item label="产品账户名称" label-width="100px">
+                <el-form-item :label=" $t('message.fund.account_name') " label-width="100px">
                      <el-input v-model="dlg.dlgFundAccountName"></el-input>
                 </el-form-item>               
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dlg.dlgVisible=false">取 消</el-button>
-                <el-button @click="postFundAccount()">确 定</el-button>
+                <el-button @click="dlg.dlgVisible=false">{{ $t("message.global.cancel") }}</el-button>
+                <el-button @click="postFundAccount()">{{ $t("message.global.confirm") }}</el-button>
             </div>
         </el-dialog>        
     </div>
 </template>
 <script>
-    import api from '../../config/api.json'
-    import ds from '../../common/ds'
     export default{
         data(){
             return {
@@ -66,15 +63,15 @@
         },
         methods:{
             getFundAccounts: function(){
-                var _self = this;  
-                ds.GET({url:api.fundURL.funds + '/'+_self.$route.params.fundId+'/fund-accounts',
+                var _self = this;
+                _self.winsigns.ds.GET({url:_self.winsigns.api.fundURL.funds + '/'+_self.$route.params.fundId+'/fund-accounts',
                         data:{}},function(data){
                     _self.loading = false;
                     _self.fundAccontList = data._embedded?data._embedded["fund-accounts"]:[];                                                                    
                 })  
             },
             openDialog: function(){
-                this.dlg.dlgTitle = "添加产品账户";
+                this.dlg.dlgTitle = this.$t('message.fund.account_add'),
                 this.dlg.dlgVisible = true; 
                 this.dlg.dlgFundAccountId="";
                 this.dlg.dlgFundAccountName="";              
@@ -82,28 +79,28 @@
             postFundAccount: function(){
                 var _self = this;
                 if (_self.dlg.dlgFundAccountId==''){//新增
-                    ds.POST({url:api.fundURL.funds + '/'+_self.$route.params.fundId+'/fund-accounts',
+                    _self.winsigns.ds.POST({url:_self.winsigns.api.fundURL.funds + '/'+_self.$route.params.fundId+'/fund-accounts',
                         data:{"name":_self.dlg.dlgFundAccountName}},function(data){
                         _self.getFundAccounts(); 
                         _self.dlg.dlgVisible= false;
                         _self.dlg.dlgFundAccountId="";
                         _self.dlg.dlgFundAccountName="";
                         _self.$message({
-                            message: '创建产品帐号成功',
+                            message: _self.$t('message.global.success'),
                             type: 'success'
                         });                                             
                     },function(err){
                         
                     })  
                 } else{//修改
-                    ds.PUT({url:api.fundURL.fundaccounts+'/'+_self.dlg.dlgFundAccountId,
+                    _self.winsigns.ds.PUT({url:_self.winsigns.api.fundURL.fundaccounts+'/'+_self.dlg.dlgFundAccountId,
                         data:{"name":_self.dlg.dlgFundAccountName}},function(data){
                         _self.getFundAccounts(); 
                         _self.dlg.dlgVisible= false;
                         _self.dlg.dlgFundAccountName="";
                         _self.dlg.dlgFundAccountId="";
                         _self.$message({
-                            message: '修改产品帐号成功',
+                            message: _self.$t('message.global.success'),
                             type: 'success'
                         });                                             
                     },function(err){
@@ -116,29 +113,30 @@
                 this.dlg.dlgFundAccountId = row.id,
                 this.dlg.dlgFundAccountName = row.name,
                 this.dlg.dlgVisible = true;
-                this.dlg.dlgTitle = "编辑产品账户";
+                this.dlg.dlgTitle = this.$t('message.fund.account_edit')
             },
             handleDelete(index, row) {
                 var _self = this;
-                _self.$confirm('您正在删除产品账户 是否继续?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
+                _self.$confirm(_self.$t('message.fund.account_delete_confim'),
+                    _self.$t('message.global.prompt'), {
+                        confirmButtonText: _self.$t('message.global.confirm'),
+                        cancelButtonText: _self.$t('message.global.cancel'),
                         type: 'warning'
                     }).then(() => {
-                        ds.DELETE({url:api.fundURL.fundaccounts+'/'+row.id,
+                    _self.winsigns.ds.DELETE({url:_self.winsigns.api.fundURL.fundaccounts+'/'+row.id,
                         data:{}},function(data){
                             _self.getFundAccounts();                 
                             _self.$message({
-                                message: '删除产品帐号成功',
+                                message: _self.$t('message.global.success'),
                                 type: 'success'
                             });                                             
                         },function(err){
                             
                         })                   
                     }).catch(() => {
-                        this.$message({
+                     _self.$message({
                             type: 'info',
-                            message: '已取消删除'
+                            message: _self.$t('message.global.cancel_delete')
                         });          
                     });                
             }

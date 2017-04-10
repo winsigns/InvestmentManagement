@@ -6,13 +6,13 @@ import org.springframework.web.socket.config.annotation.AbstractWebSocketMessage
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
+
 @Configuration
 @EnableWebSocketMessageBroker//1
 public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer{
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/endpointWisely").withSockJS(); //2
-        registry.addEndpoint("/endpointChat").withSockJS(); //2
+        registry.addEndpoint("/endpointWisely").withSockJS();
     }
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {

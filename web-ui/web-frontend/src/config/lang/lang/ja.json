@@ -1,9 +1,0 @@
-{
-    "fund":{
-        "fd_title":"すべての基金製品",   
-        "fd_life_cycle":"創設期"  
-    },
-    "fundCreate":{
-        "fd_crt_setsuccess":"基金を創設する成功"
-    }
-}
