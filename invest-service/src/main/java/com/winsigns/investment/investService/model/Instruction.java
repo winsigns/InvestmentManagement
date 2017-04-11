@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.model.AbstractEntity;
 import com.winsigns.investment.investService.constant.CurrencyCode;
 import com.winsigns.investment.investService.constant.InstructionStatus;
-import com.winsigns.investment.investService.constant.InstructionType;
+import com.winsigns.investment.investService.constant.InstructionVolumeType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -57,10 +57,10 @@ public class Instruction extends AbstractEntity {
   @Setter
   private String investService;
 
-  // 投资方向
+  // 投资类型
   @Getter
   @Setter
-  private String investDirection;
+  private String investType;
 
   // 币种
   @Getter
@@ -77,7 +77,7 @@ public class Instruction extends AbstractEntity {
   @Getter
   @Setter
   @Enumerated(EnumType.STRING)
-  private InstructionType volumeType;
+  private InstructionVolumeType volumeType;
 
   // 指令数量
   @Getter

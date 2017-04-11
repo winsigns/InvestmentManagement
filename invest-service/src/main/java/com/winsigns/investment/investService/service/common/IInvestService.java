@@ -24,14 +24,22 @@ public interface IInvestService {
 
   /**
    * 
-   * @return 指令类型
+   * @return 投资类型
    */
-  Enum<?>[] getInstructionType();
+  IInvestType[] getInvestType();
+
+  /**
+   * 获取指定名字的投资类型
+   * 
+   * @param name 名字
+   * @return
+   */
+  IInvestType getInvestType(String name);
 
   /**
    * 提交指令
    * 
    * @param instruction
    */
-  void commitInstruction(Instruction instruction);
+  boolean commitInstruction(Instruction instruction);
 }
