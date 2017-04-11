@@ -7,7 +7,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 import com.winsigns.investment.framework.model.AbstractEntity;
-import com.winsigns.investment.tradeService.constant.InstructionType;
+import com.winsigns.investment.tradeService.constant.InstructionVolumeType;
 
 
 @Entity
@@ -33,7 +33,7 @@ public class Entrust extends AbstractEntity {
 
   // 数量类型
   @Enumerated(EnumType.STRING)
-  private InstructionType volumeType;
+  private InstructionVolumeType volumeType;
 
   // 指令数量
   private Double quantity;
@@ -89,11 +89,11 @@ public class Entrust extends AbstractEntity {
     this.costPrice = costPrice;
   }
 
-  public InstructionType getVolumeType() {
+  public InstructionVolumeType getVolumeType() {
     return volumeType;
   }
 
-  public void setVolumeType(InstructionType volumeType) {
+  public void setVolumeType(InstructionVolumeType volumeType) {
     this.volumeType = volumeType;
   }
 
