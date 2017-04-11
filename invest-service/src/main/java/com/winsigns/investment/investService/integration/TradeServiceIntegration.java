@@ -1,7 +1,5 @@
 package com.winsigns.investment.investService.integration;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +10,8 @@ import com.winsigns.investment.framework.integration.AbstractIntegration;
 import com.winsigns.investment.investService.command.CommitInstructionCommand;
 import com.winsigns.investment.investService.model.Instruction;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 与trade-service的交互
  * 
@@ -19,9 +19,8 @@ import com.winsigns.investment.investService.model.Instruction;
  *
  */
 @Component
+@Slf4j
 public class TradeServiceIntegration extends AbstractIntegration {
-
-  private Logger log = LoggerFactory.getLogger(TradeServiceIntegration.class);
 
   private String tradeURL = "/trades";
 

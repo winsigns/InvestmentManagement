@@ -1,7 +1,5 @@
 package com.winsigns.investment.investService.integration;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -11,6 +9,8 @@ import com.jayway.jsonpath.PathNotFoundException;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.winsigns.investment.framework.integration.AbstractIntegration;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 与fund-service的交互
  * 
@@ -18,9 +18,8 @@ import com.winsigns.investment.framework.integration.AbstractIntegration;
  *
  */
 @Component
+@Slf4j
 public class FundServiceIntegration extends AbstractIntegration {
-
-  private Logger log = LoggerFactory.getLogger(FundServiceIntegration.class);
 
   private String portfolioURL = "/portfolios/%d";
 
