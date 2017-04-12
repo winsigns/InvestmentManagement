@@ -73,7 +73,7 @@ public class InstructionBasketService {
       newBasket.setBasketName(i18nHelper.i18n(DEFAULT_BASKET_NAME));
     }
 
-    return addInstructionOfBasket(newBasket, command);
+    return newBasket;
   }
 
   /**
@@ -83,12 +83,13 @@ public class InstructionBasketService {
    * @param command
    * @return
    */
-  protected InstructionBasket addInstructionOfBasket(InstructionBasket thisBasket,
+  protected Instruction addInstructionOfBasket(InstructionBasket thisBasket,
       CreateInstructionCommand command) {
     Assert.notNull(thisBasket);
     Instruction newInstruction = instructionService.addInstruction(command);
     thisBasket.addInstruction(newInstruction);
-    return basketRepository.save(thisBasket);
+    basketRepository.save(thisBasket);
+    return newInstruction;
   }
 
   /**
@@ -96,9 +97,9 @@ public class InstructionBasketService {
    * 
    * @param basketId 篮子号
    * @param instructionCommand
-   * @return 返回这个篮子
+   * @return 返回这条新增加的指令
    */
-  public InstructionBasket addInstructionOfBasket(Long basketId,
+  public Instruction addInstructionOfBasket(Long basketId,
       CreateInstructionCommand instructionCommand) {
 
     Assert.notNull(basketId);
