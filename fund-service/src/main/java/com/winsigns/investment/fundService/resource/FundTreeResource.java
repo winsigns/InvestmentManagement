@@ -3,40 +3,27 @@ package com.winsigns.investment.fundService.resource;
 import org.springframework.hateoas.core.Relation;
 
 import com.winsigns.investment.framework.hal.HALResponse;
+import com.winsigns.investment.framework.model.Item;
 import com.winsigns.investment.fundService.model.Fund;
 import com.winsigns.investment.fundService.model.FundAccount;
 import com.winsigns.investment.fundService.model.Portfolio;
 import com.winsigns.investment.fundService.resource.FundTreeResource.FundItem;
 
-import lombok.Getter;
-
 public class FundTreeResource extends HALResponse<FundItem> {
-  @Getter
-  protected String shortName;
-
   public FundTreeResource(FundItem content) {
     super(content);
   }
 
   public FundTreeResource(Fund fund) {
     this(new FundItem(fund));
-    this.shortName = fund.getShortName();
-  }
-
-  static protected class Item {
-    @Getter
-    protected Long id;
-
-    @Getter
-    protected String name;
   }
 
   @Relation(value = "fund", collectionRelation = "funds")
   static protected class FundItem extends Item {
 
     public FundItem(Fund fund) {
-      this.id = fund.getId();
-      this.name = fund.getName();
+      this.value = fund.getId();
+      this.label = fund.getShortName();
     }
 
   }
@@ -44,8 +31,8 @@ public class FundTreeResource extends HALResponse<FundItem> {
   static protected class FundAccountItem extends Item {
 
     public FundAccountItem(FundAccount fundAccount) {
-      this.id = fundAccount.getId();
-      this.name = fundAccount.getName();
+      this.value = fundAccount.getId();
+      this.label = fundAccount.getName();
     }
 
   }
@@ -65,8 +52,8 @@ public class FundTreeResource extends HALResponse<FundItem> {
   static protected class PortfolioItem extends Item {
 
     public PortfolioItem(Portfolio portfolio) {
-      this.id = portfolio.getId();
-      this.name = portfolio.getName();
+      this.value = portfolio.getId();
+      this.label = portfolio.getName();
     }
 
   }
