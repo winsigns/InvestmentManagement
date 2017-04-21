@@ -12,7 +12,14 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
-
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: trade-service  
+    producer:
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      
 eureka:
   instance:
     preferIpAddress: true

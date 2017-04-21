@@ -4,9 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.winsigns.investment.tradeService.command.CommitInstructionCommand;
+import com.winsigns.investment.tradeService.constant.CurrencyCode;
+import com.winsigns.investment.tradeService.model.Done;
 import com.winsigns.investment.tradeService.service.common.AbstractTradeService;
+import com.winsigns.investment.tradeService.service.common.IPriceType;
 import com.winsigns.investment.tradeService.service.common.ITradeType;
-import com.winsigns.investment.tradeService.service.common.MockInvestService;
+import com.winsigns.investment.tradeService.service.common.RemoteCapitalService;
+import com.winsigns.investment.tradeService.service.common.RemoteInvestService;
+import com.winsigns.investment.tradeService.service.common.RemotePositionService;
+import com.winsigns.investment.tradeService.service.common.Resource;
 import com.winsigns.investment.tradeService.service.stock.StockInvestService;
 import com.winsigns.investment.tradeService.service.stock.StockTradeType;
 
@@ -17,8 +23,18 @@ public class SSEAStockTradeService extends AbstractTradeService {
   StockInvestService investService;
 
   @Override
-  public MockInvestService getSupportedInvestService() {
+  public RemoteInvestService getSupportedInvestService() {
     return investService;
+  }
+
+  @Override
+  public RemoteCapitalService getUsedCapitalService() {
+    return new RemoteCapitalService("CHINA_GENERAL_CAPITAL", CurrencyCode.CNY);
+  }
+
+  @Override
+  public RemotePositionService getUsedPositionService() {
+    return new RemotePositionService("SSEAStockPositionService");
   }
 
   @Override
@@ -33,60 +49,60 @@ public class SSEAStockTradeService extends AbstractTradeService {
   }
 
   @Override
-  public Double calculateRequiredCapital(CommitInstructionCommand command) {
-    Double requiredCapital = 0.0;
-
-    if (this.getTradeType(command.getInvestType()).equals(StockTradeType.BUY)) {
-      Double costPrice = 0.0;
-      // TODO 不限价需要获取价格
-      if (command.getCostPrice() == null) {
-
-      } else {
-        costPrice = command.getCostPrice();
-      }
-
-      switch (command.getVolumeType()) {
-        case AmountType:
-          requiredCapital = command.getAmount();
-          break;
-        case FixedType:
-          requiredCapital = costPrice * command.getQuantity();
-          break;
-        default:
-          requiredCapital = costPrice * command.getQuantity();
-          break;
-      }
-    }
-    return requiredCapital;
+  public IPriceType[] getPriceType() {
+    return SSEAStockPriceType.values();
   }
 
   @Override
-  public Long calculateRequiredPosition(CommitInstructionCommand command) {
-    Long requiredPosition = 0L;
+  public Resource calculateRequiredResource(CommitInstructionCommand command) {
 
-    if (this.getTradeType(command.getInvestType()).equals(StockTradeType.SELL)) {
+    Resource resouce = new Resource(this);
 
-      Double costPrice = 0.0;
-      // TODO 不限价需要获取价格
-      if (command.getCostPrice() == null) {
+    Double costPrice = 0.0;
+    // TODO 不限价需要获取价格
+    if (command.getCostPrice() == null) {
 
-      } else {
-        costPrice = command.getCostPrice();
-      }
+    } else {
+      costPrice = command.getCostPrice();
+    }
+
+    if (this.getTradeType(command.getInvestType()).equals(StockTradeType.BUY)) {
+
+      Double capital = 0.0;
 
       switch (command.getVolumeType()) {
         case AmountType:
-          requiredPosition = (long) Math.floor(command.getAmount() / costPrice);
+          capital = command.getAmount();
           break;
         case FixedType:
-          requiredPosition = command.getQuantity();
+          capital = costPrice * command.getQuantity();
           break;
         default:
-          requiredPosition = command.getQuantity();
+          capital = costPrice * command.getQuantity();
           break;
       }
+      resouce.setAppliedCapital(capital);
+    } else {
+      Long position;
+      switch (command.getVolumeType()) {
+        case AmountType:
+          position = (long) Math.floor(command.getAmount() / costPrice);
+          break;
+        case FixedType:
+          position = command.getQuantity();
+          break;
+        default:
+          position = command.getQuantity();
+          break;
+      }
+      resouce.setAppliedPosition(position);
     }
-
-    return requiredPosition;
+    return resouce;
   }
+
+  @Override
+  public void done(Done thisDone) {
+
+  }
+
 }

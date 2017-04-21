@@ -2,9 +2,14 @@ package com.winsigns.investment.tradeService.service.common;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.winsigns.investment.framework.i18n.i18nHelper;
+import com.winsigns.investment.tradeService.command.CommitInstructionCommand;
+import com.winsigns.investment.tradeService.integration.InventoryServiceIntegration;
+import com.winsigns.investment.tradeService.model.VirtualDone;
+import com.winsigns.investment.tradeService.repository.VirtualDoneRepository;
 
 
 /**
@@ -16,9 +21,18 @@ import com.winsigns.investment.framework.i18n.i18nHelper;
 @Service
 public abstract class AbstractTradeService implements ITradeService {
 
+  @Autowired
+  TradeServiceManager tradeServiceManager;
+
+  @Autowired
+  protected InventoryServiceIntegration inventoryService;
+
+  @Autowired
+  protected VirtualDoneRepository virtualDoneRepository;
+
   @PostConstruct
-  private void register() {
-    TradeServiceManager.getInstance().register(this);
+  public void register() {
+    tradeServiceManager.register(this);
   }
 
   @Override
@@ -39,6 +53,35 @@ public abstract class AbstractTradeService implements ITradeService {
       }
     }
     return null;
+  }
+
+  @Override
+  public IPriceType getPriceType(String name) {
+    for (IPriceType type : this.getPriceType()) {
+      if (type.name().equals(name)) {
+        return type;
+      }
+    }
+    return null;
+  }
+
+  @Override
+  public void virtualDone(CommitInstructionCommand command, Resource resource) {
+
+    VirtualDone thisDone = new VirtualDone();
+
+    thisDone.setInstructionId(command.getInstructionId());
+    thisDone.setPortfolioId(command.getPortfolioId());
+    thisDone.setSecurityId(command.getSecurityId());
+    thisDone.setInvestService(command.getInvestService());
+    thisDone.setInvestType(command.getInvestType());
+    thisDone.setCurrency(command.getCurrency());
+    thisDone.setTradeService(this.getName());
+    thisDone.setAppliedCapital(resource.getAppliedCapital());
+    thisDone.setAppliedPosition(resource.getAppliedPosition());
+    thisDone.applyResource();
+
+    virtualDoneRepository.save(thisDone);
   }
 
 }

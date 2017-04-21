@@ -2,7 +2,7 @@ package com.winsigns.investment.tradeService.service.stock;
 
 import org.springframework.stereotype.Component;
 
-import com.winsigns.investment.tradeService.service.common.MockInvestService;
+import com.winsigns.investment.tradeService.service.common.RemoteInvestService;
 
 /**
  * 模拟的现货投资服务
@@ -11,7 +11,7 @@ import com.winsigns.investment.tradeService.service.common.MockInvestService;
  *
  */
 @Component
-public class StockInvestService extends MockInvestService {
+public class StockInvestService extends RemoteInvestService {
 
   @Override
   public StockInvestType[] getInstructionType() {

@@ -37,7 +37,7 @@ public class TradeController {
   public Resources<TradeServiceResource> getAvailableTradeServices() {
     Link link = linkTo(TradeController.class).withSelfRel();
     return new Resources<TradeServiceResource>(new TradeServiceResourceAssembler()
-        .toResources(tradeServiceManager.getAvailableTradeServices(null)), link);
+        .toResources(tradeServiceManager.getAvailableTradeServices(null, null)), link);
   }
 
   /**

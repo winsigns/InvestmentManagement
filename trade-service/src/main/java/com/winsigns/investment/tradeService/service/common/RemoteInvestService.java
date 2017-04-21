@@ -6,7 +6,7 @@ package com.winsigns.investment.tradeService.service.common;
  * @author yimingjin
  *
  */
-public abstract class MockInvestService {
+public abstract class RemoteInvestService {
 
   public String getName() {
     return this.getClass().getSimpleName();

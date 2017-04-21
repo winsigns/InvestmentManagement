@@ -1,15 +1,17 @@
 package com.winsigns.investment.tradeService.service.common;
 
-import java.util.List;
+import javax.persistence.Embeddable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * 交易类型的接口
+ * 价格类型的接口
  * 
  * @author yimingjin
  *
  */
-public interface ITradeType {
-
+@Embeddable
+public interface IPriceType {
   /**
    * 该类型的名字
    * 
@@ -22,12 +24,6 @@ public interface ITradeType {
    * 
    * @return
    */
+  @JsonIgnore
   public String i18n();
-
-  /**
-   * 获取支持该交易类型的投资服务类型
-   * 
-   * @return
-   */
-  public List<IMockInvestType> getSupportInvestTypes();
 }
