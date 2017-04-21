@@ -4,11 +4,12 @@
 package com.winsigns.investment.inventoryService.model;
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -18,7 +19,7 @@ import org.springframework.hateoas.core.Relation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.measure.MeasureHost;
 import com.winsigns.investment.framework.measure.MeasureHostType;
-import com.winsigns.investment.framework.spring.SpringManager;
+import com.winsigns.investment.inventoryService.constant.CurrencyCode;
 import com.winsigns.investment.inventoryService.measure.ECACashPoolMHT;
 
 import lombok.Getter;
@@ -41,24 +42,37 @@ public class ECACashPool extends MeasureHost {
    */
   @Getter
   @Setter
-  private Currency currency;
+  @Enumerated(EnumType.STRING)
+  private CurrencyCode currency;
 
   /*
    * 未分配资金
    */
   @Getter
   @Setter
-  private Double unassignedCapital;
+  private Double unassignedCapital = 0.0;
 
-  @Override
-  public MeasureHostType getType() {
-    return SpringManager.getApplicationContext().getBean(ECACashPoolMHT.class);
+  /*
+   * 该池子分配出去的资金
+   */
+  @Getter
+  @JsonIgnore
+  @OneToMany(mappedBy = "cashPool", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<CapitalDetail> details = new ArrayList<CapitalDetail>();
+
+  public Double changeUnassignedCapital(Double unassignedCapital) {
+    this.unassignedCapital += unassignedCapital;
+    return this.unassignedCapital;
   }
 
-  @OneToMany(mappedBy = "ecaCashPool", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JsonIgnore
-  @Getter
-  @Setter
-  private List<ECACashSerial> ecaCashSerials = new ArrayList<ECACashSerial>();
+  @Override
+  protected Class<? extends MeasureHostType> defineType() {
+    return ECACashPoolMHT.class;
+  }
+
+  @Override
+  public MeasureHost parent() {
+    return null;
+  }
 
 }

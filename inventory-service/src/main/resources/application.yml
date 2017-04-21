@@ -22,7 +22,14 @@ spring:
       min-idle: 0 
       max-active: 8 
       max-wait: -1 
-     
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: inventroy-service  
+    producer:
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+          
 eureka:
   instance:
     preferIpAddress: true

@@ -1,18 +1,22 @@
 package com.winsigns.investment.inventoryService.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
+import com.winsigns.investment.inventoryService.capital.common.CapitalServiceManager;
+import com.winsigns.investment.inventoryService.command.CreateCapitalDetailCommand;
 import com.winsigns.investment.inventoryService.command.CreateCashPoolCommand;
-import com.winsigns.investment.inventoryService.command.TransferAccountCommand;
+import com.winsigns.investment.inventoryService.command.TransferBetweenECAAndECACommand;
+import com.winsigns.investment.inventoryService.command.TransferBetweenFAAndECACommand;
+import com.winsigns.investment.inventoryService.model.CapitalDetail;
 import com.winsigns.investment.inventoryService.model.ECACashPool;
-import com.winsigns.investment.inventoryService.model.ECACashSerial;
+import com.winsigns.investment.inventoryService.model.ECAToECACapitalSerial;
+import com.winsigns.investment.inventoryService.model.ECAToFACapitalSerial;
+import com.winsigns.investment.inventoryService.model.FundAccountCapitalPool;
 import com.winsigns.investment.inventoryService.repository.ECACashPoolRepository;
 
 @Service
@@ -21,31 +25,51 @@ public class ECACashPoolService {
   @Autowired
   ECACashPoolRepository ecaCashPoolRepository;
 
-  /*
+  @Autowired
+  CapitalDetailService capitalDetailService;
+
+  @Autowired
+  CapitalSerialService capitalSerialService;
+
+  @Autowired
+  CapitalServiceManager capitalServiceManager;
+
+  /**
    * 查找特定外部资金账户下的所有资金池
+   * 
+   * @param externalCapitalAccountId
+   * @return
    */
   public Collection<ECACashPool> findByExternalCapitalAccountId(Long externalCapitalAccountId) {
 
     return ecaCashPoolRepository.findByExternalCapitalAccountId(externalCapitalAccountId);
   }
 
-  /*
+  /**
    * 查找所有的资金池
+   * 
+   * @return
    */
   public Collection<ECACashPool> findAll() {
     return ecaCashPoolRepository.findAll();
   }
 
-  /*
+  /**
    * 查找特定的资金池
+   * 
+   * @param eCACashPoolId
+   * @return
    */
-  public ECACashPool findOne(Long eCACashPoolId) {
+  public ECACashPool findECACashPool(Long eCACashPoolId) {
 
     return ecaCashPoolRepository.findOne(eCACashPoolId);
   }
 
-  /*
+  /**
    * 添加一个资金池
+   * 
+   * @param createCashPoolCommand
+   * @return
    */
   public ECACashPool addECACashPool(CreateCashPoolCommand createCashPoolCommand) {
     ECACashPool ecaCashPool = ecaCashPoolRepository.findByExternalCapitalAccountIdAndCurrency(
@@ -66,21 +90,22 @@ public class ECACashPoolService {
    * 从资金封闭圈外增加资金
    */
   @Transactional
-  public ECACashPool transferTo(Long ecaCashPoolId, TransferAccountCommand transferAccountCommand) {
+  public ECACashPool transferTo(Long ecaCashPoolId,
+      TransferBetweenFAAndECACommand transferAccountCommand) {
 
     ECACashPool ecaCashPool = ecaCashPoolRepository.findOne(ecaCashPoolId);
 
-    if (ecaCashPool == null)
-      return null;
-
-    ecaCashPool.setUnassignedCapital(
-        ecaCashPool.getUnassignedCapital() + transferAccountCommand.getChangedCapital());
-
-    ECACashSerial ecaCashSerial = new ECACashSerial();
-    ecaCashSerial.setEcaCashPool(ecaCashPool);
-    ecaCashSerial.setAssignedDate(new Date());
-    ecaCashSerial.setAssignedCash(Math.abs(transferAccountCommand.getChangedCapital()));
-    ecaCashSerial.operator(ecaCashPool, false);
+    // if (ecaCashPool == null)
+    // return null;
+    //
+    // ecaCashPool.setUnassignedCapital(
+    // ecaCashPool.getUnassignedCapital() + transferAccountCommand.getChangedCapital());
+    //
+    // ECACashSerial ecaCashSerial = new ECACashSerial();
+    // ecaCashSerial.setEcaCashPool(ecaCashPool);
+    // ecaCashSerial.setAssignedDate(new Date());
+    // ecaCashSerial.setAssignedCash(Math.abs(transferAccountCommand.getChangedCapital()));
+    // ecaCashSerial.operator();
 
     return ecaCashPoolRepository.save(ecaCashPool);
   }
@@ -90,63 +115,97 @@ public class ECACashPoolService {
    */
   @Transactional
   public ECACashPool transferFrom(Long ecaCashPoolId,
-      TransferAccountCommand transferAccountCommand) {
+      TransferBetweenFAAndECACommand transferAccountCommand) {
 
     ECACashPool ecaCashPool = ecaCashPoolRepository.findOne(ecaCashPoolId);
 
     if (ecaCashPool == null)
       return null;
 
-    ecaCashPool.setUnassignedCapital(
-        ecaCashPool.getUnassignedCapital() - transferAccountCommand.getChangedCapital());
-
-    ECACashSerial ecaCashSerial = new ECACashSerial();
-    ecaCashSerial.setEcaCashPool(ecaCashPool);
-    ecaCashSerial.setAssignedDate(new Date());
-    ecaCashSerial.setAssignedCash(-Math.abs(transferAccountCommand.getChangedCapital()));
-    ecaCashSerial.operator(ecaCashPool, false);
+    // ecaCashPool.setUnassignedCapital(
+    // ecaCashPool.getUnassignedCapital() - transferAccountCommand.getChangedCapital());
+    //
+    // ECACashSerial ecaCashSerial = new ECACashSerial();
+    // ecaCashSerial.setEcaCashPool(ecaCashPool);
+    // ecaCashSerial.setAssignedDate(new Date());
+    // ecaCashSerial.setAssignedCash(-Math.abs(transferAccountCommand.getChangedCapital()));
+    // ecaCashSerial.operator();
 
     return ecaCashPoolRepository.save(ecaCashPool);
   }
 
-  /*
-   * 两个资金池之间的互转
+  /**
+   * 两个外部资金账户资金池之间的互转
+   * 
+   * @param command
    */
-  public Collection<ECACashPool> allot(Long dstEcaCashPoolId, Long srcEcaCashPoolId,
-      Double changedCapital) {
+  public ECACashPool transferToECA(TransferBetweenECAAndECACommand command) {
+    Long srcECACashPoolId = command.getSrcECACashPoolId();
+    Long dstECACashPoolId = command.getDstECACashPoolId();
+    Double occurAmount = Math.floor(command.getOccurAmount());
+    Assert.notNull(srcECACashPoolId);
+    Assert.notNull(dstECACashPoolId);
 
-    List<ECACashPool> result = new ArrayList<ECACashPool>();
+    ECACashPool srcECACashPool = ecaCashPoolRepository.findOne(srcECACashPoolId);
+    Assert.notNull(srcECACashPool);
+    ECACashPool dstECACashPool = ecaCashPoolRepository.findOne(dstECACashPoolId);
+    Assert.notNull(dstECACashPool);
+    Assert.isTrue(srcECACashPool.getCurrency().equals(dstECACashPool.getCurrency()));
 
-    ECACashPool dstEcaCashPool = ecaCashPoolRepository.findOne(dstEcaCashPoolId);
+    srcECACashPool.changeUnassignedCapital(-occurAmount);
+    srcECACashPool = ecaCashPoolRepository.save(srcECACashPool);
 
-    if (dstEcaCashPool == null)
-      return null;
+    dstECACashPool.changeUnassignedCapital(occurAmount);
+    dstECACashPool = ecaCashPoolRepository.save(dstECACashPool);
 
-    dstEcaCashPool
-        .setUnassignedCapital(dstEcaCashPool.getUnassignedCapital() + Math.abs(changedCapital));
-    result.add(ecaCashPoolRepository.save(dstEcaCashPool));
+    capitalSerialService.addCapitalSerial(ECAToECACapitalSerial.class, srcECACashPoolId,
+        dstECACashPoolId, srcECACashPool.getCurrency(), occurAmount);
 
-    ECACashSerial dstECACashSerial = new ECACashSerial();
-    dstECACashSerial.setEcaCashPool(dstEcaCashPool);
-    dstECACashSerial.setAssignedDate(new Date());
-    dstECACashSerial.setAssignedCash(Math.abs(changedCapital));
-    dstECACashSerial.operator(dstEcaCashPool, false);
+    return srcECACashPool;
+  }
 
-    ECACashPool srcEcaCashPool = ecaCashPoolRepository.findOne(srcEcaCashPoolId);
-    if (srcEcaCashPool == null)
-      return null;
-    srcEcaCashPool
-        .setUnassignedCapital(srcEcaCashPool.getUnassignedCapital() - Math.abs(changedCapital));
+  /**
+   * 从外部资金账户分配资金到产品账户
+   * 
+   * @param command
+   * @return
+   */
+  @Transactional
+  public ECACashPool transferFromECAToFA(TransferBetweenFAAndECACommand command) {
 
-    result.add(ecaCashPoolRepository.save(srcEcaCashPool));
+    Long ecaCashPoolId = command.getEcaCashPoolId();
+    Long faCapitalPoolId = command.getFaCapitalPoolId();
+    Double occurAmount = Math.floor(command.getOccurAmount());
+    Assert.notNull(ecaCashPoolId);
+    Assert.notNull(faCapitalPoolId);
 
-    ECACashSerial srcECACashSerial = new ECACashSerial();
-    srcECACashSerial.setEcaCashPool(srcEcaCashPool);
-    srcECACashSerial.setAssignedDate(new Date());
-    srcECACashSerial.setAssignedCash(-Math.abs(changedCapital));
-    srcECACashSerial.operator(srcEcaCashPool, false);
+    FundAccountCapitalPool capitalPool =
+        capitalServiceManager.readFundAccountCapitalPool(faCapitalPoolId);
+    Assert.notNull(capitalPool);
 
-    return result;
+    ECACashPool ecaCashPool = this.findECACashPool(ecaCashPoolId);
+    Assert.notNull(ecaCashPool);
+
+    Assert.isTrue(capitalPool.getCurrency().equals(ecaCashPool.getCurrency()));
+
+    ecaCashPool.changeUnassignedCapital(-occurAmount);
+
+    CapitalDetail capitalDetail = capitalDetailService.readCapitalDetail(capitalPool, ecaCashPool);
+    if (capitalDetail == null) {
+      CreateCapitalDetailCommand crtCommand = new CreateCapitalDetailCommand();
+      crtCommand.setFaCapitalPoolId(faCapitalPoolId);
+      crtCommand.setEcaCashPoolId(ecaCashPoolId);
+      capitalDetail = capitalDetailService.addFundAccountCapitalDetail(crtCommand);
+    }
+    capitalDetail.changeCash(occurAmount);
+    capitalDetail.changeAvailableCapital(occurAmount);
+    capitalDetail.changeDesirableCapital(occurAmount);
+    capitalDetailService.save(capitalDetail);
+
+    capitalSerialService.addCapitalSerial(ECAToFACapitalSerial.class, ecaCashPoolId,
+        faCapitalPoolId, capitalPool.getCurrency(), occurAmount);
+
+    return ecaCashPool;
   }
 
 }

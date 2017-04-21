@@ -1,6 +1,9 @@
 package com.winsigns.investment.inventoryService.model;
 
+import static java.util.Arrays.asList;
+
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,8 +59,21 @@ public class ECACashSerial extends OperatorEntity {
   private Long linkedFASerialId;
 
   @Override
-  protected void doOperator(MeasureHost measureHost, boolean isFloat) {
+  protected List<MeasureHost> doOperator() {
+
     SpringManager.getApplicationContext().getBean(ECACashSerialRepository.class).save(this);
+
+    return asList(ecaCashPool);
+  }
+
+  @Override
+  public boolean isAffectedFloatMeasure() {
+    return true;
+  }
+
+  @Override
+  public boolean isAffectedNomalMeasure() {
+    return true;
   }
 
 
