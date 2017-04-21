@@ -4,24 +4,17 @@ import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
-import org.springframework.web.client.RestOperations;
 
 /**
- * 服务间调用的基类
- * 
- * <p>
- * 注入了LoadBalancerClient和RestOperations
+ * 通过服务发现与服务间进行交互
  * 
  * @author yimingjin
  * @since 0.0.1
  */
-public abstract class AbstractIntegration {
+public abstract class AbstractIntegration extends BaseIntegration {
 
   @Autowired
   LoadBalancerClient loadBalancer;
-
-  @Autowired
-  protected RestOperations restTemplate;
 
   protected URI getIntegrationURI() {
     return loadBalancer.choose(getIntegrationName()).getUri();
@@ -33,4 +26,5 @@ public abstract class AbstractIntegration {
    * @return 交互的服务名
    */
   public abstract String getIntegrationName();
+
 }
