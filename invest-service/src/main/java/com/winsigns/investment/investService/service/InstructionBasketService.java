@@ -73,7 +73,7 @@ public class InstructionBasketService {
       newBasket.setBasketName(i18nHelper.i18n(DEFAULT_BASKET_NAME));
     }
 
-    return newBasket;
+    return basketRepository.save(newBasket);
   }
 
   /**

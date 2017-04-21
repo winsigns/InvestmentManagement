@@ -20,6 +20,7 @@ CREATE TABLE instruction
 	create_date DATE,
 	create_time TIMESTAMP,
 	instruction_basket_id BIGINT,
+	trader_id BIGINT,
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 

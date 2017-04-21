@@ -41,7 +41,7 @@ public class InstructionResource extends HALResponse<Instruction> {
   protected final List<Item> supportedOperator = new ArrayList<Item>();
 
   @Getter
-  protected final List<Item> supprotedInvestService = new ArrayList<Item>();
+  protected final List<Item> supportedInvestService = new ArrayList<Item>();
 
   @Getter
   protected final List<Item> supportedCurrencies = new ArrayList<Item>();
@@ -102,7 +102,7 @@ public class InstructionResource extends HALResponse<Instruction> {
         .getServicesInfo().entrySet()) {
       IInvestType[] types = info.getValue();
       for (int i = 0; i < types.length; ++i) {
-        this.supprotedInvestService.add(new Item(info.getKey().getName() + "." + types[i].name(),
+        this.supportedInvestService.add(new Item(info.getKey().getName() + "." + types[i].name(),
             info.getKey().getSimpleName() + "-" + types[i].i18n()));
       }
     }

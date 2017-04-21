@@ -25,6 +25,9 @@ public enum InstructionMessageCode {
   // 投资类型不能为空
   INVEST_TYPE_CANNOT_NULL,
 
+  // 数量类型不匹配
+  INSTRUCTION_VOLUME_TYPE_NOT_SUPPORT,
+
   // 指令操作不支持
   INSTRUCTION_OPERATOR_NOT_SUPPORT,
 

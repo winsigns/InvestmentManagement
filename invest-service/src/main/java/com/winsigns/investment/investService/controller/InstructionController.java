@@ -48,14 +48,16 @@ public class InstructionController {
    * @return
    */
   @GetMapping
-  public Resources<InstructionResource> readInstructions(@RequestParam Long investManagerId,
+  public Resources<InstructionResource> readInstructions(
+      @RequestParam(required = false) Long investManagerId,
+      @RequestParam(required = false) Long traderId,
       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") Date beginDate,
       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") Date endDate) {
     Link link = linkTo(InstructionController.class).withSelfRel();
     Link deleteLink =
         linkTo(methodOn((InstructionController.class)).deleteInstructions(null)).withRel("deletes");
-    Collection<Instruction> instructions =
-        instructionService.findNormalInstructionByCondition(investManagerId, beginDate, endDate);
+    Collection<Instruction> instructions = instructionService
+        .findNormalInstructionByCondition(investManagerId, traderId, beginDate, endDate);
     return new Resources<InstructionResource>(
         new InstructionResourceAssembler().toResources(instructions), link, deleteLink);
   }

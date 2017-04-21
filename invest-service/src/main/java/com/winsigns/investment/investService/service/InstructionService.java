@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -16,6 +15,7 @@ import com.winsigns.investment.investService.constant.InstructionMessageCode;
 import com.winsigns.investment.investService.constant.InstructionMessageType;
 import com.winsigns.investment.investService.constant.InstructionOperatorType;
 import com.winsigns.investment.investService.constant.InstructionStatus;
+import com.winsigns.investment.investService.constant.InstructionVolumeType;
 import com.winsigns.investment.investService.integration.FundServiceIntegration;
 import com.winsigns.investment.investService.model.Instruction;
 import com.winsigns.investment.investService.model.InstructionMessage;
@@ -120,9 +120,15 @@ public class InstructionService {
   }
 
   protected void check(Instruction thisInstruction) {
-    instructionMessageRepository.deleteByInstruction(thisInstruction);
+    // instructionMessageRepository.deleteByInstruction(thisInstruction);
+    if (!thisInstruction.getMessages().isEmpty()) {
+      instructionMessageRepository.delete(thisInstruction.getMessages());
+      thisInstruction.getMessages().clear();
+    }
     checkPortfolio(thisInstruction);
     checkSecurityAndDirection(thisInstruction);
+    checkVolumeType(thisInstruction);
+    // return instructionRepository.save(thisInstruction);
   }
 
   /**
@@ -169,6 +175,19 @@ public class InstructionService {
     if (thisInstruction.getInvestType() == null) {
       thisInstruction.addInstructionMessage(new InstructionMessage(thisInstruction, "investType",
           InstructionMessageType.ERROR, InstructionMessageCode.INVEST_TYPE_CANNOT_NULL));
+    }
+  }
+
+  /**
+   * 检查数量类型是否匹配
+   * 
+   * @param thisInstruction
+   */
+  protected void checkVolumeType(Instruction thisInstruction) {
+    if (!InstructionVolumeType.contains(thisInstruction.getVolumeType())) {
+      thisInstruction.addInstructionMessage(
+          new InstructionMessage(thisInstruction, "volumeType", InstructionMessageType.ERROR,
+              InstructionMessageCode.INSTRUCTION_VOLUME_TYPE_NOT_SUPPORT));
     }
   }
 
@@ -220,18 +239,26 @@ public class InstructionService {
    * @return
    */
   public Collection<Instruction> findNormalInstructionByCondition(Long investManagerId,
-      Date beginDate, Date endDate) {
-
-    Assert.notNull(investManagerId);
+      Long traderId, Date beginDate, Date endDate) {
     if (beginDate == null) {
       beginDate = new Date();
     }
     if (endDate == null) {
       endDate = new Date();
     }
-    return instructionRepository
-        .findByInvestManagerIdAndCreateDateBetweenAndExecutionStatusNotAndInstructionBasketIsNull(
-            investManagerId, beginDate, endDate, InstructionStatus.DELETED, sortByCreateTime());
+    if (investManagerId != null) {
+      return instructionRepository
+          .findByInvestManagerIdAndCreateDateBetweenAndExecutionStatusNotAndInstructionBasketIsNullOrderByCreateTimeDesc(
+              investManagerId, beginDate, endDate, InstructionStatus.DELETED);
+    } else if (traderId != null) {
+      return instructionRepository
+          .findByTraderIdAndCreateDateBetweenAndExecutionStatusNotAndInstructionBasketIsNullOrderByCreateTimeDesc(
+              traderId, beginDate, endDate, InstructionStatus.DELETED);
+    } else {
+      return instructionRepository
+          .findByCreateDateBetweenAndExecutionStatusNotAndInstructionBasketIsNullOrderByCreateTimeDesc(
+              beginDate, endDate, InstructionStatus.DELETED);
+    }
   }
 
   /**
@@ -241,17 +268,9 @@ public class InstructionService {
    * @return
    */
   public Collection<Instruction> findDeletedInstructionByCondition(Long investManagerId) {
-    return instructionRepository.findByInvestManagerIdAndExecutionStatusAndInstructionBasketIsNull(
-        investManagerId, InstructionStatus.DELETED, sortByCreateTime());
-  }
-
-  /**
-   * 默认的排序方式
-   * 
-   * @return
-   */
-  private Sort sortByCreateTime() {
-    return new Sort(Sort.Direction.DESC, "createTime");
+    return instructionRepository
+        .findByInvestManagerIdAndExecutionStatusAndInstructionBasketIsNullOrderByCreateTimeDesc(
+            investManagerId, InstructionStatus.DELETED);
   }
 
   /**
