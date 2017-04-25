@@ -10,6 +10,18 @@ import lombok.Data;
 @Data
 public class ResponseResourceApplication {
 
+  @Data
+  public static class Header {
+
+    Boolean result = true;
+
+    String code;
+
+    String message;
+  }
+
+  private Header header;
+
   private Long virtualDoneId;
 
   private Long applicationFormId;

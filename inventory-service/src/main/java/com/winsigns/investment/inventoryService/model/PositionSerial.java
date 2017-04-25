@@ -1,10 +1,15 @@
 package com.winsigns.investment.inventoryService.model;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.springframework.hateoas.core.Relation;
 
@@ -40,5 +45,9 @@ public class PositionSerial extends AbstractEntity {
   @Getter
   @Setter
   protected Long occurPosition = 0L;
+
+  @Getter
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date occurTime = new Timestamp(System.currentTimeMillis());
 
 }

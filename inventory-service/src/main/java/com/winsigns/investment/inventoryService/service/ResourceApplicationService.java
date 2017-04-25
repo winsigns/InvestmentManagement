@@ -86,10 +86,7 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
   CapitalServiceManager capitalServiceManager;
 
   @Autowired
-  KafkaTemplate<Boolean, ResponseResourceApplication> trueTemplate;
-
-  @Autowired
-  KafkaTemplate<Boolean, String> falseTemplate;
+  KafkaTemplate<Boolean, ResponseResourceApplication> resourceTemplate;
 
   @Autowired
   ResourceApplicationFormRepository resourceApplicationFormRepository;
@@ -106,6 +103,7 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
   public void apply(ApplyResourceCommand applyInventoryCommand) {
 
     ResourceApplicationForm form = new ResourceApplicationForm();
+    form.setVirtualDoneId(applyInventoryCommand.getVirtualDoneId());
     form.setPortfolioId(applyInventoryCommand.getPortfolioId());
     form.setSecurityId(applyInventoryCommand.getSecurityId());
     form.setCurrency(applyInventoryCommand.getCurrency());
@@ -185,6 +183,8 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
    */
   public void processForm(ResourceApplicationForm form) {
 
+    ResponseResourceApplication application = new ResponseResourceApplication();
+
     PlatformTransactionManager platformTransactionManager =
         SpringManager.getApplicationContext().getBean(PlatformTransactionManager.class);
 
@@ -213,23 +213,19 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
               form.getCurrency(), form.getAppliedCapital());
       platformTransactionManager.commit(status);
 
-      ResponseResourceApplication application = new ResponseResourceApplication();
       application.setVirtualDoneId(form.getVirtualDoneId());
       application.setApplicationFormId(form.getId());
       application.setPositionSerials(positionSerials);
       application.setCapitalSerials(capitalSerials);
 
-      trueTemplate.send(applyTopic, true, application);
-
-    } catch (ResourceApplicationExcepiton e) {
-
-      platformTransactionManager.rollback(status);
-      falseTemplate.send(applyTopic, false, e.getMessage());
+      resourceTemplate.send(applyTopic, true, application);
 
     } catch (Exception e) {
-
       platformTransactionManager.rollback(status);
-      falseTemplate.send(applyTopic, false, e.getMessage());
+      application.getHeader().setResult(false);
+      application.getHeader().setMessage(e.getMessage());
+      application.getHeader().setCode(e.getMessage());
+      resourceTemplate.send(applyTopic, false, application);
 
     } finally {
       resourceApplicationFormRepository.save(form);

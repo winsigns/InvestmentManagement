@@ -91,6 +91,7 @@ CREATE TABLE position_serial
 	external_trade_account_id BIGINT,
 	position_type VARCHAR(64),
 	occur_position BIGINT,
+	occur_time TIMESTAMP,
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 
