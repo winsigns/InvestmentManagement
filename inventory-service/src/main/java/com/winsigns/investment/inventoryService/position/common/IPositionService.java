@@ -1,7 +1,10 @@
 package com.winsigns.investment.inventoryService.position.common;
 
+import java.util.List;
+
 import com.winsigns.investment.framework.service.IService;
 import com.winsigns.investment.inventoryService.exception.ResourceApplicationExcepiton;
+import com.winsigns.investment.inventoryService.model.PositionSerial;
 
 /**
  * 持仓服务的接口
@@ -19,7 +22,8 @@ public interface IPositionService extends IService {
    * @param type
    * @param quantity
    * @return
+   * @throws ResourceApplicationExcepiton
    */
-  void apply(Long portfolioId, Long securityId, String type, Long quantity)
+  List<PositionSerial> apply(Long portfolioId, Long securityId, String type, Long appliedPosition)
       throws ResourceApplicationExcepiton;
 }

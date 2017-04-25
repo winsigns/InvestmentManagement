@@ -14,6 +14,18 @@ import lombok.Getter;
 @DiscriminatorValue("stock-position")
 public class StockPosition extends Position {
 
+  // 浮动持仓量
+  @Getter
+  protected Long floatPositionQuantity = 0L;
+
+  // 浮动可卖持仓量
+  @Getter
+  protected Long floatCanSellPositionQuantity = 0L;
+
+  // 浮动权益持仓量
+  @Getter
+  protected Long floatEquityPositionQuantity = 0L;
+
   // 持仓量
   @Getter
   protected Long positionQuantity = 0L;
@@ -27,6 +39,39 @@ public class StockPosition extends Position {
   protected Long equityPositionQuantity = 0L;
 
   /**
+   * 修改浮动持仓量
+   * 
+   * @param positionQuantity
+   * @return
+   */
+  public Long changeFloatPositionQuantity(Long floatPositionQuantity) {
+    this.floatPositionQuantity += floatPositionQuantity;
+    return this.floatPositionQuantity;
+  }
+
+  /**
+   * 修改浮动可卖持仓量
+   * 
+   * @param positionQuantity
+   * @return
+   */
+  public Long changeFloatCanSellPositionQuantity(Long floatCanSellPositionQuantity) {
+    this.floatCanSellPositionQuantity += floatCanSellPositionQuantity;
+    return this.floatCanSellPositionQuantity;
+  }
+
+  /**
+   * 浮动权益持仓量
+   * 
+   * @param positionQuantity
+   * @return
+   */
+  public Long changeFloatEquityPositionQuantity(Long floatEquityPositionQuantity) {
+    this.floatEquityPositionQuantity += floatEquityPositionQuantity;
+    return this.floatEquityPositionQuantity;
+  }
+
+  /**
    * 修改持仓量
    * 
    * @param positionQuantity
@@ -38,7 +83,7 @@ public class StockPosition extends Position {
   }
 
   /**
-   * 修改持仓量
+   * 修改可卖持仓量
    * 
    * @param positionQuantity
    * @return
@@ -49,7 +94,7 @@ public class StockPosition extends Position {
   }
 
   /**
-   * 修改持仓量
+   * 修改权益持仓量
    * 
    * @param positionQuantity
    * @return

@@ -2,12 +2,66 @@ package com.winsigns.investment.inventoryService.model;
 
 import java.util.Date;
 
-import com.winsigns.investment.inventoryService.command.ApplyResourceCommand;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
+import org.springframework.hateoas.core.Relation;
+
+import com.winsigns.investment.framework.model.AbstractEntity;
+import com.winsigns.investment.inventoryService.constant.CurrencyCode;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class ResourceApplicationForm extends ApplyResourceCommand implements Cloneable {
+@Entity
+@Relation(value = "resource-form", collectionRelation = "resource-forms")
+public class ResourceApplicationForm extends AbstractEntity implements Cloneable {
+
+  // 虚拟成交编号
+  @Getter
+  @Setter
+  private Long virtualDoneId;
+
+  // 投资组合
+  @Getter
+  @Setter
+  private Long portfolioId;
+
+  // 投资标的
+  @Getter
+  @Setter
+  private Long securityId;
+
+  // 币种
+  @Getter
+  @Setter
+  private CurrencyCode currency;
+
+  // 资金服务
+  @Getter
+  @Setter
+  private String capitalService;
+
+  // 申请的资金
+  @Getter
+  @Setter
+  private Double appliedCapital = 0.0;
+
+  // 持仓服务
+  @Getter
+  @Setter
+  private String positionService;
+
+  // 申请的持仓
+  @Getter
+  @Setter
+  private Long appliedPosition = 0L;
+
+  // 操作序号
+  @Getter
+  @Setter
+  private String operatorSequence;
 
   // 申请时间
   @Getter
@@ -23,6 +77,7 @@ public class ResourceApplicationForm extends ApplyResourceCommand implements Clo
 
   @Getter
   @Setter
+  @Enumerated(EnumType.STRING)
   ApplyStatus status = ApplyStatus.INIT;
 
   public ResourceApplicationForm clone() {

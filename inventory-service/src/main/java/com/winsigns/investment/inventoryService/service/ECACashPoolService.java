@@ -175,7 +175,7 @@ public class ECACashPoolService {
 
     Long ecaCashPoolId = command.getEcaCashPoolId();
     Long faCapitalPoolId = command.getFaCapitalPoolId();
-    Double occurAmount = Math.floor(command.getOccurAmount());
+    Double occurAmount = Math.abs(command.getOccurAmount());
     Assert.notNull(ecaCashPoolId);
     Assert.notNull(faCapitalPoolId);
 

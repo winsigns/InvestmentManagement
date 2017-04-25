@@ -1,10 +1,13 @@
 package com.winsigns.investment.inventoryService.capital.common;
 
+import java.util.List;
+
 import com.winsigns.investment.framework.service.IService;
 import com.winsigns.investment.inventoryService.command.CreateFundAccountCapitalPoolCommand;
 import com.winsigns.investment.inventoryService.constant.CurrencyCode;
 import com.winsigns.investment.inventoryService.constant.ExternalCapitalAccountType;
 import com.winsigns.investment.inventoryService.exception.ResourceApplicationExcepiton;
+import com.winsigns.investment.inventoryService.model.CapitalSerial;
 import com.winsigns.investment.inventoryService.model.FundAccountCapitalPool;
 
 /**
@@ -37,9 +40,11 @@ public interface ICapitalService extends IService {
    * @param fundAccountId 产品账户
    * @param currency 币种
    * @param appliedCapital 申请的资金
+   * @return
    * @throws ResourceApplicationExcepiton
+   * 
    */
-  void apply(Long fundAccountId, CurrencyCode currency, Double appliedCapital)
+  public List<CapitalSerial> apply(Long fundAccountId, CurrencyCode currency, Double appliedCapital)
       throws ResourceApplicationExcepiton;
 
 

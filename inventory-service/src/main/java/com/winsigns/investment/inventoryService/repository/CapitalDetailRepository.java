@@ -16,6 +16,9 @@ public interface CapitalDetailRepository extends JpaRepository<CapitalDetail, Lo
 
   public List<CapitalDetail> findByCapitalPoolOrderByCash(FundAccountCapitalPool capitalPool);
 
+  public List<CapitalDetail> findByCapitalPoolOrderByAvailableCapitalDesc(
+      FundAccountCapitalPool capitalPool);
+
 }
 
 
