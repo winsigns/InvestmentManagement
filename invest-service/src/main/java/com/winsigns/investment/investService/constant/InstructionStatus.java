@@ -73,6 +73,12 @@ public enum InstructionStatus {
     return supportOperatorTypes.get(this);
   }
 
+  /**
+   * 判断该状态是否支持该操作
+   * 
+   * @param thisType 指定的操作类型
+   * @return
+   */
   public boolean isSupportedOperator(InstructionOperatorType thisType) {
     for (InstructionOperatorType type : getSupportedOperator()) {
       if (type.equals(thisType)) {

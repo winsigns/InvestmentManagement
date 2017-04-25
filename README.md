@@ -88,6 +88,6 @@ service discovery with Eureka
 /instructions/{instructionId}/commit POST
 
 /instruction-baskets POST
-/instruction-baskets/{instructionBasketId} GET/POST/DELETE
+/instruction-baskets/{instructionBasketId} GET/POST/PUT/DELETE
 
 ```

@@ -56,7 +56,7 @@ configurations {
 }
 
 dependencies {
-    compile('com.winsigns:investment-framework:0.0.2-SNAPSHOT')
+    compile('com.winsigns:investment-framework:0.0.3-SNAPSHOT')
 
     compile('org.springframework.boot:spring-boot-starter-hateoas')
     compile('org.springframework.boot:spring-boot-starter-web')

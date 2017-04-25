@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.model.AbstractEntity;
 import com.winsigns.investment.investService.constant.CurrencyCode;
 import com.winsigns.investment.investService.constant.InstructionStatus;
-import com.winsigns.investment.investService.constant.InstructionType;
+import com.winsigns.investment.investService.constant.InstructionVolumeType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -57,10 +57,10 @@ public class Instruction extends AbstractEntity {
   @Setter
   private String investService;
 
-  // 投资方向
+  // 投资类型
   @Getter
   @Setter
-  private String investDirection;
+  private String investType;
 
   // 币种
   @Getter
@@ -77,7 +77,7 @@ public class Instruction extends AbstractEntity {
   @Getter
   @Setter
   @Enumerated(EnumType.STRING)
-  private InstructionType volumeType;
+  private InstructionVolumeType volumeType = InstructionVolumeType.FixedType;
 
   // 指令数量
   @Getter
@@ -111,17 +111,25 @@ public class Instruction extends AbstractEntity {
   @Temporal(TemporalType.TIMESTAMP)
   private Date createTime = new Timestamp(System.currentTimeMillis());
 
+  // 指令信息
   @OneToMany(mappedBy = "instruction", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JsonIgnore
   @Setter
   @Getter
   private List<InstructionMessage> messages = new ArrayList<InstructionMessage>();
 
+  // 指令篮子
   @ManyToOne
   @JsonIgnore
   @Getter
   @Setter
   private InstructionBasket instructionBasket;
+
+  // 交易员
+  @Getter
+  @Setter
+  // TODO 暂时写死，随后增加分配交易员
+  private Long traderId = 123456L;
 
   public void addInstructionMessage(InstructionMessage message) {
     this.messages.add(message);
