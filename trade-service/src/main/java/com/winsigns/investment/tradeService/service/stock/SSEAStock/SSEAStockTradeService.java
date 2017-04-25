@@ -29,7 +29,7 @@ public class SSEAStockTradeService extends AbstractTradeService {
 
   @Override
   public RemoteCapitalService getUsedCapitalService() {
-    return new RemoteCapitalService("CHINA_GENERAL_CAPITAL", CurrencyCode.CNY);
+    return new RemoteCapitalService("GeneralCapitalService", CurrencyCode.CNY);
   }
 
   @Override
@@ -57,9 +57,10 @@ public class SSEAStockTradeService extends AbstractTradeService {
   public Resource calculateRequiredResource(CommitInstructionCommand command) {
 
     Resource resouce = new Resource(this);
-
+    Long position = 0L;
+    Double capital = 0.0;
     Double costPrice = 0.0;
-    // TODO 不限价需要获取价格
+    // TODO 不限价需要获取价格 公允价->最新价->昨收盘价
     if (command.getCostPrice() == null) {
 
     } else {
@@ -68,35 +69,38 @@ public class SSEAStockTradeService extends AbstractTradeService {
 
     if (this.getTradeType(command.getInvestType()).equals(StockTradeType.BUY)) {
 
-      Double capital = 0.0;
-
+      switch (command.getVolumeType()) {
+        case AmountType:
+          capital = -command.getAmount();
+          position = (long) Math.floor(capital / costPrice);
+          break;
+        case FixedType:
+          capital = -costPrice * command.getQuantity();
+          position = command.getQuantity();
+          break;
+        default:
+          capital = -costPrice * command.getQuantity();
+          position = command.getQuantity();
+          break;
+      }
+    } else {
       switch (command.getVolumeType()) {
         case AmountType:
           capital = command.getAmount();
+          position = -(long) Math.floor(command.getAmount() / costPrice);
           break;
         case FixedType:
-          capital = costPrice * command.getQuantity();
+          capital = command.getQuantity() * costPrice;
+          position = -command.getQuantity();
           break;
         default:
-          capital = costPrice * command.getQuantity();
+          capital = command.getQuantity() * costPrice;
+          position = -command.getQuantity();
           break;
       }
-      resouce.setAppliedCapital(capital);
-    } else {
-      Long position;
-      switch (command.getVolumeType()) {
-        case AmountType:
-          position = (long) Math.floor(command.getAmount() / costPrice);
-          break;
-        case FixedType:
-          position = command.getQuantity();
-          break;
-        default:
-          position = command.getQuantity();
-          break;
-      }
-      resouce.setAppliedPosition(position);
     }
+    resouce.setAppliedCapital(capital);
+    resouce.setAppliedPosition(position);
     return resouce;
   }
 

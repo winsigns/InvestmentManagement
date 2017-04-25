@@ -5,6 +5,8 @@ import static com.winsigns.investment.tradeService.service.common.TradeServiceMa
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 import com.winsigns.investment.framework.measure.MeasureHost;
 import com.winsigns.investment.framework.model.OperatorEntity;
@@ -48,16 +50,30 @@ public class VirtualDone extends OperatorEntity {
   // 币种
   @Getter
   @Setter
+  @Enumerated(EnumType.STRING)
   private CurrencyCode currency;
 
+  // 交易服务
   @Getter
   @Setter
   private String tradeService;
 
+  // 外部资金账户id
+  @Getter
+  @Setter
+  private Long externalCapitalAccountId;
+
+  // 申请的资金
   @Getter
   @Setter
   private Double appliedCapital;
 
+  // 外部交易账户
+  @Getter
+  @Setter
+  private Long externalTradeAccountId;
+
+  // 申请的持仓
   @Getter
   @Setter
   private Long appliedPosition;
@@ -83,6 +99,7 @@ public class VirtualDone extends OperatorEntity {
     ITradeService tradeService = getTradeServiceManager().getService(this.getTradeService());
 
     ApplyResourceCommand applyCmd = new ApplyResourceCommand();
+    applyCmd.setVirtualDoneId(this.getId());
     applyCmd.setOperatorSequence(getOperatorSequence());
     applyCmd.setPortfolioId(this.getPortfolioId());
     applyCmd.setSecurityId(this.getSecurityId());

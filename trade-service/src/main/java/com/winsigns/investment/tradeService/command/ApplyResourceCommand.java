@@ -7,6 +7,9 @@ import lombok.Data;
 @Data
 public class ApplyResourceCommand {
 
+  // 虚拟成交编号
+  private Long virtualDoneId;
+
   // 投资组合
   private Long portfolioId;
 

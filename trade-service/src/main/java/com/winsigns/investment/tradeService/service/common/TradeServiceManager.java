@@ -4,19 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import com.winsigns.investment.framework.measure.ProcessorValue;
 import com.winsigns.investment.framework.spring.SpringManager;
 import com.winsigns.investment.tradeService.command.CommitInstructionCommand;
+import com.winsigns.investment.tradeService.integration.InvestServiceIntegration;
 import com.winsigns.investment.tradeService.model.Done;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Component
-@Slf4j
 public class TradeServiceManager {
+
+  @Autowired
+  InvestServiceIntegration investServiceIntegration;
+
+  final static JsonDeserializer<Boolean> keyDeserializer =
+      new JsonDeserializer<Boolean>(Boolean.class);
+  final static JsonDeserializer<ProcessorValue> valueDeserializer =
+      new JsonDeserializer<ProcessorValue>(ProcessorValue.class);
 
   List<ITradeService> services = new ArrayList<ITradeService>();
 
@@ -80,7 +89,8 @@ public class TradeServiceManager {
   }
 
   /**
-   * 接受一条指令，创建一个虚拟成交，向清单服务发送资源申请
+   * 接受一条指令
+   * <p>
    * 
    * @param command
    */
@@ -94,7 +104,7 @@ public class TradeServiceManager {
   }
 
   /**
-   * 选择一个最合适的,并返回需要的资源
+   * 选择一个最合适的交易服务
    * 
    * @param services
    * @return
@@ -121,8 +131,17 @@ public class TradeServiceManager {
    * 处理
    */
   @KafkaListener(topics = {"resource-application"})
-  public void respnseResourceApplication(ConsumerRecord<String, String> record) {
-    log.debug(record.key());
-    log.debug(record.value());
+  public void responseResourceApplication(ConsumerRecord<String, String> record) {
+    Boolean key = keyDeserializer.deserialize("", record.key().getBytes());
+
+    String value = record.value();
+
+    if (key) {
+      System.out.println(record.value());
+    } else {
+      System.out.println(record.value());
+    }
   }
+
+
 }

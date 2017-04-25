@@ -6,4 +6,6 @@ import com.winsigns.investment.tradeService.model.VirtualDone;
 
 public interface VirtualDoneRepository extends JpaRepository<VirtualDone, Long> {
 
+  public VirtualDone findByInstructionId(Long instructionId);
+
 }

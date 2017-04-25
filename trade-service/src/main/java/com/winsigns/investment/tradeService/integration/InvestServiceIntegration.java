@@ -7,7 +7,7 @@ import com.winsigns.investment.framework.integration.AbstractIntegration;
 import com.winsigns.investment.framework.spring.SpringManager;
 
 /**
- * 与trade-service的交互
+ * 与invest-service的交互
  * 
  * @author yimingjin
  *

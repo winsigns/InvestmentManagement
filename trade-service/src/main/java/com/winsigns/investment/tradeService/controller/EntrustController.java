@@ -97,22 +97,6 @@ public class EntrustController {
   }
 
   /**
-   * 在指定委托下面创建一条成交
-   * 
-   * @param entrustId
-   * @param command
-   * @return
-   */
-  @PostMapping("/{entrustId}/dones")
-  public DoneResource createDone(@PathVariable Long entrustId,
-      @RequestBody CreateDoneCommand command) {
-    command.setEntrustId(entrustId);
-
-    Done done = doneService.addDone(command);
-    return new DoneResourceAssembler().toResource(done);
-  }
-
-  /**
    * 修改一条委托
    * 
    * @param entrustId
@@ -136,6 +120,42 @@ public class EntrustController {
   public ResponseEntity<?> deleteEntrust(@PathVariable Long entrustId) {
     entrustService.deleteEntrust(entrustId);
     return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+  }
+
+  /**
+   * 查询一条委托的所有成交信息
+   * 
+   * @param entrustId
+   * @return
+   */
+  @GetMapping("/{entrustId}/dones")
+  public Resources<DoneResource> readDones(@PathVariable Long entrustId) {
+
+    Link link = linkTo(methodOn(EntrustController.class).readDones(entrustId)).withSelfRel();
+    Link linkEntrust = linkTo(methodOn(EntrustController.class).readEntrust(entrustId))
+        .withRel(Entrust.class.getAnnotation(Relation.class).value());
+
+    Entrust entrust = entrustService.readEntrust(entrustId);
+    List<Done> dones = doneService.findByEntrust(entrust);
+
+    return new Resources<DoneResource>(new DoneResourceAssembler().toResources(dones), link,
+        linkEntrust);
+  }
+
+  /**
+   * 在指定委托下面创建一条成交
+   * 
+   * @param entrustId
+   * @param command
+   * @return
+   */
+  @PostMapping("/{entrustId}/dones")
+  public DoneResource createDone(@PathVariable Long entrustId,
+      @RequestBody CreateDoneCommand command) {
+    command.setEntrustId(entrustId);
+
+    Done done = doneService.addDone(command);
+    return new DoneResourceAssembler().toResource(done);
   }
 
 }
