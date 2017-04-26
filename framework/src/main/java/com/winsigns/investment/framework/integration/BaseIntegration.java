@@ -43,7 +43,7 @@ public class BaseIntegration {
    * @param key
    * @return
    */
-  private String getHeaderParam(String key) {
+  protected String getHeaderParam(String key) {
     RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
     if (requestAttributes == null) {
       return null;

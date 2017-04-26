@@ -3,6 +3,7 @@ package com.winsigns.investment.framework.i18n;
 import java.util.Locale;
 
 import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -24,8 +25,12 @@ public class i18nHelper {
   private i18nHelper() {}
 
   public static String i18n(String resourceKey) {
-    Locale locale = LocaleContextHolder.getLocale();
-    return messageSource.getMessage(resourceKey, null, locale);
+    try {
+      Locale locale = LocaleContextHolder.getLocale();
+      return messageSource.getMessage(resourceKey, null, locale);
+    } catch (NoSuchMessageException e) {
+      return "";
+    }
   }
 
   public static String i18n(Enum<?> literal) {
