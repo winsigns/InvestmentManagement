@@ -1,13 +1,14 @@
 package com.winsigns.investment.inventoryService.service;
 
-import java.sql.Timestamp;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -21,6 +22,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import com.winsigns.investment.framework.i18n.i18nHelper;
 import com.winsigns.investment.framework.spring.SpringManager;
 import com.winsigns.investment.inventoryService.capital.common.CapitalServiceManager;
 import com.winsigns.investment.inventoryService.capital.common.ICapitalService;
@@ -104,6 +106,7 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
 
     ResourceApplicationForm form = new ResourceApplicationForm();
     form.setVirtualDoneId(applyInventoryCommand.getVirtualDoneId());
+    form.setInstructionId(applyInventoryCommand.getInstructionId());
     form.setPortfolioId(applyInventoryCommand.getPortfolioId());
     form.setSecurityId(applyInventoryCommand.getSecurityId());
     form.setCurrency(applyInventoryCommand.getCurrency());
@@ -111,7 +114,7 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
     form.setAppliedPosition(applyInventoryCommand.getAppliedPosition());
     form.setCapitalService(applyInventoryCommand.getCapitalService());
     form.setPositionService(applyInventoryCommand.getPositionService());
-    form.setAppliedTime(new Timestamp(System.currentTimeMillis()));
+    form.setLanguage(applyInventoryCommand.getLanguage());
 
     ResourceApplicationForm formStatus = form.clone();
     formStatus.setStatus(ApplyStatus.PROCESSING);
@@ -165,14 +168,19 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
     this.start();
   }
 
-  public enum ErrorCode {
+  public enum ResourceApplicationErrorCode {
     // 不支持的资金服务
     NOT_SUPPORT_CAPITAL_SERVICE,
     // 不支持的期货服务
     NOT_SUPPORT_POSITION_SERVICE;
 
-    public String toString() {
-      return "ResourceApplicationService:" + this.name();
+    /**
+     * 国际化
+     * 
+     * @return
+     */
+    public String i18n() {
+      return i18nHelper.i18n(this);
     }
   }
 
@@ -192,20 +200,23 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
     DefaultTransactionDefinition transactionDefinition =
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
     TransactionStatus status = platformTransactionManager.getTransaction(transactionDefinition);
-
+    LocaleContextHolder.setLocale(new Locale(form.getLanguage()));
     try {
       IPositionService positionService =
           positionServiceManager.getService(form.getPositionService());
       if (positionService == null) {
-        throw new ResourceApplicationExcepiton(ErrorCode.NOT_SUPPORT_POSITION_SERVICE.toString());
+        throw new ResourceApplicationExcepiton(
+            ResourceApplicationErrorCode.NOT_SUPPORT_POSITION_SERVICE.i18n());
       }
 
+      // TODO 这里需要给positionSerials和capitalSerials记录formId;
       List<PositionSerial> positionSerials = positionService.apply(form.getPortfolioId(),
           form.getSecurityId(), null, form.getAppliedPosition());
 
       ICapitalService capitalService = capitalServiceManager.getService(form.getCapitalService());
       if (capitalService == null) {
-        throw new ResourceApplicationExcepiton(ErrorCode.NOT_SUPPORT_CAPITAL_SERVICE.toString());
+        throw new ResourceApplicationExcepiton(
+            ResourceApplicationErrorCode.NOT_SUPPORT_CAPITAL_SERVICE.i18n());
       }
 
       List<CapitalSerial> capitalSerials =
@@ -215,18 +226,29 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
 
       application.setVirtualDoneId(form.getVirtualDoneId());
       application.setApplicationFormId(form.getId());
-      application.setPositionSerials(positionSerials);
-      application.setCapitalSerials(capitalSerials);
-
+      application.setInstructionId(form.getInstructionId());
       resourceTemplate.send(applyTopic, true, application);
 
+    } catch (ResourceApplicationExcepiton e) {
+      platformTransactionManager.rollback(status);
+      application.getHeader().setResult(false);
+      application.getHeader().setCode(e.getMessage());
+      application.getHeader().setMessage(e.getMessage());
+      application.setVirtualDoneId(form.getVirtualDoneId());
+      application.setApplicationFormId(form.getId());
+      application.setInstructionId(form.getInstructionId());
+      form.setMessage(e.getMessage());
+      resourceTemplate.send(applyTopic, false, application);
     } catch (Exception e) {
       platformTransactionManager.rollback(status);
       application.getHeader().setResult(false);
-      application.getHeader().setMessage(e.getMessage());
       application.getHeader().setCode(e.getMessage());
+      application.getHeader().setMessage(e.getMessage()); // TODO
+      application.setVirtualDoneId(form.getVirtualDoneId());
+      application.setApplicationFormId(form.getId());
+      application.setInstructionId(form.getInstructionId());
       resourceTemplate.send(applyTopic, false, application);
-
+      form.setMessage(e.getMessage());
     } finally {
       resourceApplicationFormRepository.save(form);
     }

@@ -212,11 +212,17 @@ public class CapitalServiceManager {
       }
       if (thisAmount.doubleValue() > 0) {
         occurAmount -= thisAmount;
+        srcDetail.changeFloatCash(-thisAmount);
+        srcDetail.changeFloatAvailableCapital(-thisAmount);
+        srcDetail.changeFloatDesirableCapital(-thisAmount);
         srcDetail.changeCash(-thisAmount);
         srcDetail.changeAvailableCapital(-thisAmount);
         srcDetail.changeDesirableCapital(-thisAmount);
         capitalDetailService.save(srcDetail);
 
+        dstDetail.changeFloatCash(thisAmount);
+        dstDetail.changeFloatAvailableCapital(thisAmount);
+        dstDetail.changeFloatDesirableCapital(thisAmount);
         dstDetail.changeCash(thisAmount);
         dstDetail.changeAvailableCapital(thisAmount);
         dstDetail.changeDesirableCapital(thisAmount);

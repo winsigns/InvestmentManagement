@@ -1,5 +1,6 @@
 package com.winsigns.investment.inventoryService.model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -22,6 +23,11 @@ public class ResourceApplicationForm extends AbstractEntity implements Cloneable
   @Getter
   @Setter
   private Long virtualDoneId;
+
+  // 指令ID
+  @Getter
+  @Setter
+  private Long instructionId;
 
   // 投资组合
   @Getter
@@ -65,8 +71,7 @@ public class ResourceApplicationForm extends AbstractEntity implements Cloneable
 
   // 申请时间
   @Getter
-  @Setter
-  Date appliedTime;
+  Date appliedTime = new Timestamp(System.currentTimeMillis());
 
   public static enum ApplyStatus {
     // 初始状态
@@ -78,7 +83,15 @@ public class ResourceApplicationForm extends AbstractEntity implements Cloneable
   @Getter
   @Setter
   @Enumerated(EnumType.STRING)
-  ApplyStatus status = ApplyStatus.INIT;
+  private ApplyStatus status = ApplyStatus.INIT;
+
+  @Getter
+  @Setter
+  private String language;
+
+  @Getter
+  @Setter
+  private String message;
 
   public ResourceApplicationForm clone() {
     ResourceApplicationForm o = null;

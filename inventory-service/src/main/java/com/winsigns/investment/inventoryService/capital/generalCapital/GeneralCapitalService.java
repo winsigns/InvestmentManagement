@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.winsigns.investment.framework.i18n.i18nHelper;
 import com.winsigns.investment.inventoryService.capital.common.AbstractCapitalService;
 import com.winsigns.investment.inventoryService.command.CreateFundAccountCapitalPoolCommand;
 import com.winsigns.investment.inventoryService.constant.CurrencyCode;
@@ -21,14 +22,19 @@ import com.winsigns.investment.inventoryService.service.CapitalSerialService;
 @Service
 public class GeneralCapitalService extends AbstractCapitalService {
 
-  public enum ErrorCode {
+  public enum GeneralCapitalErrorCode {
     // 未找到资金
     NOT_FIND_CAPITAL_RESOURCE,
     // 可用资金不足
     AVAILABLE_CAPITAL_NOT_ENOUGH;
 
-    public String toString() {
-      return "SSEAStockPositionService:" + this.name();
+    /**
+     * 国际化
+     * 
+     * @return
+     */
+    public String i18n() {
+      return i18nHelper.i18n(this);
     }
   }
 
@@ -70,21 +76,23 @@ public class GeneralCapitalService extends AbstractCapitalService {
     GeneralCapitalPool capital =
         generalCapitalRepository.findByFundAccountIdAndCurrency(fundAccountId, currency);
     if (capital == null) {
-      throw new ResourceApplicationExcepiton(ErrorCode.NOT_FIND_CAPITAL_RESOURCE.toString());
+      throw new ResourceApplicationExcepiton(
+          GeneralCapitalErrorCode.NOT_FIND_CAPITAL_RESOURCE.i18n());
     }
 
     List<CapitalDetail> capitalDetails =
         capitalDetailRepository.findByCapitalPoolOrderByAvailableCapitalDesc(capital);
 
     if (capitalDetails == null || capitalDetails.isEmpty()) {
-      throw new ResourceApplicationExcepiton(ErrorCode.NOT_FIND_CAPITAL_RESOURCE.toString());
+      throw new ResourceApplicationExcepiton(
+          GeneralCapitalErrorCode.NOT_FIND_CAPITAL_RESOURCE.i18n());
     }
 
     if (appliedCapital.doubleValue() >= 0) { // 卖出
       // 增加最少的资金池的资金
       CapitalDetail capitalDetail = new CapitalDetail();
-      capitalDetail.changeAvailableCapital(appliedCapital);
-      capitalDetail.changeCash(appliedCapital);
+      capitalDetail.changeFloatAvailableCapital(appliedCapital);
+      capitalDetail.changeFloatCash(appliedCapital);
       capitalDetailRepository.save(capitalDetail);
 
       // 添加流水
@@ -96,17 +104,17 @@ public class GeneralCapitalService extends AbstractCapitalService {
       boolean isEnded = false;
       for (CapitalDetail capitalDetail : capitalDetails) {
         Double thisAmount = 0.0;
-        Double currRemain = capitalDetail.getAvailableCapital() - appliedCapital;
+        Double currRemain = capitalDetail.getFloatAvailableCapital() - appliedCapital;
         if (currRemain.doubleValue() >= 0) { // 当前资金记录有剩余，则表示已经分配完
           thisAmount = appliedCapital;
           isEnded = true;
         } else {
-          thisAmount = capitalDetail.getAvailableCapital();
+          thisAmount = capitalDetail.getFloatAvailableCapital();
         }
         if (thisAmount.doubleValue() > 0) {
           appliedCapital -= thisAmount;
-          capitalDetail.changeAvailableCapital(-thisAmount);
-          capitalDetail.changeCash(-thisAmount);
+          capitalDetail.changeFloatAvailableCapital(-thisAmount);
+          capitalDetail.changeFloatCash(-thisAmount);
           capitalDetailRepository.save(capitalDetail);
 
           // 添加流水
@@ -121,7 +129,8 @@ public class GeneralCapitalService extends AbstractCapitalService {
 
       // 如果最后还有剩余，则抛异常
       if (appliedCapital.doubleValue() > 0) {
-        throw new ResourceApplicationExcepiton(ErrorCode.AVAILABLE_CAPITAL_NOT_ENOUGH.toString());
+        throw new ResourceApplicationExcepiton(
+            GeneralCapitalErrorCode.AVAILABLE_CAPITAL_NOT_ENOUGH.i18n());
       }
     }
     return serials;

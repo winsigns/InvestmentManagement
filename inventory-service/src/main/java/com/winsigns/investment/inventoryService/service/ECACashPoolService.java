@@ -197,6 +197,9 @@ public class ECACashPoolService {
       crtCommand.setEcaCashPoolId(ecaCashPoolId);
       capitalDetail = capitalDetailService.addFundAccountCapitalDetail(crtCommand);
     }
+    capitalDetail.changeFloatCash(occurAmount);
+    capitalDetail.changeFloatAvailableCapital(occurAmount);
+    capitalDetail.changeFloatDesirableCapital(occurAmount);
     capitalDetail.changeCash(occurAmount);
     capitalDetail.changeAvailableCapital(occurAmount);
     capitalDetail.changeDesirableCapital(occurAmount);

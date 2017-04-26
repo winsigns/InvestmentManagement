@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 
 import org.springframework.hateoas.core.Relation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.measure.MeasureHost;
 
 @Entity
@@ -19,12 +20,14 @@ public class FloatCapitalSerial extends CapitalSerial {
   }
 
   @Override
+  @JsonIgnore
   public boolean isAffectedFloatMeasure() {
     // TODO Auto-generated method stub
     return false;
   }
 
   @Override
+  @JsonIgnore
   public boolean isAffectedNomalMeasure() {
     // TODO Auto-generated method stub
     return false;

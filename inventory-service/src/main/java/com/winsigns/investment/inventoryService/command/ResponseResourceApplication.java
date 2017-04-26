@@ -1,10 +1,5 @@
 package com.winsigns.investment.inventoryService.command;
 
-import java.util.List;
-
-import com.winsigns.investment.inventoryService.model.CapitalSerial;
-import com.winsigns.investment.inventoryService.model.PositionSerial;
-
 import lombok.Data;
 
 @Data
@@ -20,14 +15,12 @@ public class ResponseResourceApplication {
     String message;
   }
 
-  private Header header;
+  private Header header = new Header();
 
   private Long virtualDoneId;
 
   private Long applicationFormId;
 
-  List<PositionSerial> positionSerials;
-
-  List<CapitalSerial> capitalSerials;
+  private Long instructionId;
 
 }

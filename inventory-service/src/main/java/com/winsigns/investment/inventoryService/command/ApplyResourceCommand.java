@@ -10,6 +10,9 @@ public class ApplyResourceCommand {
   // 虚拟成交编号
   private Long virtualDoneId;
 
+  // 指令ID
+  private Long instructionId;
+
   // 投资组合
   private Long portfolioId;
 
@@ -34,4 +37,6 @@ public class ApplyResourceCommand {
   // 操作序号
   private String operatorSequence;
 
+  // 记录下请求的语言
+  private String language;
 }

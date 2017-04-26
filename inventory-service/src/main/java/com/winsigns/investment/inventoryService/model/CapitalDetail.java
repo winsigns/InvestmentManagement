@@ -42,6 +42,21 @@ public class CapitalDetail extends MeasureHost {
   @Enumerated(EnumType.STRING)
   private CurrencyCode currency;
 
+  // 浮动现金
+  @Getter
+  @Setter
+  private Double floatCash = 0.0;
+
+  // 浮动可用资金
+  @Getter
+  @Setter
+  private Double floatAvailableCapital = 0.0;
+
+  // 浮动可取资金
+  @Getter
+  @Setter
+  private Double floatDesirableCapital = 0.0;
+
   // 现金
   @Getter
   @Setter
@@ -66,6 +81,21 @@ public class CapitalDetail extends MeasureHost {
   public MeasureHost parent() {
     // TODO Auto-generated method stub
     return null;
+  }
+
+  public Double changeFloatCash(Double floatCash) {
+    this.floatCash += floatCash;
+    return this.floatCash;
+  }
+
+  public Double changeFloatAvailableCapital(Double floatAvailableCapital) {
+    this.floatAvailableCapital += floatAvailableCapital;
+    return this.floatAvailableCapital;
+  }
+
+  public Double changeFloatDesirableCapital(Double floatDesirableCapital) {
+    this.floatDesirableCapital += floatDesirableCapital;
+    return this.floatDesirableCapital;
   }
 
   public Double changeCash(Double cash) {

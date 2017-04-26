@@ -100,6 +100,7 @@ CREATE TABLE resource_application_form
 (
 	id BIGINT NOT NULL auto_increment, 	
 	virtual_done_id BIGINT,
+	instruction_id BIGINT,
 	portfolio_id BIGINT,
 	security_id BIGINT,
 	currency VARCHAR(4),
@@ -110,6 +111,8 @@ CREATE TABLE resource_application_form
 	operator_sequence VARCHAR(20),
 	applied_time TIMESTAMP,
 	status VARCHAR(64),
+	language VARCHAR(16),
+	message VARCHAR(512),
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 
