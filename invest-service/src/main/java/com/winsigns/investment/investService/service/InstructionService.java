@@ -4,12 +4,16 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.winsigns.investment.investService.command.CreateInstructionCommand;
+import com.winsigns.investment.investService.command.ResponseResourceApplication;
 import com.winsigns.investment.investService.command.UpdateInstructionCommand;
 import com.winsigns.investment.investService.constant.InstructionMessageCode;
 import com.winsigns.investment.investService.constant.InstructionMessageType;
@@ -22,6 +26,8 @@ import com.winsigns.investment.investService.model.InstructionMessage;
 import com.winsigns.investment.investService.repository.InstructionMessageRepository;
 import com.winsigns.investment.investService.repository.InstructionRepository;
 import com.winsigns.investment.investService.service.common.InvestServiceManager;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 指令服务
@@ -36,7 +42,18 @@ import com.winsigns.investment.investService.service.common.InvestServiceManager
  *
  */
 @Service
+@Slf4j
 public class InstructionService {
+
+  final static String applyTopic = "resource-application";
+
+  final static JsonDeserializer<Boolean> keyDeserializer =
+      new JsonDeserializer<Boolean>(Boolean.class);
+  final static JsonDeserializer<ResponseResourceApplication> valueDeserializer =
+      new JsonDeserializer<ResponseResourceApplication>(ResponseResourceApplication.class);
+
+  @Autowired
+  InvestServiceManager investServiceManager;
 
   @Autowired
   InstructionRepository instructionRepository;
@@ -298,13 +315,13 @@ public class InstructionService {
         return thisInstruction;
       }
 
-      if (InvestServiceManager.getInstance().commitInstruction(thisInstruction)) {
+      if (investServiceManager.commitInstruction(thisInstruction)) {
         thisInstruction.setExecutionStatus(InstructionStatus.COMMITING);
+        thisInstruction.setCommitTime();
         instructionRepository.save(thisInstruction);
       } else {
-        thisInstruction
-            .addInstructionMessage(new InstructionMessage(thisInstruction, "executionStatus",
-                InstructionMessageType.ERROR, InstructionMessageCode.INSTRUCTION_COMMIT_FAIL));
+        thisInstruction.addInstructionMessage("executionStatus", InstructionMessageType.ERROR,
+            InstructionMessageCode.INSTRUCTION_COMMIT_FAIL);
         thisInstruction = instructionRepository.save(thisInstruction);
       }
     } else {
@@ -322,5 +339,32 @@ public class InstructionService {
       }
     }
     return true;
+  }
+
+  /**
+   * 处理资源申请的应答
+   * 
+   * @param record
+   */
+  @KafkaListener(topics = {applyTopic})
+  public void responseResourceApplication(ConsumerRecord<String, String> record) {
+    log.info(record.key());
+    log.info(record.value());
+
+    ResponseResourceApplication response =
+        valueDeserializer.deserialize("", record.value().getBytes());
+
+    Instruction thisInstruction = instructionRepository.findOne(response.getInstructionId());
+    Assert.notNull(thisInstruction);
+    if (response.getHeader().getResult()) {
+      // TODO 分配交易员
+      thisInstruction.setExecutionStatus(InstructionStatus.ASSIGNING);
+      thisInstruction = instructionRepository.save(thisInstruction);
+    } else {
+      InstructionMessage thisMessage =
+          new InstructionMessage(thisInstruction, "executionStatus", InstructionMessageType.ERROR,
+              InstructionMessageCode.INSTRUCTION_COMMIT_FAIL, response.getHeader().getMessage());
+      instructionMessageRepository.save(thisMessage);
+    }
   }
 }

@@ -26,6 +26,7 @@ public enum StockInvestType implements IInvestType {
 
   @Override
   public IInvestService getInvestService() {
-    return InvestServiceManager.getInstance().getService(StockInvestService.class.getName());
+    return InvestServiceManager.getInvestServiceManager()
+        .getService(StockInvestService.class.getSimpleName());
   }
 }

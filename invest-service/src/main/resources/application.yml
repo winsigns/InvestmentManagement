@@ -12,6 +12,13 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: invest-service  
+    producer:
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 eureka:
   instance:
@@ -27,7 +34,7 @@ management:
     
 kafka:
   stream:
-    appid: inventory-service-kafka-stream
+    appid: invest-service-kafka-stream
   broker:
     host: localhost:9092
   zookeeper:
