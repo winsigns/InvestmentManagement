@@ -29,5 +29,5 @@ public interface ITradeType {
    * 
    * @return
    */
-  public List<IMockInvestType> getSupportInvestTypes();
+  public List<IRemoteInvestType> getSupportInvestTypes();
 }

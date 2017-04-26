@@ -44,13 +44,14 @@ CREATE TABLE virtual_done
 	invest_type VARCHAR(64),
 	currency VARCHAR(4),
 	trade_service VARCHAR(64),
-	external_capital_account_id BIGINT,
 	applied_capital DOUBLE PRECISION,
-	external_trade_account_id BIGINT,
 	applied_position BIGINT,
 	instruction_basket_id BIGINT,
+	status VARCHAR(64),
 	done_time TIMESTAMP,
 	operator_sequence BIGINT,
+	form_id BIGINT,
+	form_message VARCHAR(512),
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 

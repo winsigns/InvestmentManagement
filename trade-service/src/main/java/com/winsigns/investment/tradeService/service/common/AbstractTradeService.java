@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.winsigns.investment.framework.i18n.i18nHelper;
 import com.winsigns.investment.tradeService.command.CommitInstructionCommand;
+import com.winsigns.investment.tradeService.constant.VirtualDoneStatus;
 import com.winsigns.investment.tradeService.integration.InventoryServiceIntegration;
 import com.winsigns.investment.tradeService.model.VirtualDone;
 import com.winsigns.investment.tradeService.repository.VirtualDoneRepository;
@@ -79,9 +80,11 @@ public abstract class AbstractTradeService implements ITradeService {
     thisDone.setTradeService(this.getName());
     thisDone.setAppliedCapital(resource.getAppliedCapital());
     thisDone.setAppliedPosition(resource.getAppliedPosition());
+    thisDone = virtualDoneRepository.save(thisDone);
+    // TODO 这里applyResource失败的话，需要将PROCESSING置成CANCELED，
     thisDone.applyResource();
-
-    virtualDoneRepository.save(thisDone);
+    thisDone.setStatus(VirtualDoneStatus.PROCESSING);
+    thisDone = virtualDoneRepository.save(thisDone);
   }
 
 }

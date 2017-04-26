@@ -10,22 +10,33 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import com.winsigns.investment.framework.measure.ProcessorValue;
 import com.winsigns.investment.framework.spring.SpringManager;
 import com.winsigns.investment.tradeService.command.CommitInstructionCommand;
+import com.winsigns.investment.tradeService.command.ResponseResourceApplication;
+import com.winsigns.investment.tradeService.constant.VirtualDoneStatus;
 import com.winsigns.investment.tradeService.integration.InvestServiceIntegration;
 import com.winsigns.investment.tradeService.model.Done;
+import com.winsigns.investment.tradeService.model.VirtualDone;
+import com.winsigns.investment.tradeService.repository.VirtualDoneRepository;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class TradeServiceManager {
+
+  static final String applyTopic = "resource-application";
 
   @Autowired
   InvestServiceIntegration investServiceIntegration;
 
+  @Autowired
+  VirtualDoneRepository virtualDoneRepository;
+
   final static JsonDeserializer<Boolean> keyDeserializer =
       new JsonDeserializer<Boolean>(Boolean.class);
-  final static JsonDeserializer<ProcessorValue> valueDeserializer =
-      new JsonDeserializer<ProcessorValue>(ProcessorValue.class);
+  final static JsonDeserializer<ResponseResourceApplication> valueDeserializer =
+      new JsonDeserializer<ResponseResourceApplication>(ResponseResourceApplication.class);
 
   List<ITradeService> services = new ArrayList<ITradeService>();
 
@@ -128,19 +139,27 @@ public class TradeServiceManager {
   }
 
   /**
-   * 处理
+   * 处理资源申请的应答
+   * 
+   * @param record
    */
-  @KafkaListener(topics = {"resource-application"})
+  @KafkaListener(topics = {applyTopic})
   public void responseResourceApplication(ConsumerRecord<String, String> record) {
-    Boolean key = keyDeserializer.deserialize("", record.key().getBytes());
+    log.info(record.key());
+    log.info(record.value());
+    ResponseResourceApplication response =
+        valueDeserializer.deserialize("", record.value().getBytes());
 
-    String value = record.value();
-
-    if (key) {
-      System.out.println(record.value());
+    VirtualDone virtualDone = virtualDoneRepository.findOne(response.getVirtualDoneId());
+    Assert.notNull(virtualDone);
+    virtualDone.setFormId(response.getApplicationFormId());
+    if (response.getHeader().getResult()) {
+      virtualDone.setStatus(VirtualDoneStatus.FINISHED);
     } else {
-      System.out.println(record.value());
+      virtualDone.setFormMessage(response.getHeader().getMessage());
+      virtualDone.setStatus(VirtualDoneStatus.CANCELED);
     }
+    virtualDoneRepository.save(virtualDone);
   }
 
 

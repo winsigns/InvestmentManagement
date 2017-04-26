@@ -34,7 +34,7 @@ management:
 
 kafka:
   stream:
-    appid: inventory-service-kafka-stream
+    appid: trade-service-kafka-stream
   broker:
     host: localhost:9092
   zookeeper:

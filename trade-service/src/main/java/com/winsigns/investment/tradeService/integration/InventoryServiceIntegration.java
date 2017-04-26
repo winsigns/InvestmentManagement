@@ -8,10 +8,13 @@ import org.springframework.stereotype.Component;
 import com.winsigns.investment.framework.integration.AbstractIntegration;
 import com.winsigns.investment.tradeService.command.ApplyResourceCommand;
 
-import lombok.extern.slf4j.Slf4j;
-
+/**
+ * 与清单服务的交互
+ * 
+ * @author yimingjin
+ *
+ */
 @Component
-@Slf4j
 public class InventoryServiceIntegration extends AbstractIntegration {
 
   private final static String INVENTORY_SERVICE = "inventory-service";
@@ -23,10 +26,16 @@ public class InventoryServiceIntegration extends AbstractIntegration {
     return INVENTORY_SERVICE;
   }
 
+  /**
+   * 向清单服务申请资源
+   * 
+   * @param command
+   * @return
+   */
   public boolean applyResource(ApplyResourceCommand command) {
 
-    log.info(command.toString());
-
+    String language = this.getHeaderParam("accept-language");
+    command.setLanguage(language);
     HttpEntity<ApplyResourceCommand> requestEntity = new HttpEntity<ApplyResourceCommand>(command);
 
     ResponseEntity<String> result = restTemplate

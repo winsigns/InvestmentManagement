@@ -12,6 +12,6 @@ public abstract class RemoteInvestService {
     return this.getClass().getSimpleName();
   }
 
-  public abstract IMockInvestType[] getInstructionType();
+  public abstract IRemoteInvestType[] getInstructionType();
 
 }

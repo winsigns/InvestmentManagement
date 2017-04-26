@@ -39,7 +39,7 @@ public class Done extends AbstractEntity {
   @Setter
   private Long doneQuantity;
 
-  // 委托状态
+  // 成交状态
   @Setter
   @Getter
   @Enumerated(EnumType.STRING)

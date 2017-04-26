@@ -6,7 +6,7 @@ package com.winsigns.investment.tradeService.service.common;
  * @author yimingjin
  *
  */
-public interface IMockInvestType {
+public interface IRemoteInvestType {
 
   public String name();
 }

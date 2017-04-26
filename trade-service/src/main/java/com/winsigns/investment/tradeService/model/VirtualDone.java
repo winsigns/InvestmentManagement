@@ -13,6 +13,7 @@ import com.winsigns.investment.framework.model.OperatorEntity;
 import com.winsigns.investment.framework.spring.SpringManager;
 import com.winsigns.investment.tradeService.command.ApplyResourceCommand;
 import com.winsigns.investment.tradeService.constant.CurrencyCode;
+import com.winsigns.investment.tradeService.constant.VirtualDoneStatus;
 import com.winsigns.investment.tradeService.integration.InventoryServiceIntegration;
 import com.winsigns.investment.tradeService.service.common.ITradeService;
 
@@ -58,25 +59,31 @@ public class VirtualDone extends OperatorEntity {
   @Setter
   private String tradeService;
 
-  // 外部资金账户id
-  @Getter
-  @Setter
-  private Long externalCapitalAccountId;
-
   // 申请的资金
   @Getter
   @Setter
   private Double appliedCapital;
 
-  // 外部交易账户
-  @Getter
-  @Setter
-  private Long externalTradeAccountId;
-
   // 申请的持仓
   @Getter
   @Setter
   private Long appliedPosition;
+
+  // 资源申请单ID
+  @Getter
+  @Setter
+  private Long formId;
+
+  // 资源申请单信息
+  @Getter
+  @Setter
+  private String formMessage;
+
+  // 状态
+  @Setter
+  @Getter
+  @Enumerated(EnumType.STRING)
+  private VirtualDoneStatus status = VirtualDoneStatus.INIT;
 
   @Override
   protected List<MeasureHost> doOperator() {
@@ -94,12 +101,17 @@ public class VirtualDone extends OperatorEntity {
     return false;
   }
 
+  /**
+   * 虚拟成交申请资源
+   * 
+   */
   public void applyResource() {
 
     ITradeService tradeService = getTradeServiceManager().getService(this.getTradeService());
 
     ApplyResourceCommand applyCmd = new ApplyResourceCommand();
     applyCmd.setVirtualDoneId(this.getId());
+    applyCmd.setInstructionId(this.getInstructionId());
     applyCmd.setOperatorSequence(getOperatorSequence());
     applyCmd.setPortfolioId(this.getPortfolioId());
     applyCmd.setSecurityId(this.getSecurityId());
