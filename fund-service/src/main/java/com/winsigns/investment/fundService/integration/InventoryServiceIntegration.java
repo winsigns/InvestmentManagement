@@ -68,7 +68,7 @@ public class InventoryServiceIntegration extends AbstractIntegration {
           detailNode.put("fundAccountId", fundAccount.getId());
           detailNode.put("name", fundAccount.getName());
           if (details != null && !details.isEmpty()) {
-            detailNode.put("id", JsonPath.read(details.get(0), "$.id").toString());
+            detailNode.put("id", JsonPath.read(details.get(0), "$.faCapitalPoolId").toString());
             Double cash_ = JsonPath.read(details.get(0), "$.cash");
             detailNode.put("cash", cash_);
             cash += cash_;
