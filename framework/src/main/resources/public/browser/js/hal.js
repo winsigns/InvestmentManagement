@@ -34,10 +34,14 @@
         return str.replace(replaceRegex, '.../');
     },
     normalizeUrl: function(rel) {
+       var host = location.host
+       var newRel = rel     
+       newRel = newRel.replace(/:\/\/[^\/]*/, "://" + host)
+   
        var cur = location.hash.slice(1);
-       var uri = new URI(rel)
-       var norm = uri.absoluteTo(cur);
+       var uri = new URI(newRel)
 
+       var norm = uri.absoluteTo(cur);
        return norm
 	},
     buildUrl: function(rel) {
