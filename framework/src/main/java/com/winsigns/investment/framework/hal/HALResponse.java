@@ -56,16 +56,16 @@ public class HALResponse<T> extends Resource<T> {
    * 增加集合的Link
    * 
    * @param controllerClass 控制类
-   * @param modelType 模型类
+   * @param resourceType 资源类
    * 
    * @since 0.0.3
    */
-  public void addCollectionLink(Class<?> controllerClass, Class<?> modelType) {
+  public void addCollectionLink(Class<?> controllerClass, Class<?> resourceType) {
 
     Assert.notNull(controllerClass);
-    Assert.notNull(modelType);
+    Assert.notNull(resourceType);
 
     this.add(linkTo((controllerClass))
-        .withRel(modelType.getAnnotation(Relation.class).collectionRelation()));
+        .withRel(resourceType.getAnnotation(Relation.class).collectionRelation()));
   }
 }
