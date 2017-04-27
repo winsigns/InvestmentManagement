@@ -24,7 +24,8 @@ public enum FutureInvestType implements IInvestType {
 
   @Override
   public IInvestService getInvestService() {
-    return InvestServiceManager.getInstance().getService(FutureInvestService.class.getName());
+    return InvestServiceManager.getInvestServiceManager()
+        .getService(FutureInvestService.class.getSimpleName());
   }
 
 }

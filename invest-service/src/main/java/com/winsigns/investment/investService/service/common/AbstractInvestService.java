@@ -19,11 +19,14 @@ import com.winsigns.investment.investService.model.Instruction;
 public abstract class AbstractInvestService implements IInvestService {
 
   @Autowired
+  InvestServiceManager investServiceManager;
+
+  @Autowired
   TradeServiceIntegration tradeService;
 
   @PostConstruct
   private void register() {
-    InvestServiceManager.getInstance().register(this);
+    investServiceManager.register(this);
   }
 
   @Override
@@ -37,17 +40,8 @@ public abstract class AbstractInvestService implements IInvestService {
   }
 
   @Override
-  public IInvestType getInvestType(String name) {
-    for (IInvestType type : this.getInvestType()) {
-      if (type.name().equals(name)) {
-        return type;
-      }
-    }
-    return null;
-  }
-
-  @Override
   public boolean commitInstruction(Instruction instruction) {
     return tradeService.commitInstruction(instruction);
   }
+
 }

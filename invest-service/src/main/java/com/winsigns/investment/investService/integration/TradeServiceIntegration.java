@@ -1,6 +1,7 @@
 package com.winsigns.investment.investService.integration;
 
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -43,9 +44,11 @@ public class TradeServiceIntegration extends AbstractIntegration {
     command.setQuantity(instruction.getQuantity());
     command.setAmount(instruction.getAmount());
 
+    HttpHeaders reponseHeaders = new HttpHeaders();
+    String language = this.getHeaderParam("accept-language");
+    reponseHeaders.set("accept-language", language);
     HttpEntity<CommitInstructionCommand> requestEntity =
-        new HttpEntity<CommitInstructionCommand>(command);
-
+        new HttpEntity<CommitInstructionCommand>(command, reponseHeaders);
     try {
       ResponseEntity<String> resultStr = restTemplate
           .postForEntity(this.getIntegrationURI() + tradeURL, requestEntity, String.class);
