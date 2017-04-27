@@ -17,10 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.winsigns.investment.tradeService.command.CommitInstructionCommand;
 import com.winsigns.investment.tradeService.resource.TradeServiceResource;
 import com.winsigns.investment.tradeService.resource.TradeServiceResourceAssembler;
-import com.winsigns.investment.tradeService.service.TradeServiceManager;
+import com.winsigns.investment.tradeService.service.common.TradeServiceManager;
 
+/**
+ * 交易服务的通用入口
+ * 
+ * @author yimingjin
+ *
+ */
 @RestController
-@RequestMapping(path = "/trade",
+@RequestMapping(path = "/trades",
     produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
 public class TradeController {
 
@@ -31,12 +37,16 @@ public class TradeController {
   public Resources<TradeServiceResource> getAvailableTradeServices() {
     Link link = linkTo(TradeController.class).withSelfRel();
     return new Resources<TradeServiceResource>(new TradeServiceResourceAssembler()
-        .toResources(tradeServiceManager.getAvailableTradeServices(null)), link);
+        .toResources(tradeServiceManager.getAvailableTradeServices(null, null)), link);
   }
 
+  /**
+   * 接受一条投资服务的指令
+   * 
+   * @param CommitInstructionCmd
+   */
   @PostMapping
   public void acceptInstrucion(@RequestBody CommitInstructionCommand CommitInstructionCmd) {
-    CommitInstructionCmd.setInvestSvc("stock");
     tradeServiceManager.acceptInstruction(CommitInstructionCmd);
   }
 }

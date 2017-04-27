@@ -1,11 +1,16 @@
 package com.winsigns.investment.investService.command;
 
 import com.winsigns.investment.investService.constant.CurrencyCode;
-import com.winsigns.investment.investService.constant.InstructionType;
+import com.winsigns.investment.investService.constant.InstructionVolumeType;
 
 import lombok.Data;
 
-
+/**
+ * 更新指令的命令
+ * 
+ * @author yimingjin
+ *
+ */
 @Data
 public class UpdateInstructionCommand {
   // 投资组合
@@ -17,8 +22,8 @@ public class UpdateInstructionCommand {
   // 投资服务
   private String investService;
 
-  // 投资方向
-  private String investDirection;
+  // 投资类型
+  private String investType;
 
   // 币种
   private CurrencyCode currency;
@@ -27,7 +32,7 @@ public class UpdateInstructionCommand {
   private Double costPrice;
 
   // 数量类型
-  private InstructionType volumeType;
+  private InstructionVolumeType volumeType;
 
   // 指令数量
   private Long quantity;

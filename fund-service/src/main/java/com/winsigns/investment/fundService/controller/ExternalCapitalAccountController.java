@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.core.Relation;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.winsigns.investment.framework.hal.Resources;
 import com.winsigns.investment.fundService.command.CreateExternalTradeAccountCommand;
 import com.winsigns.investment.fundService.command.UpdateExternalCapitalAccountCommand;
 import com.winsigns.investment.fundService.constant.ExternalCapitalAccountType;
@@ -91,12 +92,12 @@ public class ExternalCapitalAccountController {
         externalCapitalAccount.getExternalTradeAccounts();
     if (!externalTradeAccounts.isEmpty()) {
       externalCapitalAccountResource.add(
-          ExternalTradeAccount.class.getAnnotation(Relation.class).collectionRelation(),
+          ExternalTradeAccountResource.class.getAnnotation(Relation.class).collectionRelation(),
           new ExternalTradeAccountResourceAssembler().toResources(externalTradeAccounts));
     }
 
     // 外部调用获取指定的资金池
-    List ecaCashPools = inventoryServiceIntegration.getECACashPools(externalCapitalAccountId);
+    JsonNode ecaCashPools = inventoryServiceIntegration.getECACashPools(externalCapitalAccount);
     externalCapitalAccountResource.add("eca-cash-pools", ecaCashPools);
 
     return externalCapitalAccountResource;
@@ -128,7 +129,7 @@ public class ExternalCapitalAccountController {
         .readExternalTradeAccounts(externalCapitalAccountId)).withSelfRel();
     Link linkECA = linkTo(methodOn(ExternalCapitalAccountController.class)
         .readExternalCapitalAccount(externalCapitalAccountId))
-            .withRel(ExternalCapitalAccount.class.getAnnotation(Relation.class).value());
+            .withRel(ExternalCapitalAccountResource.class.getAnnotation(Relation.class).value());
 
     return new Resources<ExternalTradeAccountResource>(
         new ExternalTradeAccountResourceAssembler().toResources(

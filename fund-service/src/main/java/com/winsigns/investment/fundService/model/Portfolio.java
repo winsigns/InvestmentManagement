@@ -1,19 +1,19 @@
 package com.winsigns.investment.fundService.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winsigns.investment.framework.model.AbstractEntity;
 import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.springframework.hateoas.core.Relation;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winsigns.investment.framework.model.AbstractEntity;
 
 /**
  * Created by colin on 2017/2/6.
  */
 @Entity
-@Relation(value = "portfolio", collectionRelation = "portfolios")
 public class Portfolio extends AbstractEntity {
 
   // 组合名称

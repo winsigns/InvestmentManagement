@@ -1,27 +1,14 @@
 package com.winsigns.investment.fundService.command;
 
-import java.util.Currency;
+import com.winsigns.investment.fundService.constant.CurrencyCode;
 
+import lombok.Data;
+
+@Data
 public class CreateCashPoolCommand {
 
-  private Currency currency;
+  private CurrencyCode currency;
 
   private Long externalCapitalAccountId;
-
-  public Currency getCurrency() {
-    return currency;
-  }
-
-  public void setCurrency(Currency currency) {
-    this.currency = currency;
-  }
-
-  public Long getExternalCapitalAccountId() {
-    return externalCapitalAccountId;
-  }
-
-  public void setExternalCapitalAccountId(Long externalCapitalAccountId) {
-    this.externalCapitalAccountId = externalCapitalAccountId;
-  }
 
 }

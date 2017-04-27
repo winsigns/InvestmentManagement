@@ -58,20 +58,27 @@ public class InvestServiceManager {
    * 
    * @return 返回服务名和服务支持的方向
    */
-  public Map<IInvestService, Enum<?>[]> getServicesInfo() {
-    Map<IInvestService, Enum<?>[]> serviceDetails = new HashMap<IInvestService, Enum<?>[]>();
+  public Map<IInvestService, IInvestType[]> getServicesInfo() {
+    Map<IInvestService, IInvestType[]> serviceDetails =
+        new HashMap<IInvestService, IInvestType[]>();
 
     for (IInvestService service : services) {
-      serviceDetails.put(service, service.getInstructionType());
+      serviceDetails.put(service, service.getInvestType());
     }
     return serviceDetails;
   }
 
-  public void commitInstruction(Instruction instruction) {
+  /**
+   * 提交指令
+   * 
+   * @param instruction 具体的指令
+   * @return
+   */
+  public boolean commitInstruction(Instruction instruction) {
 
     IInvestService service = this.getService(instruction.getInvestService());
     Assert.notNull(service);
-    service.commitInstruction(instruction);
+    return service.commitInstruction(instruction);
 
   }
 }

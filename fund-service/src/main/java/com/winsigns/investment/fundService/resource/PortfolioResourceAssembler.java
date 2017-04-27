@@ -3,15 +3,15 @@ package com.winsigns.investment.fundService.resource;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-import com.winsigns.investment.fundService.controller.FundAccountController;
-import com.winsigns.investment.fundService.controller.PortfolioController;
-import com.winsigns.investment.fundService.model.FundAccount;
-import com.winsigns.investment.fundService.model.Portfolio;
 import org.springframework.hateoas.core.Relation;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
-public class PortfolioResourceAssembler extends
-    ResourceAssemblerSupport<Portfolio, PortfolioResource> {
+import com.winsigns.investment.fundService.controller.FundAccountController;
+import com.winsigns.investment.fundService.controller.PortfolioController;
+import com.winsigns.investment.fundService.model.Portfolio;
+
+public class PortfolioResourceAssembler
+    extends ResourceAssemblerSupport<Portfolio, PortfolioResource> {
 
   public PortfolioResourceAssembler() {
     super(PortfolioController.class, PortfolioResource.class);
@@ -25,7 +25,7 @@ public class PortfolioResourceAssembler extends
     Long fundAccountId = portfolio.getFundAccount().getId();
     portfolioResource
         .add(linkTo(methodOn(FundAccountController.class).readFundAccount(fundAccountId))
-            .withRel(FundAccount.class.getAnnotation(Relation.class).value()));
+            .withRel(FundAccountResource.class.getAnnotation(Relation.class).value()));
 
     return portfolioResource;
   }

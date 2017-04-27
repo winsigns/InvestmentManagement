@@ -1,16 +1,27 @@
 package com.winsigns.investment.fundService.constant;
 
+import com.winsigns.investment.framework.i18n.i18nHelper;
+
 /**
  * Created by colin on 2017/2/23.
  */
-public class CurrencyCode {
-
+public enum CurrencyCode {
   // 人民币
-  public static String CNY = "CNY";
+  CNY,
 
   // 港币
-  public static String HKD = "HKD";
+  HKD,
 
   // 美元
-  public static String USD = "USD";
+  USD;
+
+  /**
+   * 国际化
+   * 
+   * @return
+   */
+  public String i18n() {
+    return i18nHelper.i18n(this);
+  }
 }
+

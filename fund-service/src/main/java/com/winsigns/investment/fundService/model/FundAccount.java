@@ -1,15 +1,16 @@
 package com.winsigns.investment.fundService.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winsigns.investment.framework.model.AbstractEntity;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import org.springframework.hateoas.core.Relation;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winsigns.investment.framework.model.AbstractEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +20,6 @@ import lombok.Setter;
  */
 
 @Entity
-@Relation(value = "fund-account", collectionRelation = "fund-accounts")
 public class FundAccount extends AbstractEntity {
 
   // 名称
@@ -44,6 +44,5 @@ public class FundAccount extends AbstractEntity {
   @Getter
   @Setter
   @ManyToOne
-  @JsonIgnore
   private InvestManager investManager;
 }
