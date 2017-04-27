@@ -92,7 +92,7 @@ public class ExternalCapitalAccountController {
         externalCapitalAccount.getExternalTradeAccounts();
     if (!externalTradeAccounts.isEmpty()) {
       externalCapitalAccountResource.add(
-          ExternalTradeAccount.class.getAnnotation(Relation.class).collectionRelation(),
+          ExternalTradeAccountResource.class.getAnnotation(Relation.class).collectionRelation(),
           new ExternalTradeAccountResourceAssembler().toResources(externalTradeAccounts));
     }
 
@@ -129,7 +129,7 @@ public class ExternalCapitalAccountController {
         .readExternalTradeAccounts(externalCapitalAccountId)).withSelfRel();
     Link linkECA = linkTo(methodOn(ExternalCapitalAccountController.class)
         .readExternalCapitalAccount(externalCapitalAccountId))
-            .withRel(ExternalCapitalAccount.class.getAnnotation(Relation.class).value());
+            .withRel(ExternalCapitalAccountResource.class.getAnnotation(Relation.class).value());
 
     return new Resources<ExternalTradeAccountResource>(
         new ExternalTradeAccountResourceAssembler().toResources(

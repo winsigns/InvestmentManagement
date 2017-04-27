@@ -65,7 +65,8 @@ public class FundAccountController {
     // 增加内嵌的投资组合
     List<Portfolio> portfolios = fundAccount.getPortfolios();
     if (!portfolios.isEmpty()) {
-      fundAccountResource.add(Portfolio.class.getAnnotation(Relation.class).collectionRelation(),
+      fundAccountResource.add(
+          PortfolioResource.class.getAnnotation(Relation.class).collectionRelation(),
           new PortfolioResourceAssembler().toResources(portfolios));
     }
     return fundAccountResource;
@@ -93,7 +94,7 @@ public class FundAccountController {
         linkTo(methodOn(FundAccountController.class).readPortfolios(fundAccountId)).withSelfRel();
     Link linkFundAccount =
         linkTo(methodOn(FundAccountController.class).readFundAccount(fundAccountId))
-            .withRel(FundAccount.class.getAnnotation(Relation.class).value());
+            .withRel(FundAccountResource.class.getAnnotation(Relation.class).value());
 
     return new Resources<PortfolioResource>(new PortfolioResourceAssembler()
         .toResources(portfolioService.findByFundAccountId(fundAccountId)), link, linkFundAccount);

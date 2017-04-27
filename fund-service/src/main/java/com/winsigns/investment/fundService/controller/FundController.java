@@ -131,7 +131,7 @@ public class FundController {
     // 增加内嵌的基金产品账户
     List<FundAccount> fundAccounts = fund.getFundAccounts();
     if (!fundAccounts.isEmpty()) {
-      fundResource.add(FundAccount.class.getAnnotation(Relation.class).collectionRelation(),
+      fundResource.add(FundAccountResource.class.getAnnotation(Relation.class).collectionRelation(),
           new FundAccountResourceAssembler().toResources(fundAccounts));
     }
 
@@ -139,7 +139,7 @@ public class FundController {
     List<ExternalCapitalAccount> externalCapitalAccounts = fund.getExternalCapitalAccounts();
     if (!externalCapitalAccounts.isEmpty()) {
       fundResource.add(
-          ExternalCapitalAccount.class.getAnnotation(Relation.class).collectionRelation(),
+          ExternalCapitalAccountResource.class.getAnnotation(Relation.class).collectionRelation(),
           new ExternalCapitalAccountResourceAssembler().toResources(externalCapitalAccounts));
     }
 

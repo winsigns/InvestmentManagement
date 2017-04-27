@@ -1,10 +1,13 @@
 package com.winsigns.investment.fundService.resource;
 
+import org.springframework.hateoas.core.Relation;
+
 import com.winsigns.investment.framework.hal.HALResponse;
 import com.winsigns.investment.fundService.model.Portfolio;
 
 import lombok.Getter;
 
+@Relation(value = "portfolio", collectionRelation = "portfolios")
 public class PortfolioResource extends HALResponse<Portfolio> {
 
   @Getter
