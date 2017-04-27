@@ -57,7 +57,7 @@ configurations {
 }
 
 dependencies {
-	compile('com.winsigns:investment-framework:0.0.2-SNAPSHOT')
+	compile('com.winsigns:investment-framework:0.0.4-SNAPSHOT')
 	
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile('org.springframework.boot:spring-boot-starter-web')
@@ -68,6 +68,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-redis')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('mysql:mysql-connector-java')
+	compile('com.jayway.jsonpath:json-path')
 
 	compile('org.springframework.kafka:spring-kafka')
 	compile('org.apache.kafka:kafka-streams:0.10.0.0')

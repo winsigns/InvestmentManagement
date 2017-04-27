@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.framework.hal.HALResponse;
+import com.winsigns.investment.inventoryService.model.CapitalDetail;
 import com.winsigns.investment.inventoryService.model.ECACashPool;
-import com.winsigns.investment.inventoryService.model.FundAccountCapital;
-import com.winsigns.investment.inventoryService.model.FundAccountCapitalDetail;
-import com.winsigns.investment.inventoryService.model.Position;
+import com.winsigns.investment.inventoryService.model.FundAccountCapitalPool;
 
 /**
  * Created by colin on 2017/2/22.
@@ -30,19 +29,12 @@ public class RootController {
   public HttpEntity<HALResponse<String>> root() {
     HALResponse<String> halResponse = new HALResponse<String>("");
 
-    halResponse.add(linkTo(methodOn((ECACashPoolController.class)).readECACashPools(null))
-        .withRel(ECACashPool.class.getAnnotation(Relation.class).collectionRelation()));
-
-    halResponse.add(linkTo(methodOn((FundAccountCapitalController.class)).readFundAccountCapitals())
-        .withRel(FundAccountCapital.class.getAnnotation(Relation.class).collectionRelation()));
-
+    halResponse.addCollectionLink(ECACashPoolController.class, ECACashPool.class);
     halResponse.add(
-        linkTo(methodOn((FundAccountCapitalDetailController.class)).readFundAccountCapitalDetails())
+        linkTo(methodOn(FundAccountCapitalPoolController.class).readFundAccountCapitalPools(null))
             .withRel(
-                FundAccountCapitalDetail.class.getAnnotation(Relation.class).collectionRelation()));
-
-    halResponse.add(linkTo(methodOn((PositionController.class)).readPositions())
-        .withRel(Position.class.getAnnotation(Relation.class).collectionRelation()));
+                FundAccountCapitalPool.class.getAnnotation(Relation.class).collectionRelation()));
+    halResponse.addCollectionLink(CapitalDetailController.class, CapitalDetail.class);
 
     return new ResponseEntity<>(halResponse, HttpStatus.OK);
   }

@@ -3,10 +3,8 @@ package com.winsigns.investment.inventoryService.constant;
 import static java.util.Arrays.asList;
 
 import java.util.Collection;
-import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import com.winsigns.investment.framework.i18n.i18nHelper;
 
@@ -37,18 +35,17 @@ public enum ExternalCapitalAccountType {
   // 自定义标的账户
 
   // 支持的币种
-  private static HashMap<ExternalCapitalAccountType, List<Currency>> supportCurrencies =
-      new HashMap<ExternalCapitalAccountType, List<Currency>>();
+  private static HashMap<ExternalCapitalAccountType, List<CurrencyCode>> supportCurrencies =
+      new HashMap<ExternalCapitalAccountType, List<CurrencyCode>>();
   // 支持外部交易账户
   private static HashMap<ExternalCapitalAccountType, List<ExternalTradeAccountType>> supportTradeAccountTypes =
       new HashMap<ExternalCapitalAccountType, List<ExternalTradeAccountType>>();
 
   static {
     supportCurrencies.put(CHINA_GENERAL_CAPITAL_ACCOUNT,
-        asList(Currency.getInstance(CurrencyCode.CNY), Currency.getInstance(CurrencyCode.HKD),
-            Currency.getInstance(CurrencyCode.USD)));
+        asList(CurrencyCode.CNY, CurrencyCode.HKD, CurrencyCode.USD));
 
-    supportCurrencies.put(CHINA_FUTURE_CAPITAL_ACCOUNT, asList(Currency.getInstance(Locale.CHINA)));
+    supportCurrencies.put(CHINA_FUTURE_CAPITAL_ACCOUNT, asList(CurrencyCode.CNY));
   }
 
   static {
@@ -64,7 +61,8 @@ public enum ExternalCapitalAccountType {
             ExternalTradeAccountType.CFFEX_TRADING_CODE));
   }
 
-  public static Collection<Currency> getSupportedCurrency(ExternalCapitalAccountType accountType) {
+  public static Collection<CurrencyCode> getSupportedCurrency(
+      ExternalCapitalAccountType accountType) {
     return accountType.getSupportedCurrency();
   }
 
@@ -77,7 +75,7 @@ public enum ExternalCapitalAccountType {
     return i18nHelper.i18n(this);
   }
 
-  public Collection<Currency> getSupportedCurrency() {
+  public Collection<CurrencyCode> getSupportedCurrency() {
     return supportCurrencies.get(this);
   }
 

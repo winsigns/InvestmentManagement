@@ -3,15 +3,12 @@ package com.winsigns.investment.inventoryService.resource;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
-
-import com.winsigns.investment.inventoryService.command.AllotAccountCommand;
-import com.winsigns.investment.inventoryService.command.TransferAccountCommand;
+import com.winsigns.investment.framework.measure.resource.MeasureHostResourceAssembler;
 import com.winsigns.investment.inventoryService.controller.ECACashPoolController;
 import com.winsigns.investment.inventoryService.model.ECACashPool;
 
 public class ECACashPoolResourceAssembler
-    extends ResourceAssemblerSupport<ECACashPool, ECACashPoolResource> {
+    extends MeasureHostResourceAssembler<ECACashPool, ECACashPoolResource> {
 
   public ECACashPoolResourceAssembler() {
     super(ECACashPoolController.class, ECACashPoolResource.class);
@@ -23,15 +20,13 @@ public class ECACashPoolResourceAssembler
     ECACashPoolResource ecaCashPoolResource =
         createResourceWithId(ecaCashPool.getId(), ecaCashPool);
 
-    ecaCashPoolResource.add(linkTo(methodOn(ECACashPoolController.class)
-        .transferTo(ecaCashPool.getId(), new TransferAccountCommand())).withRel("transfer-to"));
-    ecaCashPoolResource.add(linkTo(methodOn(ECACashPoolController.class)
-        .transferFrom(ecaCashPool.getId(), new TransferAccountCommand())).withRel("transfer-from"));
 
-    ecaCashPoolResource.add(linkTo(methodOn(ECACashPoolController.class)
-        .allotIn(ecaCashPool.getId(), new AllotAccountCommand())).withRel("allot-in"));
-    ecaCashPoolResource.add(linkTo(methodOn(ECACashPoolController.class)
-        .allotOut(ecaCashPool.getId(), new AllotAccountCommand())).withRel("allot-out"));
+    ecaCashPoolResource.add(linkTo(
+        methodOn(ECACashPoolController.class).transferToFundAccount(ecaCashPool.getId(), null))
+            .withRel("to-fa"));
+    ecaCashPoolResource
+        .add(linkTo(methodOn(ECACashPoolController.class).transferToECA(ecaCashPool.getId(), null))
+            .withRel("to-eca"));
 
     return ecaCashPoolResource;
   }

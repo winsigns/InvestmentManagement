@@ -8,10 +8,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.winsigns.investment.framework.measure.ICalculateFactor;
+import com.winsigns.investment.framework.measure.IMeasure;
 import com.winsigns.investment.framework.measure.Measure;
+import com.winsigns.investment.framework.measure.MeasureHost;
 import com.winsigns.investment.framework.measure.MeasureHostType;
 import com.winsigns.investment.framework.measure.TradingMeasureValue;
+import com.winsigns.investment.framework.model.OperatorEntity;
 import com.winsigns.investment.inventoryService.model.ECACashPool;
 import com.winsigns.investment.inventoryService.model.ECACashSerial;
 import com.winsigns.investment.inventoryService.repository.ECACashPoolRepository;
@@ -35,18 +37,28 @@ public class ECACashMeasure extends Measure {
   }
 
   @Override
-  public List<ICalculateFactor> getCalculateFactors() {
-    return asList(new ECACashSerial());
+  public List<Class<? extends OperatorEntity>> getConcernedOperator() {
+    return asList(ECACashSerial.class);
+  }
+
+
+  @Override
+  public List<IMeasure> getDependentMeasure() {
+    return null;
   }
 
   @Override
-  protected TradingMeasureValue doCalculate(Long measureHostId, boolean isFloat, String version) {
-
-    ECACashPool ecaCashPool = ecaCashPoolRepository.findOne(measureHostId);
+  protected TradingMeasureValue doCalculate(MeasureHost measureHost, boolean isFloat,
+      String version) {
+    ECACashPool ecaCashPool = (ECACashPool) measureHost;
 
     Double cash = ecaCashSerialRepository.findByECACashPoolAndAssignedDate(ecaCashPool, new Date());
 
-    return new TradingMeasureValue(ecaCashPool, this, isFloat, version, cash);
+    if (cash == null) {
+      cash = 0.0;
+    }
 
+    return new TradingMeasureValue(ecaCashPool, this, isFloat, version, cash);
   }
+
 }
