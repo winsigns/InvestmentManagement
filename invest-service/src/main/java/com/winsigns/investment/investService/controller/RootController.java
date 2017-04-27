@@ -5,7 +5,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import org.springframework.hateoas.core.Relation;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +24,8 @@ public class RootController {
       produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
   public HttpEntity<HALResponse<String>> root() {
     HALResponse<String> halResponse = new HALResponse<String>("");
-    halResponse.add(linkTo((InstructionController.class))
-        .withRel(Instruction.class.getAnnotation(Relation.class).collectionRelation()));
+    halResponse.addCollectionLink(InstructionController.class, Instruction.class);
+    halResponse.add(linkTo((InstructionController.class)).withRel("instruct-baskets"));
     return new ResponseEntity<>(halResponse, HttpStatus.OK);
   }
 }

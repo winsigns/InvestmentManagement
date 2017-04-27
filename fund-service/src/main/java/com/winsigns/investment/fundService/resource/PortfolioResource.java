@@ -7,7 +7,6 @@ import com.winsigns.investment.fundService.model.Portfolio;
 
 import lombok.Getter;
 
-@Relation(value = "portfolio", collectionRelation = "portfolios")
 public class PortfolioResource extends HALResponse<Portfolio> {
 
   @Getter
