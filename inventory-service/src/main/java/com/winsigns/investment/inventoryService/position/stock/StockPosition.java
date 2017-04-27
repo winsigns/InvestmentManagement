@@ -3,14 +3,11 @@ package com.winsigns.investment.inventoryService.position.stock;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import org.springframework.hateoas.core.Relation;
-
 import com.winsigns.investment.inventoryService.model.Position;
 
 import lombok.Getter;
 
 @Entity
-@Relation(value = "position", collectionRelation = "positions")
 @DiscriminatorValue("stock-position")
 public class StockPosition extends Position {
 

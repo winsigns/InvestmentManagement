@@ -19,8 +19,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.hateoas.core.Relation;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.model.AbstractEntity;
 import com.winsigns.investment.investService.constant.CurrencyCode;
@@ -39,7 +37,6 @@ import lombok.Setter;
  *
  */
 @Entity
-@Relation(value = "instruction", collectionRelation = "instructions")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
 @DiscriminatorValue("instruction")

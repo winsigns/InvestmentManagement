@@ -14,8 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.hateoas.core.Relation;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.model.AbstractEntity;
 import com.winsigns.investment.tradeService.constant.CurrencyCode;
@@ -25,7 +23,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Relation(value = "entrust", collectionRelation = "entrusts")
 public class Entrust extends AbstractEntity {
 
   // 指令ID

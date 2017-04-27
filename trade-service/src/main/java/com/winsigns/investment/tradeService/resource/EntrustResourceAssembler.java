@@ -7,7 +7,6 @@ import org.springframework.hateoas.core.Relation;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
 import com.winsigns.investment.tradeService.controller.EntrustController;
-import com.winsigns.investment.tradeService.model.Done;
 import com.winsigns.investment.tradeService.model.Entrust;
 
 public class EntrustResourceAssembler extends ResourceAssemblerSupport<Entrust, EntrustResource> {
@@ -21,8 +20,8 @@ public class EntrustResourceAssembler extends ResourceAssemblerSupport<Entrust, 
     EntrustResource resource = createResourceWithId(entrust.getId(), entrust);
 
     resource.add(linkTo(methodOn(EntrustController.class).readDones(entrust.getId()))
-        .withRel(Done.class.getAnnotation(Relation.class).collectionRelation()));
-    // 准备各项过滤条件的Link
+        .withRel(DoneResource.class.getAnnotation(Relation.class).collectionRelation()));
+    // TODO 准备各项过滤条件的Link
 
     return resource;
   }

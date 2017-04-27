@@ -11,8 +11,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
-import org.springframework.hateoas.core.Relation;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -25,7 +23,6 @@ import lombok.Setter;
  *
  */
 @Entity(name = "instruction_basket")
-@Relation(value = "instruction", collectionRelation = "instructions")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorValue("instruction_basket")
 public class InstructionBasket extends Instruction {

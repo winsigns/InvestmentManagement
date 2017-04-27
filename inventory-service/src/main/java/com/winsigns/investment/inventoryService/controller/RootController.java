@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.framework.hal.HALResponse;
-import com.winsigns.investment.inventoryService.model.CapitalDetail;
-import com.winsigns.investment.inventoryService.model.ECACashPool;
-import com.winsigns.investment.inventoryService.model.FundAccountCapitalPool;
+import com.winsigns.investment.inventoryService.resource.CapitalDetailResource;
+import com.winsigns.investment.inventoryService.resource.ECACashPoolResource;
+import com.winsigns.investment.inventoryService.resource.FundAccountCapitalPoolResource;
 
 /**
  * Created by colin on 2017/2/22.
@@ -29,12 +29,12 @@ public class RootController {
   public HttpEntity<HALResponse<String>> root() {
     HALResponse<String> halResponse = new HALResponse<String>("");
 
-    halResponse.addCollectionLink(ECACashPoolController.class, ECACashPool.class);
+    halResponse.addCollectionLink(ECACashPoolController.class, ECACashPoolResource.class);
     halResponse.add(
         linkTo(methodOn(FundAccountCapitalPoolController.class).readFundAccountCapitalPools(null))
-            .withRel(
-                FundAccountCapitalPool.class.getAnnotation(Relation.class).collectionRelation()));
-    halResponse.addCollectionLink(CapitalDetailController.class, CapitalDetail.class);
+            .withRel(FundAccountCapitalPoolResource.class.getAnnotation(Relation.class)
+                .collectionRelation()));
+    halResponse.addCollectionLink(CapitalDetailController.class, CapitalDetailResource.class);
 
     return new ResponseEntity<>(halResponse, HttpStatus.OK);
   }

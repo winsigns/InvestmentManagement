@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winsigns.investment.framework.hal.HALResponse;
-import com.winsigns.investment.tradeService.model.Entrust;
+import com.winsigns.investment.tradeService.resource.EntrustResource;
 
 
 /**
@@ -24,7 +24,7 @@ public class RootController {
       produces = {HAL_JSON_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE})
   public HttpEntity<HALResponse<String>> root() {
     HALResponse<String> halResponse = new HALResponse<String>("");
-    halResponse.addCollectionLink(EntrustController.class, Entrust.class);
+    halResponse.addCollectionLink(EntrustController.class, EntrustResource.class);
     return new ResponseEntity<>(halResponse, HttpStatus.OK);
   }
 }

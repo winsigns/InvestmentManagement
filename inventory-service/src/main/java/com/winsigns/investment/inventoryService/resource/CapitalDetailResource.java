@@ -1,10 +1,13 @@
 package com.winsigns.investment.inventoryService.resource;
 
+import org.springframework.hateoas.core.Relation;
+
 import com.winsigns.investment.framework.hal.HALResponse;
 import com.winsigns.investment.inventoryService.model.CapitalDetail;
 
 import lombok.Getter;
 
+@Relation(value = "capital-detail", collectionRelation = "capital-details")
 public class CapitalDetailResource extends HALResponse<CapitalDetail> {
 
   @Getter

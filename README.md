@@ -103,7 +103,7 @@ service discovery with Eureka
 
 /entrusts GET/POST
 /entrusts/{entrustId} GET/PUT/DELETE
-/entrusts/{entrustId}/dones POST
+/entrusts/{entrustId}/dones GET/POST
 
 /dones/{doneId} GET
 ```

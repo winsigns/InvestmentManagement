@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.hateoas.core.Relation;
+
 import com.winsigns.investment.framework.hal.HALResponse;
 import com.winsigns.investment.framework.model.Item;
 import com.winsigns.investment.investService.constant.CurrencyCode;
@@ -22,6 +24,7 @@ import lombok.Getter;
  * @author yimingjin
  *
  */
+@Relation(value = "instruction", collectionRelation = "instructions")
 public class InstructionResource extends HALResponse<Instruction> {
 
   @Getter

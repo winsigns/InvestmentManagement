@@ -14,8 +14,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
-import org.springframework.hateoas.core.Relation;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.model.AbstractEntity;
 import com.winsigns.investment.inventoryService.constant.CurrencyCode;
@@ -25,7 +23,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Relation(value = "fa-capital-pool", collectionRelation = "fa-capital-pools")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn
 @DiscriminatorValue("fa-capital_pool")

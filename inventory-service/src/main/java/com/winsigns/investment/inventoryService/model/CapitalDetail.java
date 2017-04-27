@@ -5,8 +5,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 
-import org.springframework.hateoas.core.Relation;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.measure.MeasureHost;
 import com.winsigns.investment.framework.measure.MeasureHostType;
@@ -17,7 +15,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Relation(value = "capital-detail", collectionRelation = "capital-details")
 public class CapitalDetail extends MeasureHost {
 
   // 具体的资金服务的资金

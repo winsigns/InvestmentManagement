@@ -10,8 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.hateoas.core.Relation;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.model.AbstractEntity;
 import com.winsigns.investment.tradeService.constant.DoneStatus;
@@ -20,7 +18,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Relation(value = "done", collectionRelation = "dones")
 public class Done extends AbstractEntity {
   // 委托
   @ManyToOne

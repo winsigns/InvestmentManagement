@@ -6,15 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
-import org.springframework.hateoas.core.Relation;
-
 import com.winsigns.investment.framework.model.AbstractEntity;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Relation(value = "position", collectionRelation = "positions")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn
 @DiscriminatorValue("position")

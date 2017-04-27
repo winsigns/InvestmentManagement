@@ -14,8 +14,6 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.springframework.hateoas.core.Relation;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.measure.MeasureHost;
 import com.winsigns.investment.framework.measure.MeasureHostType;
@@ -27,7 +25,6 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "external_capital_account_cash_pool")
-@Relation(value = "eca-cash-pool", collectionRelation = "eca-cash-pools")
 public class ECACashPool extends MeasureHost {
 
   /*

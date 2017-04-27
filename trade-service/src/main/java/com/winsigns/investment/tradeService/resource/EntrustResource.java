@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.hateoas.core.Relation;
+
 import com.winsigns.investment.framework.hal.HALResponse;
 import com.winsigns.investment.framework.model.Item;
 import com.winsigns.investment.tradeService.constant.EntrustOperatorType;
@@ -17,6 +19,7 @@ import com.winsigns.investment.tradeService.service.common.ITradeType;
 
 import lombok.Getter;
 
+@Relation(value = "entrust", collectionRelation = "entrusts")
 public class EntrustResource extends HALResponse<Entrust> {
   @Getter
   protected final HashMap<String, String> errors = new HashMap<String, String>();
@@ -52,10 +55,10 @@ public class EntrustResource extends HALResponse<Entrust> {
     for (EntrustMessage entrustMessage : entrust.getMessages()) {
       switch (entrustMessage.getMessageType()) {
         case ERROR:
-          errors.put(entrustMessage.getFieldName(), entrustMessage.getMessageCode().i18n());
+          errors.put(entrustMessage.getFieldName(), entrustMessage.getMessage());
           break;
         case WARNING:
-          warnings.put(entrustMessage.getFieldName(), entrustMessage.getMessageCode().i18n());
+          warnings.put(entrustMessage.getFieldName(), entrustMessage.getMessage());
           break;
         default:
           break;

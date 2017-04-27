@@ -40,6 +40,16 @@ public abstract class AbstractInvestService implements IInvestService {
   }
 
   @Override
+  public IInvestType getInvestType(String name) {
+    for (IInvestType type : this.getInvestType()) {
+      if (type.name().equals(name)) {
+        return type;
+      }
+    }
+    return DefaultInvestType.DEFAULT;
+  }
+
+  @Override
   public boolean commitInstruction(Instruction instruction) {
     return tradeService.commitInstruction(instruction);
   }

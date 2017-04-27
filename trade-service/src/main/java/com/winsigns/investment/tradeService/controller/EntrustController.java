@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.core.Relation;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.winsigns.investment.framework.hal.Resources;
 import com.winsigns.investment.tradeService.command.CreateDoneCommand;
 import com.winsigns.investment.tradeService.command.CreateEntrustCommand;
 import com.winsigns.investment.tradeService.command.UpdateEntrustCommand;
@@ -89,7 +89,7 @@ public class EntrustController {
     // 增加内嵌的成交
     List<Done> dones = doneService.findByEntrust(entrust);
     if (!dones.isEmpty()) {
-      resource.add(Done.class.getAnnotation(Relation.class).collectionRelation(),
+      resource.add(DoneResource.class.getAnnotation(Relation.class).collectionRelation(),
           new DoneResourceAssembler().toResources(dones));
     }
 
@@ -133,7 +133,7 @@ public class EntrustController {
 
     Link link = linkTo(methodOn(EntrustController.class).readDones(entrustId)).withSelfRel();
     Link linkEntrust = linkTo(methodOn(EntrustController.class).readEntrust(entrustId))
-        .withRel(Entrust.class.getAnnotation(Relation.class).value());
+        .withRel(EntrustResource.class.getAnnotation(Relation.class).value());
 
     Entrust entrust = entrustService.readEntrust(entrustId);
     List<Done> dones = doneService.findByEntrust(entrust);
