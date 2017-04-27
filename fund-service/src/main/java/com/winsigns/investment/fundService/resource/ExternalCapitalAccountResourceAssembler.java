@@ -9,8 +9,6 @@ import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import com.winsigns.investment.fundService.controller.ExternalCapitalAccountController;
 import com.winsigns.investment.fundService.controller.FundController;
 import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
-import com.winsigns.investment.fundService.model.ExternalTradeAccount;
-import com.winsigns.investment.fundService.model.Fund;
 
 public class ExternalCapitalAccountResourceAssembler
     extends ResourceAssemblerSupport<ExternalCapitalAccount, ExternalCapitalAccountResource> {
@@ -27,11 +25,11 @@ public class ExternalCapitalAccountResourceAssembler
 
     externalCapitalAccountResource.add(
         linkTo(methodOn(FundController.class).readFund(externalCapitalAccount.getFund().getId()))
-            .withRel(Fund.class.getAnnotation(Relation.class).value()));
+            .withRel(FundResource.class.getAnnotation(Relation.class).value()));
 
     externalCapitalAccountResource.add(linkTo(methodOn(ExternalCapitalAccountController.class)
         .readExternalTradeAccounts(externalCapitalAccount.getId())).withRel(
-            ExternalTradeAccount.class.getAnnotation(Relation.class).collectionRelation()));
+            ExternalTradeAccountResource.class.getAnnotation(Relation.class).collectionRelation()));
 
     return externalCapitalAccountResource;
   }

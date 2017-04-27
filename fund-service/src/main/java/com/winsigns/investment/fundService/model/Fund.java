@@ -1,21 +1,21 @@
 package com.winsigns.investment.fundService.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.winsigns.investment.framework.model.AbstractEntity;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import org.springframework.hateoas.core.Relation;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winsigns.investment.framework.model.AbstractEntity;
 
 /**
  * Created by colin on 2017/2/6.
  */
 
 @Entity
-@Relation(value = "fund", collectionRelation = "funds")
 public class Fund extends AbstractEntity {
 
   // 编码
@@ -36,7 +36,8 @@ public class Fund extends AbstractEntity {
 
   @OneToMany(mappedBy = "fund", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JsonIgnore
-  private List<ExternalCapitalAccount> externalCapitalAccounts = new ArrayList<ExternalCapitalAccount>();
+  private List<ExternalCapitalAccount> externalCapitalAccounts =
+      new ArrayList<ExternalCapitalAccount>();
 
   public String getCode() {
     return code;

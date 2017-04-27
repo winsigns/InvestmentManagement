@@ -1,14 +1,19 @@
 package com.winsigns.investment.fundService.service;
 
+import java.util.Collection;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
 import com.winsigns.investment.fundService.command.CreateFundAccountCommand;
 import com.winsigns.investment.fundService.command.UpdateFundAccountCommand;
 import com.winsigns.investment.fundService.model.Fund;
 import com.winsigns.investment.fundService.model.FundAccount;
+import com.winsigns.investment.fundService.model.InvestManager;
 import com.winsigns.investment.fundService.repository.FundAccountRepository;
 import com.winsigns.investment.fundService.repository.FundRepository;
-import java.util.Collection;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.winsigns.investment.fundService.repository.InvestManagerRepository;
 
 @Service
 public class FundAccountService {
@@ -18,6 +23,9 @@ public class FundAccountService {
 
   @Autowired
   FundRepository fundRepository;
+
+  @Autowired
+  InvestManagerRepository investManagerRepository;
 
   public Collection<FundAccount> findByFundId(Long fundId) {
     return fundAccountRepository.findByFundId(fundId);
@@ -39,6 +47,13 @@ public class FundAccountService {
     newFundAccount.setFund(fund);
     newFundAccount.setName(createFundAccountCommand.getName());
 
+    if (createFundAccountCommand.getInvestManagerId() != null) {
+      InvestManager investManager =
+          investManagerRepository.findOne(createFundAccountCommand.getInvestManagerId());
+      Assert.notNull(investManager);
+      newFundAccount.setInvestManager(investManager);
+    }
+
     return fundAccountRepository.save(newFundAccount);
   }
 
@@ -52,7 +67,15 @@ public class FundAccountService {
 
     fundAccount.setName(fundAccountCommand.getName());
 
+    if (fundAccountCommand.getInvestManagerId() != null) {
+      InvestManager investManager =
+          investManagerRepository.findOne(fundAccountCommand.getInvestManagerId());
+      Assert.notNull(investManager);
+      fundAccount.setInvestManager(investManager);
+    }
+
     return fundAccountRepository.save(fundAccount);
+
   }
 
   public void deleteFundAccount(Long fundAccountId) {

@@ -3,12 +3,12 @@ package com.winsigns.investment.fundService.resource;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-import com.winsigns.investment.fundService.controller.ExternalCapitalAccountController;
-import com.winsigns.investment.fundService.controller.ExternalTradeAccountController;
-import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
-import com.winsigns.investment.fundService.model.ExternalTradeAccount;
 import org.springframework.hateoas.core.Relation;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+
+import com.winsigns.investment.fundService.controller.ExternalCapitalAccountController;
+import com.winsigns.investment.fundService.controller.ExternalTradeAccountController;
+import com.winsigns.investment.fundService.model.ExternalTradeAccount;
 
 public class ExternalTradeAccountResourceAssembler
     extends ResourceAssemblerSupport<ExternalTradeAccount, ExternalTradeAccountResource> {
@@ -20,15 +20,13 @@ public class ExternalTradeAccountResourceAssembler
   @Override
   public ExternalTradeAccountResource toResource(ExternalTradeAccount externalTradeAccount) {
 
-    ExternalTradeAccountResource externalTradeAccountResource = createResourceWithId(
-        externalTradeAccount.getId(),
-        externalTradeAccount);
+    ExternalTradeAccountResource externalTradeAccountResource =
+        createResourceWithId(externalTradeAccount.getId(), externalTradeAccount);
 
     Long externalCapitalAccountId = externalTradeAccount.getExternalCapitalAccount().getId();
-    externalTradeAccountResource.add(linkTo(
-        methodOn(ExternalCapitalAccountController.class)
-            .readExternalCapitalAccount(externalCapitalAccountId))
-        .withRel(ExternalCapitalAccount.class.getAnnotation(Relation.class).value()));
+    externalTradeAccountResource.add(linkTo(methodOn(ExternalCapitalAccountController.class)
+        .readExternalCapitalAccount(externalCapitalAccountId))
+            .withRel(ExternalCapitalAccountResource.class.getAnnotation(Relation.class).value()));
 
     return externalTradeAccountResource;
   }
