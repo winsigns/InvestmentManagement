@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.winsigns.investment.framework.hal.HALResponse;
-import com.winsigns.investment.framework.i18n.i18nHelper;
 import com.winsigns.investment.framework.model.Item;
 import com.winsigns.investment.investService.constant.CurrencyCode;
 import com.winsigns.investment.investService.constant.InstructionOperatorType;
 import com.winsigns.investment.investService.model.Instruction;
 import com.winsigns.investment.investService.model.InstructionMessage;
 import com.winsigns.investment.investService.service.common.IInvestService;
+import com.winsigns.investment.investService.service.common.IInvestType;
 import com.winsigns.investment.investService.service.common.InvestServiceManager;
 
 import lombok.Getter;
@@ -26,13 +26,22 @@ import lombok.Getter;
 public class InstructionResource extends HALResponse<Instruction> {
 
   @Getter
+  protected final String investServiceLabel;
+
+  @Getter
+  protected final String investTypeLabel;
+
+  @Getter
   protected final String executionStatusLabel;
+
+  @Getter
+  protected final String currencyLabel;
 
   @Getter
   protected final List<Item> supportedOperator = new ArrayList<Item>();
 
   @Getter
-  protected final List<Item> supprotedInvestService = new ArrayList<Item>();
+  protected final List<Item> supportedInvestService = new ArrayList<Item>();
 
   @Getter
   protected final List<Item> supportedCurrencies = new ArrayList<Item>();
@@ -64,19 +73,37 @@ public class InstructionResource extends HALResponse<Instruction> {
 
       }
     }
-    // 1.状态的国际化
+    // 1.字段的国际化
     this.executionStatusLabel = instruction.getExecutionStatus().i18n();
+    IInvestService service =
+        InvestServiceManager.getInstance().getService(instruction.getInvestService());
+    if (service != null) {
+      this.investServiceLabel = service.getSimpleName();
+      if (service.getInvestType(instruction.getInvestType()) != null) {
+        this.investTypeLabel = service.getInvestType(instruction.getInvestType()).i18n();
+      } else {
+        this.investTypeLabel = null;
+      }
+    } else {
+      this.investServiceLabel = null;
+      this.investTypeLabel = null;
+    }
+    if (instruction.getCurrency() != null) {
+      this.currencyLabel = instruction.getCurrency().i18n();
+    } else {
+      this.currencyLabel = null;
+    }
     // 2.状态支持的操作
     for (InstructionOperatorType type : instruction.getExecutionStatus().getSupportedOperator()) {
       this.supportedOperator.add(new Item(type.name(), type.i18n()));
     }
     // 3.支持的投资服务
-    for (Map.Entry<IInvestService, Enum<?>[]> info : InvestServiceManager.getInstance()
+    for (Map.Entry<IInvestService, IInvestType[]> info : InvestServiceManager.getInstance()
         .getServicesInfo().entrySet()) {
-      Enum<?>[] enums = info.getValue();
-      for (int i = 0; i < enums.length; ++i) {
-        this.supprotedInvestService.add(
-            new Item(info.getKey().getName() + "." + enums[i].name(), i18nHelper.i18n(enums[i])));
+      IInvestType[] types = info.getValue();
+      for (int i = 0; i < types.length; ++i) {
+        this.supportedInvestService.add(new Item(info.getKey().getName() + "." + types[i].name(),
+            info.getKey().getSimpleName() + "-" + types[i].i18n()));
       }
     }
     // 4.支持的币种

@@ -5,38 +5,36 @@ import com.winsigns.investment.investService.constant.InstructionVolumeType;
 
 import lombok.Data;
 
-/**
- * 更新指令的命令
- * 
- * @author yimingjin
- *
- */
 @Data
-public class UpdateInstructionCommand {
+public class CommitInstructionCommand {
+
+  // 指令序号
+  Long instructionId;
+
   // 投资组合
-  private Long portfolioId;
+  Long portfolioId;
 
   // 投资标的
-  private Long securityId;
+  Long securityId;
 
   // 投资服务
-  private String investService;
+  String investService;
 
   // 投资类型
-  private String investType;
+  String investType;
 
   // 币种
-  private CurrencyCode currency;
+  CurrencyCode currency;
 
   // 成本价
-  private Double costPrice;
+  Double costPrice;
 
   // 数量类型
-  private InstructionVolumeType volumeType;
+  InstructionVolumeType volumeType;
 
   // 指令数量
-  private Long quantity;
+  Long quantity;
 
   // 指令金额
-  private Double amount;
+  Double amount;
 }

@@ -10,7 +10,7 @@ CREATE TABLE instruction
 	portfolio_id BIGINT,
 	security_id BIGINT,
 	invest_service VARCHAR(64),
-	invest_direction VARCHAR(64),
+	invest_type VARCHAR(64),
 	currency VARCHAR(4),
 	cost_price DOUBLE PRECISION,
 	volume_type VARCHAR(64),
@@ -20,6 +20,7 @@ CREATE TABLE instruction
 	create_date DATE,
 	create_time TIMESTAMP,
 	instruction_basket_id BIGINT,
+	trader_id BIGINT,
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 
