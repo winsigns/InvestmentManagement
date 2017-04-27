@@ -13,9 +13,10 @@ import org.springframework.util.Assert;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 /**
- * A simple {@link Resource} wrapping a domain object and adding links to it.
+ * 支持link的替换功能
  * 
- * @author Oliver Gierke
+ * @author yimingjin
+ * @since 0.0.4
  */
 @XmlRootElement
 public class Resource<T> extends ResourceSupport {
