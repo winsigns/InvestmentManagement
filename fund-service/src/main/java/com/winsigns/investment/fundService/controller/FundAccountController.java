@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.core.Relation;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.winsigns.investment.framework.hal.Resources;
 import com.winsigns.investment.fundService.command.CreatePortfolioCommand;
 import com.winsigns.investment.fundService.command.UpdateFundAccountCommand;
 import com.winsigns.investment.fundService.model.FundAccount;
