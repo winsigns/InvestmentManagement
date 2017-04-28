@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.springframework.hateoas.core.Relation;
 
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.framework.hal.HALResponse;
 import com.winsigns.investment.framework.model.Item;
-import com.winsigns.investment.investService.constant.CurrencyCode;
 import com.winsigns.investment.investService.constant.InstructionOperatorType;
 import com.winsigns.investment.investService.model.Instruction;
 import com.winsigns.investment.investService.model.InstructionMessage;

@@ -15,8 +15,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.framework.model.AbstractEntity;
-import com.winsigns.investment.inventoryService.constant.CurrencyCode;
 import com.winsigns.investment.inventoryService.constant.ExternalCapitalAccountType;
 
 import lombok.Getter;

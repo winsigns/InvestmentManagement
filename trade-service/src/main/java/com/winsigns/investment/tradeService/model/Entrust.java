@@ -15,8 +15,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.framework.model.AbstractEntity;
-import com.winsigns.investment.tradeService.constant.CurrencyCode;
 import com.winsigns.investment.tradeService.constant.EntrustStatus;
 
 import lombok.Getter;

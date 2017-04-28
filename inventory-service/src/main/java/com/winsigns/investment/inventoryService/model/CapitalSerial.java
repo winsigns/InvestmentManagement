@@ -12,8 +12,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.framework.model.OperatorEntity;
-import com.winsigns.investment.inventoryService.constant.CurrencyCode;
 
 import lombok.Getter;
 import lombok.Setter;

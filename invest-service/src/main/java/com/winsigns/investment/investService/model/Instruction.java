@@ -20,8 +20,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.framework.model.AbstractEntity;
-import com.winsigns.investment.investService.constant.CurrencyCode;
 import com.winsigns.investment.investService.constant.InstructionMessageCode;
 import com.winsigns.investment.investService.constant.InstructionMessageType;
 import com.winsigns.investment.investService.constant.InstructionStatus;

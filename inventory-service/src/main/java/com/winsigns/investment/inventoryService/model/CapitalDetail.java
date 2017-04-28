@@ -6,9 +6,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.framework.measure.MeasureHost;
 import com.winsigns.investment.framework.measure.MeasureHostType;
-import com.winsigns.investment.inventoryService.constant.CurrencyCode;
 import com.winsigns.investment.inventoryService.measure.FACapitalDetailMHT;
 
 import lombok.Getter;

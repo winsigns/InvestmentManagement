@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.winsigns.investment.inventoryService.constant.CurrencyCode;
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.inventoryService.model.ECACashPool;
 
 public interface ECACashPoolRepository extends JpaRepository<ECACashPool, Long> {

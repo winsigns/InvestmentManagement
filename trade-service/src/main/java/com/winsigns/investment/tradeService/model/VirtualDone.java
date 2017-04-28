@@ -8,11 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.framework.measure.MeasureHost;
 import com.winsigns.investment.framework.model.OperatorEntity;
 import com.winsigns.investment.framework.spring.SpringManager;
 import com.winsigns.investment.tradeService.command.ApplyResourceCommand;
-import com.winsigns.investment.tradeService.constant.CurrencyCode;
 import com.winsigns.investment.tradeService.constant.VirtualDoneStatus;
 import com.winsigns.investment.tradeService.integration.InventoryServiceIntegration;
 import com.winsigns.investment.tradeService.service.common.ITradeService;
