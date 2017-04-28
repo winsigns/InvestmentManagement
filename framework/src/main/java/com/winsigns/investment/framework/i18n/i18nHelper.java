@@ -43,7 +43,9 @@ public class i18nHelper {
     @Bean
     public MessageSource messageSource() {
       ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-      messageSource.setBasename("i18n/message");
+      messageSource.setBasenames("i18n/message");
+      // 增加框架级别的国际化资源
+      messageSource.addBasenames("com.winsigns.investment.framework.i18n/message");
       messageSource.setDefaultEncoding("UTF-8");
       return messageSource;
     }
