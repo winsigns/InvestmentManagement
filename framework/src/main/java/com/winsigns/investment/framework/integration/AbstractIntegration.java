@@ -14,7 +14,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 public abstract class AbstractIntegration extends BaseIntegration {
 
   @Autowired
-  LoadBalancerClient loadBalancer;
+  protected LoadBalancerClient loadBalancer;
 
   protected URI getIntegrationURI() {
     return loadBalancer.choose(getIntegrationName()).getUri();
