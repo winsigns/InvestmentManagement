@@ -9,6 +9,7 @@ import com.winsigns.investment.fundService.model.FundAccount;
 import com.winsigns.investment.fundService.model.Portfolio;
 import com.winsigns.investment.fundService.resource.FundTreeResource.FundItem;
 
+@Relation(value = "fund", collectionRelation = "funds")
 public class FundTreeResource extends HALResponse<FundItem> {
   public FundTreeResource(FundItem content) {
     super(content);
@@ -18,7 +19,6 @@ public class FundTreeResource extends HALResponse<FundItem> {
     this(new FundItem(fund));
   }
 
-  @Relation(value = "fund", collectionRelation = "funds")
   static protected class FundItem extends Item {
 
     public FundItem(Fund fund) {
