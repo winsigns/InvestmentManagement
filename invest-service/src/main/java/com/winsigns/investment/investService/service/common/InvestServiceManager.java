@@ -63,11 +63,10 @@ public class InvestServiceManager {
    * @param instruction 具体的指令
    * @return
    */
-  public boolean commitInstruction(Instruction instruction) {
+  public void commitInstruction(Instruction instruction) {
 
     IInvestService service = this.getService(instruction.getInvestService());
     Assert.notNull(service);
-    return service.commitInstruction(instruction);
-
+    service.commitInstruction(instruction);
   }
 }

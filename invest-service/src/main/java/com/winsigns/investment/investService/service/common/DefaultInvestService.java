@@ -1,6 +1,7 @@
 package com.winsigns.investment.investService.service.common;
 
 import com.winsigns.investment.framework.i18n.i18nHelper;
+import com.winsigns.investment.investService.exception.InvestCommitFailedExcepiton;
 import com.winsigns.investment.investService.model.Instruction;
 
 /**
@@ -35,7 +36,5 @@ public class DefaultInvestService implements IInvestService {
   }
 
   @Override
-  public boolean commitInstruction(Instruction instruction) {
-    return false;
-  }
+  public void commitInstruction(Instruction instruction) throws InvestCommitFailedExcepiton {}
 }

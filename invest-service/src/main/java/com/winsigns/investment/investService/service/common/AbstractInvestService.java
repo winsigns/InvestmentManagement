@@ -50,8 +50,8 @@ public abstract class AbstractInvestService implements IInvestService {
   }
 
   @Override
-  public boolean commitInstruction(Instruction instruction) {
-    return tradeService.commitInstruction(instruction);
+  public void commitInstruction(Instruction instruction) {
+    tradeService.commitInstruction(instruction);
   }
 
 }

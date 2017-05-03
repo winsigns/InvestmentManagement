@@ -19,10 +19,10 @@ import com.winsigns.investment.investService.constant.InstructionMessageCode;
 import com.winsigns.investment.investService.constant.InstructionMessageType;
 import com.winsigns.investment.investService.constant.InstructionOperatorType;
 import com.winsigns.investment.investService.constant.InstructionStatus;
-import com.winsigns.investment.investService.constant.InstructionVolumeType;
+import com.winsigns.investment.investService.exception.InvestCommitFailedExcepiton;
+import com.winsigns.investment.investService.instruction.InstructionCheckManager;
 import com.winsigns.investment.investService.integration.FundServiceIntegration;
 import com.winsigns.investment.investService.model.Instruction;
-import com.winsigns.investment.investService.model.InstructionMessage;
 import com.winsigns.investment.investService.repository.InstructionMessageRepository;
 import com.winsigns.investment.investService.repository.InstructionRepository;
 import com.winsigns.investment.investService.service.common.InvestServiceManager;
@@ -240,13 +240,14 @@ public class InstructionService {
         return thisInstruction;
       }
 
-      if (investServiceManager.commitInstruction(thisInstruction)) {
+      try {
+        investServiceManager.commitInstruction(thisInstruction);
         thisInstruction.setExecutionStatus(InstructionStatus.COMMITING);
         thisInstruction.setCommitTime();
-        instructionRepository.save(thisInstruction);
-      } else {
+      } catch (InvestCommitFailedExcepiton e) {
         thisInstruction.addInstructionMessage("executionStatus", InstructionMessageType.ERROR,
-            InstructionMessageCode.INSTRUCTION_COMMIT_FAIL);
+            InstructionMessageCode.INSTRUCTION_COMMIT_FAIL, e.getFullMessage());
+      } finally {
         thisInstruction = instructionRepository.save(thisInstruction);
       }
     } else {
