@@ -96,6 +96,7 @@ public class Instruction extends AbstractEntity {
   // 指令状态
   @Getter
   @Setter
+  @Enumerated(EnumType.STRING)
   private InstructionStatus executionStatus;
 
   // 创建时间
@@ -111,7 +112,7 @@ public class Instruction extends AbstractEntity {
   private Date createTime = new Timestamp(System.currentTimeMillis());
 
   // 指令信息
-  @OneToMany(mappedBy = "instruction", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "instruction", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JsonIgnore
   @Setter
   @Getter
