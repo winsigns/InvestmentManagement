@@ -1,34 +1,42 @@
 package com.winsigns.investment.inventoryService.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import com.winsigns.investment.framework.i18n.i18nHelper;
 import com.winsigns.investment.framework.spring.SpringManager;
 import com.winsigns.investment.inventoryService.capital.common.CapitalServiceManager;
 import com.winsigns.investment.inventoryService.capital.common.ICapitalService;
 import com.winsigns.investment.inventoryService.command.ApplyResourceCommand;
 import com.winsigns.investment.inventoryService.command.ResponseResourceApplication;
+import com.winsigns.investment.inventoryService.exception.PortfolioCannotMatchFundAccount;
+import com.winsigns.investment.inventoryService.exception.PositionServiceNotSupported;
 import com.winsigns.investment.inventoryService.exception.ResourceApplicationExcepiton;
+import com.winsigns.investment.inventoryService.exception.SystemError;
 import com.winsigns.investment.inventoryService.integration.FundServiceIntegration;
 import com.winsigns.investment.inventoryService.model.CapitalSerial;
 import com.winsigns.investment.inventoryService.model.PositionSerial;
@@ -93,6 +101,9 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
   @Autowired
   ResourceApplicationFormRepository resourceApplicationFormRepository;
 
+  DefaultRedisScript<ResourceApplicationForm> script =
+      new DefaultRedisScript<ResourceApplicationForm>();
+
   static final String applyKey = "fund-accounts";
   static final String applyKeyTemp = "fund-accounts:%d";
   static final String applyTopic = "resource-application";
@@ -115,11 +126,15 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
     form.setCapitalService(applyInventoryCommand.getCapitalService());
     form.setPositionService(applyInventoryCommand.getPositionService());
     form.setLanguage(applyInventoryCommand.getLanguage());
-
+    LocaleContextHolder.setLocale(new Locale(form.getLanguage()));
     ResourceApplicationForm formStatus = form.clone();
     formStatus.setStatus(ApplyStatus.PROCESSING);
     Long fundAccountId =
         fundServiceIntegration.getFundAccountId(applyInventoryCommand.getPortfolioId());
+
+    if (fundAccountId == null) {
+      throw new PortfolioCannotMatchFundAccount();
+    }
 
     String key = String.format(applyKeyTemp, fundAccountId);
     keyTemplate.boundSetOps(applyKey).add(key);
@@ -140,16 +155,17 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
 
         Set<String> keys = keyTemplate.boundSetOps(applyKey).members();
         for (String key : keys) {
-          ResourceApplicationForm form = null;
-          form = inventoryTemplate.boundListOps(key).index(-1);
-          // TODO 这个线程的处理逻辑仍需要优化
-          // 1.redis的事务
-          // 2.该线程的启动必须是spring全部初始化完毕
-          if (form != null && form.getStatus().equals(ApplyStatus.INIT)) {
-            form = inventoryTemplate.boundListOps(key).rightPop(1, TimeUnit.MILLISECONDS);
-            form = resourceApplicationFormRepository.save(form);
-            processForm(form);
-            inventoryTemplate.boundListOps(key).rightPop(1, TimeUnit.MILLISECONDS);
+          // 将逻辑放在lua中，由redis调用，方便事务的管理
+          ResourceApplicationForm form =
+              inventoryTemplate.execute(script, Collections.singletonList(key), new Object[] {});
+
+          if (form != null) {
+            if (form.getStatus() == ApplyStatus.INIT) {
+              processForm(form);
+              inventoryTemplate.boundListOps(key).rightPop(1, TimeUnit.MILLISECONDS);
+            } else {
+              processErrorForm(form);
+            }
           }
         }
       } catch (InterruptedException e) {
@@ -168,20 +184,11 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
     this.start();
   }
 
-  public enum ResourceApplicationErrorCode {
-    // 不支持的资金服务
-    NOT_SUPPORT_CAPITAL_SERVICE,
-    // 不支持的期货服务
-    NOT_SUPPORT_POSITION_SERVICE;
-
-    /**
-     * 国际化
-     * 
-     * @return
-     */
-    public String i18n() {
-      return i18nHelper.i18n(this);
-    }
+  @PostConstruct
+  public void init() {
+    script.setScriptSource(
+        new ResourceScriptSource(new ClassPathResource("redis/resourceApply.lua")));
+    script.setResultType(ResourceApplicationForm.class);// Must Set
   }
 
   /**
@@ -191,7 +198,7 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
    */
   public void processForm(ResourceApplicationForm form) {
 
-    ResponseResourceApplication application = new ResponseResourceApplication();
+    form = resourceApplicationFormRepository.save(form);
 
     PlatformTransactionManager platformTransactionManager =
         SpringManager.getApplicationContext().getBean(PlatformTransactionManager.class);
@@ -205,8 +212,7 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
       IPositionService positionService =
           positionServiceManager.getService(form.getPositionService());
       if (positionService == null) {
-        throw new ResourceApplicationExcepiton(
-            ResourceApplicationErrorCode.NOT_SUPPORT_POSITION_SERVICE.i18n());
+        throw new PositionServiceNotSupported();
       }
 
       // TODO 这里需要给positionSerials和capitalSerials记录formId;
@@ -215,43 +221,69 @@ public class ResourceApplicationService extends Thread implements SmartInitializ
 
       ICapitalService capitalService = capitalServiceManager.getService(form.getCapitalService());
       if (capitalService == null) {
-        throw new ResourceApplicationExcepiton(
-            ResourceApplicationErrorCode.NOT_SUPPORT_CAPITAL_SERVICE.i18n());
+        throw new PositionServiceNotSupported();
       }
 
       List<CapitalSerial> capitalSerials =
           capitalService.apply(fundServiceIntegration.getFundAccountId(form.getPortfolioId()),
               form.getCurrency(), form.getAppliedCapital());
       platformTransactionManager.commit(status);
-
+      ResponseResourceApplication application = new ResponseResourceApplication();
       application.setVirtualDoneId(form.getVirtualDoneId());
       application.setApplicationFormId(form.getId());
       application.setInstructionId(form.getInstructionId());
       resourceTemplate.send(applyTopic, true, application);
 
+      form.setStatus(ApplyStatus.FINISHED);
+
     } catch (ResourceApplicationExcepiton e) {
       platformTransactionManager.rollback(status);
-      application.getHeader().setResult(false);
-      application.getHeader().setCode(e.getMessage());
-      application.getHeader().setMessage(e.getMessage());
-      application.setVirtualDoneId(form.getVirtualDoneId());
-      application.setApplicationFormId(form.getId());
-      application.setInstructionId(form.getInstructionId());
-      form.setMessage(e.getMessage());
-      resourceTemplate.send(applyTopic, false, application);
+      doError(form, false, e.getCode(), e.getFullMessage());
     } catch (Exception e) {
       platformTransactionManager.rollback(status);
-      application.getHeader().setResult(false);
-      application.getHeader().setCode(e.getMessage());
-      application.getHeader().setMessage(e.getMessage()); // TODO
-      application.setVirtualDoneId(form.getVirtualDoneId());
-      application.setApplicationFormId(form.getId());
-      application.setInstructionId(form.getInstructionId());
-      resourceTemplate.send(applyTopic, false, application);
-      form.setMessage(e.getMessage());
+      doError(form, false, e.getMessage(), e.getMessage());
     } finally {
       resourceApplicationFormRepository.save(form);
     }
+  }
 
+  /**
+   * 处理失败的流程
+   * 
+   * @param form
+   */
+  private void processErrorForm(ResourceApplicationForm form) {
+    form = resourceApplicationFormRepository.findByVirtualDoneId(form.getVirtualDoneId());
+    if (form != null) {
+      SystemError error = new SystemError();
+      doError(form, false, error.getCode(), error.getMessage());
+      resourceApplicationFormRepository.save(form);
+    } else {
+      // TODO
+    }
+  }
+
+  /**
+   * 申请单处理失败的返回
+   * <p>
+   * 更新数据库状态<br>
+   * 发送kafka消息
+   * 
+   * @param form
+   * @param result
+   * @param code
+   * @param message
+   */
+  private void doError(ResourceApplicationForm form, boolean result, String code, String message) {
+    ResponseResourceApplication application = new ResponseResourceApplication();
+    application.getHeader().setResult(result);
+    application.getHeader().setCode(code);
+    application.getHeader().setMessage(message);
+    application.setVirtualDoneId(form.getVirtualDoneId());
+    application.setApplicationFormId(form.getId());
+    application.setInstructionId(form.getInstructionId());
+    form.setMessage(message);
+    form.setStatus(ApplyStatus.FAILED);
+    resourceTemplate.send(applyTopic, false, application);
   }
 }

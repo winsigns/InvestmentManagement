@@ -74,7 +74,11 @@ public class ResourceApplicationForm extends AbstractEntity implements Cloneable
     // 初始状态
     INIT,
     // 处理中
-    PROCESSING
+    PROCESSING,
+    // 完成
+    FINISHED,
+    // 失败
+    FAILED
   }
 
   @Getter

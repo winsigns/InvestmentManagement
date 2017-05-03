@@ -3,10 +3,9 @@ package com.winsigns.investment.inventoryService.capital.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.winsigns.investment.inventoryService.command.CreateCapitalDetailCommand;

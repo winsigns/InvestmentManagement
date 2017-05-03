@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.winsigns.investment.framework.constant.CurrencyCode;
-import com.winsigns.investment.framework.i18n.i18nHelper;
 import com.winsigns.investment.inventoryService.capital.common.AbstractCapitalService;
 import com.winsigns.investment.inventoryService.command.CreateFundAccountCapitalPoolCommand;
 import com.winsigns.investment.inventoryService.constant.ExternalCapitalAccountType;
+import com.winsigns.investment.inventoryService.exception.AvailableCapitalNotEnough;
+import com.winsigns.investment.inventoryService.exception.CapitalResourceNotFinded;
 import com.winsigns.investment.inventoryService.exception.ResourceApplicationExcepiton;
 import com.winsigns.investment.inventoryService.model.CapitalDetail;
 import com.winsigns.investment.inventoryService.model.CapitalSerial;
@@ -21,22 +22,6 @@ import com.winsigns.investment.inventoryService.service.CapitalSerialService;
 
 @Service
 public class GeneralCapitalService extends AbstractCapitalService {
-
-  public enum GeneralCapitalErrorCode {
-    // 未找到资金
-    NOT_FIND_CAPITAL_RESOURCE,
-    // 可用资金不足
-    AVAILABLE_CAPITAL_NOT_ENOUGH;
-
-    /**
-     * 国际化
-     * 
-     * @return
-     */
-    public String i18n() {
-      return i18nHelper.i18n(this);
-    }
-  }
 
   @Autowired
   GeneralCapitalRepository generalCapitalRepository;
@@ -76,16 +61,14 @@ public class GeneralCapitalService extends AbstractCapitalService {
     GeneralCapitalPool capital =
         generalCapitalRepository.findByFundAccountIdAndCurrency(fundAccountId, currency);
     if (capital == null) {
-      throw new ResourceApplicationExcepiton(
-          GeneralCapitalErrorCode.NOT_FIND_CAPITAL_RESOURCE.i18n());
+      throw new CapitalResourceNotFinded();
     }
 
     List<CapitalDetail> capitalDetails =
         capitalDetailRepository.findByCapitalPoolOrderByAvailableCapitalDesc(capital);
 
     if (capitalDetails == null || capitalDetails.isEmpty()) {
-      throw new ResourceApplicationExcepiton(
-          GeneralCapitalErrorCode.NOT_FIND_CAPITAL_RESOURCE.i18n());
+      throw new CapitalResourceNotFinded();
     }
 
     if (appliedCapital.doubleValue() >= 0) { // 卖出
@@ -129,8 +112,7 @@ public class GeneralCapitalService extends AbstractCapitalService {
 
       // 如果最后还有剩余，则抛异常
       if (appliedCapital.doubleValue() > 0) {
-        throw new ResourceApplicationExcepiton(
-            GeneralCapitalErrorCode.AVAILABLE_CAPITAL_NOT_ENOUGH.i18n());
+        throw new AvailableCapitalNotEnough();
       }
     }
     return serials;

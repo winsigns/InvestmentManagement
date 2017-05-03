@@ -6,7 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.winsigns.investment.framework.i18n.i18nHelper;
+import com.winsigns.investment.inventoryService.exception.CanSellPositionNotEnough;
+import com.winsigns.investment.inventoryService.exception.PositionResourceNotFinded;
 import com.winsigns.investment.inventoryService.exception.ResourceApplicationExcepiton;
 import com.winsigns.investment.inventoryService.model.FloatPositionSerial;
 import com.winsigns.investment.inventoryService.model.PositionSerial;
@@ -18,22 +19,6 @@ import com.winsigns.investment.inventoryService.service.PositionSerialService;
 
 @Service
 public class SSEAStockPositionService extends AbstractPositionService {
-
-  public enum SSEAStockPositionErrorCode {
-    // 卖出未找到对应的持仓资源
-    NOT_FIND_POSITION_RESOURCE,
-    // 可卖持仓量不足
-    CAN_SELL_POSITION_NOT_ENOUGH;
-
-    /**
-     * 国际化
-     * 
-     * @return
-     */
-    public String i18n() {
-      return i18nHelper.i18n(this);
-    }
-  }
 
   @Autowired
   StockPositionRepository stockPositionRepository;
@@ -73,8 +58,7 @@ public class SSEAStockPositionService extends AbstractPositionService {
 
     } else {
       if (positions == null || positions.isEmpty()) {
-        throw new ResourceApplicationExcepiton(
-            SSEAStockPositionErrorCode.NOT_FIND_POSITION_RESOURCE.i18n());
+        throw new PositionResourceNotFinded();
       }
       appliedPosition = Math.abs(appliedPosition);
       boolean isEnded = false;
@@ -103,8 +87,7 @@ public class SSEAStockPositionService extends AbstractPositionService {
       }
       // 如果最后还有剩余，则抛异常
       if (appliedPosition.longValue() > 0) {
-        throw new ResourceApplicationExcepiton(
-            SSEAStockPositionErrorCode.CAN_SELL_POSITION_NOT_ENOUGH.i18n());
+        throw new CanSellPositionNotEnough();
       }
     }
 

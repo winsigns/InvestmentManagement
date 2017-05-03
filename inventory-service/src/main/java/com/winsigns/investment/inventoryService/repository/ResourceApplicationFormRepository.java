@@ -8,4 +8,5 @@ import com.winsigns.investment.inventoryService.model.ResourceApplicationForm;
 public interface ResourceApplicationFormRepository
     extends JpaRepository<ResourceApplicationForm, Long> {
 
+  public ResourceApplicationForm findByVirtualDoneId(Long virtualDoneId);
 }
