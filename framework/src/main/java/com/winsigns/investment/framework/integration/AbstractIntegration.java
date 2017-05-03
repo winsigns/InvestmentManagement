@@ -3,6 +3,7 @@ package com.winsigns.investment.framework.integration;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 
 /**
@@ -16,7 +17,11 @@ public abstract class AbstractIntegration extends BaseIntegration {
   @Autowired
   protected LoadBalancerClient loadBalancer;
 
-  protected URI getIntegrationURI() {
+  protected URI getIntegrationURI() throws ServiceNotFoundException {
+    ServiceInstance instance = loadBalancer.choose(getIntegrationName());
+    if (instance == null) {
+      throw new ServiceNotFoundException();
+    }
     return loadBalancer.choose(getIntegrationName()).getUri();
   }
 

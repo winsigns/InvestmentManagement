@@ -1,6 +1,16 @@
 package com.winsigns.investment.framework.exception;
 
-import lombok.AllArgsConstructor;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 通用的错误
@@ -9,21 +19,39 @@ import lombok.AllArgsConstructor;
  * @since 0.0.4
  *
  */
-@AllArgsConstructor
-public class CommonError implements IError {
+@NoArgsConstructor
+@ToString
+public class CommonError {
 
+  protected static ObjectMapper objectMapper =
+      new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+  @Getter
+  @Setter
+  private Date timestamp;
+
+  @Getter
+  @Setter
   private String code;
 
+  @Getter
+  @Setter
   private String message;
 
-  @Override
-  public String code() {
-    return this.code;
+  static public CommonError fromString(String errorString) {
+    try {
+      CommonError error = objectMapper.readValue(errorString, CommonError.class);
+      return error;
+    } catch (IOException e) {
+      e.printStackTrace();
+      return new CommonError(e.getMessage(), e.getMessage());
+    }
   }
 
-  @Override
-  public String message() {
-    return this.message;
+  public CommonError(String code, String message) {
+    this.code = code;
+    this.message = message;
+    this.timestamp = new Timestamp(System.currentTimeMillis());
   }
 
 }
