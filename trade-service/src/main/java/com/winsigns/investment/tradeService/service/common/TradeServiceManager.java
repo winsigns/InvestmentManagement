@@ -105,13 +105,11 @@ public class TradeServiceManager {
    * 
    * @param command
    */
-  public boolean acceptInstruction(CommitInstructionCommand command) {
+  public void acceptInstruction(CommitInstructionCommand command) {
 
     Resource resource = chooseTradeService(command);
 
     resource.getService().virtualDone(command, resource);
-
-    return true;
   }
 
   /**

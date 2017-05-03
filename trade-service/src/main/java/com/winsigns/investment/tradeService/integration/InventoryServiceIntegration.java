@@ -1,12 +1,17 @@
 package com.winsigns.investment.tradeService.integration;
 
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 
 import com.winsigns.investment.framework.integration.AbstractIntegration;
+import com.winsigns.investment.framework.integration.ServiceNotFoundException;
 import com.winsigns.investment.tradeService.command.ApplyResourceCommand;
+import com.winsigns.investment.tradeService.exception.SendResourceApplicationFailed;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 与清单服务的交互
@@ -15,6 +20,7 @@ import com.winsigns.investment.tradeService.command.ApplyResourceCommand;
  *
  */
 @Component
+@Slf4j
 public class InventoryServiceIntegration extends AbstractIntegration {
 
   private final static String INVENTORY_SERVICE = "inventory-service";
@@ -32,19 +38,22 @@ public class InventoryServiceIntegration extends AbstractIntegration {
    * @param command
    * @return
    */
-  public boolean applyResource(ApplyResourceCommand command) {
+  public void applyResource(ApplyResourceCommand command) throws SendResourceApplicationFailed {
 
     String language = this.getHeaderParam("accept-language");
     command.setLanguage(language);
     HttpEntity<ApplyResourceCommand> requestEntity = new HttpEntity<ApplyResourceCommand>(command);
 
-    ResponseEntity<String> result = restTemplate
-        .postForEntity(this.getIntegrationURI() + applyResourceURL, requestEntity, String.class);
-
-    if (result.getStatusCode() == HttpStatus.OK) {
-      return true;
-    } else {
-      return false;
+    try {
+      ResponseEntity<String> result = restTemplate
+          .postForEntity(this.getIntegrationURI() + applyResourceURL, requestEntity, String.class);
+      log.info(result.getBody());
+    } catch (RestClientResponseException e) {
+      throw new SendResourceApplicationFailed(e.getResponseBodyAsString());
+    } catch (RestClientException e) {
+      throw new SendResourceApplicationFailed();
+    } catch (ServiceNotFoundException e) {
+      throw new SendResourceApplicationFailed(e);
     }
   }
 

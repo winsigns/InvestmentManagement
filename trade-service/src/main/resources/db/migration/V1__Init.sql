@@ -59,9 +59,10 @@ CREATE TABLE entrust_message
 (
 	id BIGINT NOT NULL auto_increment,
 	entrust_id BIGINT,
-	field_name VARCHAR(255),
-	message_type VARCHAR(255),
-	message_code VARCHAR(255),
+	field_name VARCHAR(64),
+	message_type VARCHAR(64),
+	message_code VARCHAR(64),
+	message VARCHAR(512)
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 
