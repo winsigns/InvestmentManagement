@@ -6,4 +6,5 @@ com.winsigns.investment.framework.hal.HalBrowser,\
 com.winsigns.investment.framework.measure.MeasureConfiguration,\
 com.winsigns.investment.framework.measure.MeasureValueRepository,\
 com.winsigns.investment.framework.integration.RestConfiguration,\
-com.winsigns.investment.framework.spring.SpringManager
+com.winsigns.investment.framework.spring.SpringManager,\
+com.winsigns.investment.framework.version.Version
