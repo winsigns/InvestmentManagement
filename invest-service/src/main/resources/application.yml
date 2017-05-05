@@ -12,8 +12,15 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
+  redis:
+    database: 2
+    password:    
+    pool: 
+      max-idle: 8 
+      min-idle: 0 
+      max-active: 8 
+      max-wait: -1 
   kafka:
-    bootstrap-servers: localhost:9092
     consumer:
       group-id: invest-service  
     producer:
@@ -35,10 +42,6 @@ management:
 kafka:
   stream:
     appid: invest-service-kafka-stream
-  broker:
-    host: localhost:9092
-  zookeeper:
-    host: localhost:2181
 
 ---
 
@@ -46,14 +49,22 @@ spring:
   profiles: dev
   datasource:
     url: jdbc:mysql://localhost:3306/investdb?characterEncoding=utf-8
-    username: root
-    password: password
-
+    username: mariadb
+    password: mariadb
+  kafka:
+    bootstrap-servers: localhost:9092
+  redis: 
+    host: localhost
+    port: 6379 
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:10100/eureka/
-
+kafka:
+  broker:
+    host: localhost:9092
+  zookeeper:
+    host: localhost:2181
 ---
 
 spring:
