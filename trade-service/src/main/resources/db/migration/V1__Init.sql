@@ -62,7 +62,7 @@ CREATE TABLE entrust_message
 	field_name VARCHAR(64),
 	message_type VARCHAR(64),
 	message_code VARCHAR(64),
-	message VARCHAR(512)
+	message VARCHAR(512),
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 
