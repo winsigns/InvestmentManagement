@@ -14,11 +14,13 @@ import com.winsigns.investment.framework.integration.AbstractIntegration;
 @Component
 public class OperatorSequenceIntegration extends AbstractIntegration {
 
-  private static final String MEASURE_VERSION_URL = "/operator-sequences";
+  private static final String OPERATOR_SEQUENCE_URL = "/operator-sequences";
 
   @Override
   public String getIntegrationName() {
-    return "sequence-service";
+    // TODO 目前服务太多，小功能暂时合并为同一个服务
+    // return "sequence-service";
+    return "general-service";
   }
 
   /**
@@ -27,6 +29,7 @@ public class OperatorSequenceIntegration extends AbstractIntegration {
    * @return 获取的序列
    */
   public String getSequence() {
-    return restTemplate.getForObject(getIntegrationURI() + MEASURE_VERSION_URL, String.class);
+    return this.getNode(getIntegrationURI() + OPERATOR_SEQUENCE_URL).get("operatorSequence")
+        .asText();
   }
 }
