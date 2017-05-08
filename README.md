@@ -106,4 +106,8 @@ service discovery with Eureka
 /entrusts/{entrustId}/dones GET/POST
 
 /dones/{doneId} GET
+
+/operator-sequences GET
+/system-date GET
+/system-time GET
 ```
