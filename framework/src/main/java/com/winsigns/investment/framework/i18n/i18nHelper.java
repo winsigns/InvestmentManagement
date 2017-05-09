@@ -25,9 +25,22 @@ public class i18nHelper {
   private i18nHelper() {}
 
   public static String i18n(String resourceKey) {
+    return i18n(resourceKey, null);
+  }
+
+  /**
+   * 增加定制参数的国际化方法
+   * 
+   * @param resourceKey
+   * @param args
+   * @return
+   * 
+   * @since 0.0.4
+   */
+  public static String i18n(String resourceKey, Object[] args) {
     try {
       Locale locale = LocaleContextHolder.getLocale();
-      return messageSource.getMessage(resourceKey, null, locale);
+      return messageSource.getMessage(resourceKey, args, locale);
     } catch (NoSuchMessageException e) {
       return "";
     }
