@@ -11,7 +11,7 @@ import com.winsigns.investment.framework.i18n.i18nHelper;
  * @author yimingjin
  * @since 0.0.4
  */
-public class CommonException extends RuntimeException implements ICustomArguments {
+public class CommonException extends RuntimeException {
 
   /**
    * 
@@ -52,7 +52,7 @@ public class CommonException extends RuntimeException implements ICustomArgument
    */
   @Override
   public String getMessage() {
-    return i18nHelper.i18n(getCode(), getArguments());
+    return i18nHelper.i18n(getCode());
   }
 
   public void addError(CommonError error) {
@@ -68,8 +68,4 @@ public class CommonException extends RuntimeException implements ICustomArgument
     return str.substring(0, str.length() - 1);
   }
 
-  @Override
-  public Object[] getArguments() {
-    return null;
-  }
 }

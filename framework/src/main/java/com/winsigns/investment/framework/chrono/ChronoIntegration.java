@@ -31,7 +31,7 @@ public class ChronoIntegration extends AbstractIntegration {
 
   private static final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
-  private static final DateFormat timestampFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.sss");
+  private static final DateFormat timestampFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
 
   @Override
   public String getIntegrationName() {
@@ -65,7 +65,7 @@ public class ChronoIntegration extends AbstractIntegration {
   }
 
   private Date getSystemChrono(String url, DateFormat format) {
-    String dateStr = this.getNode(getIntegrationURI() + url).get("date").asText();
+    String dateStr = this.getNode(getIntegrationURI() + url).get(url.substring(8)).asText();
     Date date = null;
     try {
       date = format.parse(dateStr);

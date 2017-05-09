@@ -20,7 +20,7 @@ public abstract class AbstractIntegration extends BaseIntegration {
   protected URI getIntegrationURI() throws ServiceNotFoundException {
     ServiceInstance instance = loadBalancer.choose(getIntegrationName());
     if (instance == null) {
-      throw new ServiceNotFoundException();
+      throw new ServiceNotFoundException(new Object[] {getIntegrationName()});
     }
     return loadBalancer.choose(getIntegrationName()).getUri();
   }
