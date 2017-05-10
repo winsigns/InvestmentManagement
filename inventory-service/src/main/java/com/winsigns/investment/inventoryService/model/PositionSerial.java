@@ -11,15 +11,12 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.hateoas.core.Relation;
-
 import com.winsigns.investment.framework.model.AbstractEntity;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Relation(value = "position-serial", collectionRelation = "position-serials")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn
 public class PositionSerial extends AbstractEntity {

@@ -3,11 +3,12 @@ package com.winsigns.investment.investService.resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.springframework.hateoas.core.Relation;
+
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.framework.hal.HALResponse;
 import com.winsigns.investment.framework.model.Item;
-import com.winsigns.investment.investService.constant.CurrencyCode;
 import com.winsigns.investment.investService.constant.InstructionOperatorType;
 import com.winsigns.investment.investService.model.Instruction;
 import com.winsigns.investment.investService.model.InstructionMessage;
@@ -23,6 +24,7 @@ import lombok.Getter;
  * @author yimingjin
  *
  */
+@Relation(value = "instruction", collectionRelation = "instructions")
 public class InstructionResource extends HALResponse<Instruction> {
 
   @Getter
@@ -62,11 +64,10 @@ public class InstructionResource extends HALResponse<Instruction> {
     for (InstructionMessage instructionMessage : instruction.getMessages()) {
       switch (instructionMessage.getMessageType()) {
         case ERROR:
-          errors.put(instructionMessage.getFieldName(), instructionMessage.getMessageCode().i18n());
+          errors.put(instructionMessage.getFieldName(), instructionMessage.getMessage());
           break;
         case WARNING:
-          warnings.put(instructionMessage.getFieldName(),
-              instructionMessage.getMessageCode().i18n());
+          warnings.put(instructionMessage.getFieldName(), instructionMessage.getMessage());
           break;
         default:
           break;
@@ -76,18 +77,10 @@ public class InstructionResource extends HALResponse<Instruction> {
     // 1.字段的国际化
     this.executionStatusLabel = instruction.getExecutionStatus().i18n();
     IInvestService service =
-        InvestServiceManager.getInstance().getService(instruction.getInvestService());
-    if (service != null) {
-      this.investServiceLabel = service.getSimpleName();
-      if (service.getInvestType(instruction.getInvestType()) != null) {
-        this.investTypeLabel = service.getInvestType(instruction.getInvestType()).i18n();
-      } else {
-        this.investTypeLabel = null;
-      }
-    } else {
-      this.investServiceLabel = null;
-      this.investTypeLabel = null;
-    }
+        InvestServiceManager.getInvestServiceManager().getService(instruction.getInvestService());
+    this.investServiceLabel = service.getSimpleName();
+    this.investTypeLabel = service.getInvestType(instruction.getInvestType()).i18n();
+
     if (instruction.getCurrency() != null) {
       this.currencyLabel = instruction.getCurrency().i18n();
     } else {
@@ -97,15 +90,16 @@ public class InstructionResource extends HALResponse<Instruction> {
     for (InstructionOperatorType type : instruction.getExecutionStatus().getSupportedOperator()) {
       this.supportedOperator.add(new Item(type.name(), type.i18n()));
     }
+
     // 3.支持的投资服务
-    for (Map.Entry<IInvestService, IInvestType[]> info : InvestServiceManager.getInstance()
-        .getServicesInfo().entrySet()) {
-      IInvestType[] types = info.getValue();
-      for (int i = 0; i < types.length; ++i) {
-        this.supportedInvestService.add(new Item(info.getKey().getName() + "." + types[i].name(),
-            info.getKey().getSimpleName() + "-" + types[i].i18n()));
+    for (IInvestService svc : InvestServiceManager.getInvestServiceManager().getServices()) {
+      IInvestType[] investTypes = svc.getInvestType();
+      for (int i = 0; i < investTypes.length; ++i) {
+        this.supportedInvestService.add(new Item(svc.getName() + "." + investTypes[i].name(),
+            svc.getSimpleName() + "-" + investTypes[i].i18n()));
       }
     }
+
     // 4.支持的币种
     for (CurrencyCode code : CurrencyCode.values()) {
       this.supportedCurrencies.add(new Item(code.name(), code.i18n()));

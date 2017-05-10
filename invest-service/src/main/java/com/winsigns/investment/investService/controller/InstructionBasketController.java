@@ -72,7 +72,7 @@ public class InstructionBasketController {
   protected InstructionResource readInstructionBasket(InstructionBasket basket) {
     InstructionResource resource = new InstructionResourceAssembler().toResource(basket);
 
-    resource.add(Instruction.class.getAnnotation(Relation.class).collectionRelation(),
+    resource.add(InstructionResource.class.getAnnotation(Relation.class).collectionRelation(),
         new InstructionResourceAssembler().toResources(basket.getInstructions()));
     return resource;
   }

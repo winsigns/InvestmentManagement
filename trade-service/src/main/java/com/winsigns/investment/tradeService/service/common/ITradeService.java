@@ -1,6 +1,7 @@
 package com.winsigns.investment.tradeService.service.common;
 
 import com.winsigns.investment.tradeService.command.CommitInstructionCommand;
+import com.winsigns.investment.tradeService.exception.SendResourceApplicationFailed;
 import com.winsigns.investment.tradeService.model.Done;
 
 /**
@@ -88,7 +89,8 @@ public interface ITradeService {
   /**
    * 虚拟成交
    */
-  public void virtualDone(CommitInstructionCommand command, Resource resource);
+  public void virtualDone(CommitInstructionCommand command, Resource resource)
+      throws SendResourceApplicationFailed;
 
   /**
    * 成交信息

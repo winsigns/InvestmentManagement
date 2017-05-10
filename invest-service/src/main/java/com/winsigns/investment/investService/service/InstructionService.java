@@ -4,24 +4,30 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.winsigns.investment.investService.command.CreateInstructionCommand;
+import com.winsigns.investment.investService.command.ResponseResourceApplication;
 import com.winsigns.investment.investService.command.UpdateInstructionCommand;
 import com.winsigns.investment.investService.constant.InstructionMessageCode;
 import com.winsigns.investment.investService.constant.InstructionMessageType;
 import com.winsigns.investment.investService.constant.InstructionOperatorType;
 import com.winsigns.investment.investService.constant.InstructionStatus;
-import com.winsigns.investment.investService.constant.InstructionVolumeType;
+import com.winsigns.investment.investService.exception.InvestCommitFailedExcepiton;
+import com.winsigns.investment.investService.instruction.InstructionCheckManager;
 import com.winsigns.investment.investService.integration.FundServiceIntegration;
 import com.winsigns.investment.investService.model.Instruction;
-import com.winsigns.investment.investService.model.InstructionMessage;
 import com.winsigns.investment.investService.repository.InstructionMessageRepository;
 import com.winsigns.investment.investService.repository.InstructionRepository;
 import com.winsigns.investment.investService.service.common.InvestServiceManager;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 指令服务
@@ -36,7 +42,21 @@ import com.winsigns.investment.investService.service.common.InvestServiceManager
  *
  */
 @Service
+@Slf4j
 public class InstructionService {
+
+  final static String applyTopic = "resource-application";
+
+  final static JsonDeserializer<Boolean> keyDeserializer =
+      new JsonDeserializer<Boolean>(Boolean.class);
+  final static JsonDeserializer<ResponseResourceApplication> valueDeserializer =
+      new JsonDeserializer<ResponseResourceApplication>(ResponseResourceApplication.class);
+
+  @Autowired
+  InvestServiceManager investServiceManager;
+
+  @Autowired
+  InstructionCheckManager instructionCheckManager;
 
   @Autowired
   InstructionRepository instructionRepository;
@@ -73,6 +93,7 @@ public class InstructionService {
    * @param instructionCommand
    * @return
    */
+  @Transactional
   public Instruction addInstruction(CreateInstructionCommand instructionCommand) {
 
     // 投资经理必须输入，以后可能在controller中通过session赋值
@@ -82,8 +103,8 @@ public class InstructionService {
 
     newInstruction.setInvestManagerId(instructionCommand.getInvestManagerId());
     newInstruction.setExecutionStatus(InstructionStatus.DRAFT);
-    newInstruction = instructionRepository.save(newInstruction);
-    check(newInstruction);
+
+    instructionCheckManager.checkAndUpdate(newInstruction);
     return instructionRepository.save(newInstruction);
   }
 
@@ -115,80 +136,8 @@ public class InstructionService {
     thisInstruction.setQuantity(instructionCommand.getQuantity());
     thisInstruction.setAmount(instructionCommand.getAmount());
 
-    check(thisInstruction);
+    instructionCheckManager.checkAndUpdate(thisInstruction);
     return instructionRepository.save(thisInstruction);
-  }
-
-  protected void check(Instruction thisInstruction) {
-    // instructionMessageRepository.deleteByInstruction(thisInstruction);
-    if (!thisInstruction.getMessages().isEmpty()) {
-      instructionMessageRepository.delete(thisInstruction.getMessages());
-      thisInstruction.getMessages().clear();
-    }
-    checkPortfolio(thisInstruction);
-    checkSecurityAndDirection(thisInstruction);
-    checkVolumeType(thisInstruction);
-    // return instructionRepository.save(thisInstruction);
-  }
-
-  /**
-   * 检查指令的投资组合信息
-   * 
-   * @param thisInstruction 需要检查的指令
-   */
-  protected void checkPortfolio(Instruction thisInstruction) {
-
-    Long portfolioId = thisInstruction.getPortfolioId();
-
-    if (portfolioId == null) {
-      thisInstruction.addInstructionMessage(new InstructionMessage(thisInstruction, "portfolioId",
-          InstructionMessageType.ERROR, InstructionMessageCode.PORTFOLIO_NOT_NULL));
-    } else {
-      // 检查该投资组合是否为该投资经理管理
-      Long investManagerId = fundService.getPortfolioInvestManager(portfolioId);
-      if (investManagerId == null
-          || !investManagerId.equals(thisInstruction.getInvestManagerId())) {
-        thisInstruction.addInstructionMessage(
-            new InstructionMessage(thisInstruction, "portfolioId", InstructionMessageType.ERROR,
-                InstructionMessageCode.PORTFOLIO_NOT_MATCHED_INVESTMANAGER));
-      }
-    }
-  }
-
-  /**
-   * 检查指令的投资标的和方向
-   * 
-   * @param thisInstruction
-   */
-  protected void checkSecurityAndDirection(Instruction thisInstruction) {
-
-    if (thisInstruction.getSecurityId() == null) {
-      thisInstruction.addInstructionMessage(new InstructionMessage(thisInstruction, "securityId",
-          InstructionMessageType.ERROR, InstructionMessageCode.INVEST_SECURITY_CANNOT_NULL));
-    }
-
-    if (thisInstruction.getInvestService() == null) {
-      thisInstruction.addInstructionMessage(new InstructionMessage(thisInstruction, "investService",
-          InstructionMessageType.ERROR, InstructionMessageCode.INVEST_SERVICE_CANNOT_NULL));
-    }
-
-    if (thisInstruction.getInvestType() == null) {
-      thisInstruction.addInstructionMessage(new InstructionMessage(thisInstruction, "investType",
-          InstructionMessageType.ERROR, InstructionMessageCode.INVEST_TYPE_CANNOT_NULL));
-    }
-  }
-
-  /**
-   * 检查数量类型是否匹配
-   * 
-   * @param thisInstruction
-   */
-  protected void checkVolumeType(Instruction thisInstruction) {
-    if (!InstructionVolumeType.contains(thisInstruction.getVolumeType())) {
-      thisInstruction.addInstructionMessage(
-          new InstructionMessage(thisInstruction, "volumeType", InstructionMessageType.ERROR,
-              InstructionMessageCode.INSTRUCTION_VOLUME_TYPE_NOT_SUPPORT));
-    }
   }
 
   /**
@@ -286,25 +235,19 @@ public class InstructionService {
 
     Assert.notNull(thisInstruction);
 
-    if (!thisInstruction.getExecutionStatus().isSupportedOperator(InstructionOperatorType.COMMIT)) {
-      thisInstruction.addInstructionMessage(
-          new InstructionMessage(thisInstruction, "executionStatus", InstructionMessageType.ERROR,
-              InstructionMessageCode.INSTRUCTION_OPERATOR_NOT_SUPPORT));
-      return thisInstruction;
-    }
-
     if (!thisInstruction.isBasket()) {
-      if (!commitCheck(thisInstruction)) {
+      if (!instructionCheckManager.commitCheck(thisInstruction)) {
         return thisInstruction;
       }
 
-      if (InvestServiceManager.getInstance().commitInstruction(thisInstruction)) {
+      try {
+        investServiceManager.commitInstruction(thisInstruction);
         thisInstruction.setExecutionStatus(InstructionStatus.COMMITING);
-        instructionRepository.save(thisInstruction);
-      } else {
-        thisInstruction
-            .addInstructionMessage(new InstructionMessage(thisInstruction, "executionStatus",
-                InstructionMessageType.ERROR, InstructionMessageCode.INSTRUCTION_COMMIT_FAIL));
+        thisInstruction.setCommitTime();
+      } catch (InvestCommitFailedExcepiton e) {
+        thisInstruction.addInstructionMessage("executionStatus", InstructionMessageType.ERROR,
+            InstructionMessageCode.INSTRUCTION_COMMIT_FAIL, e.getFullMessage());
+      } finally {
         thisInstruction = instructionRepository.save(thisInstruction);
       }
     } else {
@@ -314,13 +257,30 @@ public class InstructionService {
     return thisInstruction;
   }
 
-  protected boolean commitCheck(Instruction thisInstruction) {
-    check(thisInstruction);
-    for (InstructionMessage message : thisInstruction.getMessages()) {
-      if (message.getMessageType().equals(InstructionMessageType.ERROR)) {
-        return false;
-      }
+  /**
+   * 处理资源申请的应答
+   * 
+   * @param record
+   */
+  @KafkaListener(topics = {applyTopic})
+  public void responseResourceApplication(ConsumerRecord<String, String> record) {
+    log.info(record.key());
+    log.info(record.value());
+
+    ResponseResourceApplication response =
+        valueDeserializer.deserialize("", record.value().getBytes());
+
+    Instruction thisInstruction = instructionRepository.findOne(response.getInstructionId());
+    Assert.notNull(thisInstruction);
+    if (response.getHeader().getResult()) {
+      // TODO 分配交易员
+      thisInstruction.setExecutionStatus(InstructionStatus.ASSIGNING);
+      thisInstruction = instructionRepository.save(thisInstruction);
+    } else {
+      thisInstruction.addInstructionMessage("executionStatus", InstructionMessageType.ERROR,
+          InstructionMessageCode.INSTRUCTION_COMMIT_FAIL, response.getHeader().getMessage());
+      thisInstruction.setExecutionStatus(InstructionStatus.DRAFT);
+      instructionRepository.save(thisInstruction);
     }
-    return true;
   }
 }

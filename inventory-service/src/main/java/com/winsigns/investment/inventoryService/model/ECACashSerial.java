@@ -12,8 +12,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.hateoas.core.Relation;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.measure.MeasureHost;
 import com.winsigns.investment.framework.model.OperatorEntity;
@@ -25,7 +23,6 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "eca_cash_serial")
-@Relation(value = "eca-cash-serial", collectionRelation = "eca-cash-serials")
 public class ECACashSerial extends OperatorEntity {
   @ManyToOne
   @JsonIgnore

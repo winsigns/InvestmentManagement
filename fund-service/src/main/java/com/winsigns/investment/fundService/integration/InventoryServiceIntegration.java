@@ -15,9 +15,9 @@ import com.jayway.jsonpath.Filter;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.framework.integration.AbstractIntegration;
 import com.winsigns.investment.fundService.command.CreateCashPoolCommand;
-import com.winsigns.investment.fundService.constant.CurrencyCode;
 import com.winsigns.investment.fundService.model.ExternalCapitalAccount;
 import com.winsigns.investment.fundService.model.FundAccount;
 

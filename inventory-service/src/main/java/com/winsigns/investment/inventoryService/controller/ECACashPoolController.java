@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.core.Relation;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,11 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.winsigns.investment.framework.hal.Resources;
 import com.winsigns.investment.inventoryService.command.CreateCashPoolCommand;
 import com.winsigns.investment.inventoryService.command.TransferBetweenECAAndECACommand;
 import com.winsigns.investment.inventoryService.command.TransferBetweenFAAndECACommand;
 import com.winsigns.investment.inventoryService.model.CapitalDetail;
 import com.winsigns.investment.inventoryService.model.ECACashPool;
+import com.winsigns.investment.inventoryService.resource.CapitalDetailResource;
 import com.winsigns.investment.inventoryService.resource.CapitalDetailResourceAssembler;
 import com.winsigns.investment.inventoryService.resource.ECACashPoolResource;
 import com.winsigns.investment.inventoryService.resource.ECACashPoolResourceAssembler;
@@ -66,7 +67,8 @@ public class ECACashPoolController {
         // 添加内嵌的资金明细
         List<CapitalDetail> details = resource.getContent().getDetails();
         if (!details.isEmpty()) {
-          resource.add(CapitalDetail.class.getAnnotation(Relation.class).collectionRelation(),
+          resource.add(
+              CapitalDetailResource.class.getAnnotation(Relation.class).collectionRelation(),
               new CapitalDetailResourceAssembler().toResources(details));
         }
       }
@@ -111,7 +113,7 @@ public class ECACashPoolController {
     List<CapitalDetail> details = ecaCashPool.getDetails();
     if (!details.isEmpty()) {
       ecaCashPoolResource.add(
-          CapitalDetail.class.getAnnotation(Relation.class).collectionRelation(),
+          CapitalDetailResource.class.getAnnotation(Relation.class).collectionRelation(),
           new CapitalDetailResourceAssembler().toResources(details));
     }
     return ecaCashPoolResource;

@@ -7,16 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import org.springframework.hateoas.core.Relation;
-
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.framework.model.AbstractEntity;
-import com.winsigns.investment.inventoryService.constant.CurrencyCode;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Relation(value = "resource-form", collectionRelation = "resource-forms")
 public class ResourceApplicationForm extends AbstractEntity implements Cloneable {
 
   // 虚拟成交编号
@@ -77,7 +74,11 @@ public class ResourceApplicationForm extends AbstractEntity implements Cloneable
     // 初始状态
     INIT,
     // 处理中
-    PROCESSING
+    PROCESSING,
+    // 完成
+    FINISHED,
+    // 失败
+    FAILED
   }
 
   @Getter

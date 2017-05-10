@@ -19,11 +19,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.hateoas.core.Relation;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.framework.model.AbstractEntity;
-import com.winsigns.investment.investService.constant.CurrencyCode;
+import com.winsigns.investment.investService.constant.InstructionMessageCode;
+import com.winsigns.investment.investService.constant.InstructionMessageType;
 import com.winsigns.investment.investService.constant.InstructionStatus;
 import com.winsigns.investment.investService.constant.InstructionVolumeType;
 
@@ -37,7 +37,6 @@ import lombok.Setter;
  *
  */
 @Entity
-@Relation(value = "instruction", collectionRelation = "instructions")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
 @DiscriminatorValue("instruction")
@@ -97,6 +96,7 @@ public class Instruction extends AbstractEntity {
   // 指令状态
   @Getter
   @Setter
+  @Enumerated(EnumType.STRING)
   private InstructionStatus executionStatus;
 
   // 创建时间
@@ -112,7 +112,7 @@ public class Instruction extends AbstractEntity {
   private Date createTime = new Timestamp(System.currentTimeMillis());
 
   // 指令信息
-  @OneToMany(mappedBy = "instruction", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "instruction", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JsonIgnore
   @Setter
   @Getter
@@ -125,14 +125,36 @@ public class Instruction extends AbstractEntity {
   @Setter
   private InstructionBasket instructionBasket;
 
+  // 提交时间
+  @Getter
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date commitTime;
+
   // 交易员
   @Getter
   @Setter
   // TODO 暂时写死，随后增加分配交易员
   private Long traderId = 123456L;
 
+  public void setCommitTime() {
+    this.commitTime = new Timestamp(System.currentTimeMillis());
+  }
+
   public void addInstructionMessage(InstructionMessage message) {
     this.messages.add(message);
+  }
+
+  public void addInstructionMessage(String fieldName, InstructionMessageType messageType,
+      InstructionMessageCode messageCode) {
+    InstructionMessage message = new InstructionMessage(this, fieldName, messageType, messageCode);
+    this.messages.add(message);
+  }
+
+  public void addInstructionMessage(String fieldName, InstructionMessageType messageType,
+      InstructionMessageCode messageCode, String message) {
+    InstructionMessage thisMessage =
+        new InstructionMessage(this, fieldName, messageType, messageCode, message);
+    this.messages.add(thisMessage);
   }
 
   /**

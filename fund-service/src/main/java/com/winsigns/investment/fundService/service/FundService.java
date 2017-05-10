@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.winsigns.investment.fundService.command.CreateFundCommand;
 import com.winsigns.investment.fundService.command.UpdateFundCommand;
@@ -53,7 +52,6 @@ public class FundService {
     return fundRepository.save(dstFund);
   }
 
-  @Transactional
   public void deleteFund(Long fundId) {
     fundRepository.delete(fundId);
   }

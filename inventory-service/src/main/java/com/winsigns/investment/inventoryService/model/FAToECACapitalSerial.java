@@ -4,12 +4,9 @@ import java.util.List;
 
 import javax.persistence.Entity;
 
-import org.springframework.hateoas.core.Relation;
-
 import com.winsigns.investment.framework.measure.MeasureHost;
 
 @Entity
-@Relation(value = "capital-serial", collectionRelation = "capital-serials")
 public class FAToECACapitalSerial extends CapitalSerial {
 
 

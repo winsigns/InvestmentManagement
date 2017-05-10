@@ -3,8 +3,8 @@ package com.winsigns.investment.tradeService.service.stock.SSEAStock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.tradeService.command.CommitInstructionCommand;
-import com.winsigns.investment.tradeService.constant.CurrencyCode;
 import com.winsigns.investment.tradeService.model.Done;
 import com.winsigns.investment.tradeService.service.common.AbstractTradeService;
 import com.winsigns.investment.tradeService.service.common.IPriceType;

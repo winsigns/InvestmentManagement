@@ -166,7 +166,7 @@ public class FundController {
   public Resources<FundAccountResource> readFundAccounts(@PathVariable Long fundId) {
     Link link = linkTo(methodOn(FundController.class).readFundAccounts(fundId)).withSelfRel();
     Link linkFund = linkTo(methodOn(FundController.class).readFund(fundId))
-        .withRel(Fund.class.getAnnotation(Relation.class).value());
+        .withRel(FundResource.class.getAnnotation(Relation.class).value());
 
     return new Resources<FundAccountResource>(
         new FundAccountResourceAssembler().toResources(fundAccountService.findByFundId(fundId)),
@@ -201,7 +201,7 @@ public class FundController {
     Link link =
         linkTo(methodOn(FundController.class).readExternalCapitalAccounts(fundId)).withSelfRel();
     Link linkFund = linkTo(methodOn(FundController.class).readFund(fundId))
-        .withRel(Fund.class.getAnnotation(Relation.class).value());
+        .withRel(FundResource.class.getAnnotation(Relation.class).value());
 
     return new Resources<ExternalCapitalAccountResource>(
         new ExternalCapitalAccountResourceAssembler()

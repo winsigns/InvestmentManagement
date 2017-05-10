@@ -51,12 +51,12 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: dev
 
-  sequence-service:
-    build: sequence-service
-    container_name: sequence-service
+  general-service:
+    build: general-service
+    command: /bin/bash -c "wait-for-it -t 0 localhost:6379 && /app/start /app/general-service-latest.jar"
     mem_limit: 384M
     network_mode: "host"
     ports:
-      - 10200:10200
+      - 10014:10014
     environment:
       SPRING_PROFILES_ACTIVE: dev

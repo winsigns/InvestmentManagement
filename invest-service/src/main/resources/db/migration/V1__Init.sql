@@ -20,6 +20,7 @@ CREATE TABLE instruction
 	create_date DATE,
 	create_time TIMESTAMP,
 	instruction_basket_id BIGINT,
+	commit_time TIMESTAMP,
 	trader_id BIGINT,
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
@@ -35,9 +36,10 @@ CREATE TABLE instruction_message
 (
 	id BIGINT NOT NULL auto_increment,
 	instruction_id BIGINT,
-	field_name VARCHAR(255),
-	message_type VARCHAR(255),
-	message_code VARCHAR(255),
+	field_name VARCHAR(64),
+	message_type VARCHAR(64),
+	message_code VARCHAR(64),
+	message VARCHAR(512),
 	PRIMARY KEY (id)
 )CHARACTER SET = utf8;
 

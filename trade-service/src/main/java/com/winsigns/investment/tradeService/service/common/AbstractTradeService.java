@@ -5,6 +5,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.winsigns.investment.framework.exception.CommonException;
 import com.winsigns.investment.framework.i18n.i18nHelper;
 import com.winsigns.investment.tradeService.command.CommitInstructionCommand;
 import com.winsigns.investment.tradeService.constant.VirtualDoneStatus;
@@ -81,10 +82,16 @@ public abstract class AbstractTradeService implements ITradeService {
     thisDone.setAppliedCapital(resource.getAppliedCapital());
     thisDone.setAppliedPosition(resource.getAppliedPosition());
     thisDone = virtualDoneRepository.save(thisDone);
-    // TODO 这里applyResource失败的话，需要将PROCESSING置成CANCELED，
-    thisDone.applyResource();
-    thisDone.setStatus(VirtualDoneStatus.PROCESSING);
-    thisDone = virtualDoneRepository.save(thisDone);
+
+    try {
+      thisDone.applyResource();
+      thisDone.setStatus(VirtualDoneStatus.PROCESSING);
+    } catch (CommonException e) {
+      thisDone.setStatus(VirtualDoneStatus.CANCELED);
+      throw e;
+    } finally {
+      thisDone = virtualDoneRepository.save(thisDone);
+    }
   }
 
 }

@@ -12,10 +12,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.hateoas.core.Relation;
-
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.framework.model.OperatorEntity;
-import com.winsigns.investment.inventoryService.constant.CurrencyCode;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +31,6 @@ import lombok.Setter;
  *
  */
 @Entity
-@Relation(value = "capital-serial", collectionRelation = "capital-serials")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn
 public abstract class CapitalSerial extends OperatorEntity {

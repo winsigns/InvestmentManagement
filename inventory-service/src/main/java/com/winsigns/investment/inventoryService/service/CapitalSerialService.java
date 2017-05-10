@@ -3,7 +3,7 @@ package com.winsigns.investment.inventoryService.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.winsigns.investment.inventoryService.constant.CurrencyCode;
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.inventoryService.model.CapitalSerial;
 import com.winsigns.investment.inventoryService.repository.CapitalSerialRepository;
 

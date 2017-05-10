@@ -1,5 +1,6 @@
 package com.winsigns.investment.investService.service.common;
 
+import com.winsigns.investment.investService.exception.InvestCommitFailedExcepiton;
 import com.winsigns.investment.investService.model.Instruction;
 
 /**
@@ -41,5 +42,5 @@ public interface IInvestService {
    * 
    * @param instruction
    */
-  boolean commitInstruction(Instruction instruction);
+  void commitInstruction(Instruction instruction) throws InvestCommitFailedExcepiton;
 }

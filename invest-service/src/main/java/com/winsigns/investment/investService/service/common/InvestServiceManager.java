@@ -1,12 +1,12 @@
 package com.winsigns.investment.investService.service.common;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import com.winsigns.investment.framework.spring.SpringManager;
 import com.winsigns.investment.investService.model.Instruction;
 
 /**
@@ -15,19 +15,14 @@ import com.winsigns.investment.investService.model.Instruction;
  * @author yimingjin
  *
  */
+@Component
 public class InvestServiceManager {
 
-  private List<IInvestService> services;
-
-  private static InvestServiceManager instance = new InvestServiceManager();
-
-  public static InvestServiceManager getInstance() {
-    return instance;
+  static public InvestServiceManager getInvestServiceManager() {
+    return SpringManager.getApplicationContext().getBean(InvestServiceManager.class);
   }
 
-  private InvestServiceManager() {
-    services = new ArrayList<IInvestService>();
-  }
+  private List<IInvestService> services = new ArrayList<IInvestService>();
 
   /**
    * 将投资服务注册到该管理者中
@@ -42,7 +37,7 @@ public class InvestServiceManager {
    * 获取指定名字的投资服务
    * 
    * @param name 投资服务名
-   * @return 指定投资服务
+   * @return 指定投资服务 如果没有找到，返回默认的投资服务
    */
   public IInvestService getService(String name) {
     for (IInvestService service : services) {
@@ -50,7 +45,7 @@ public class InvestServiceManager {
         return service;
       }
     }
-    return null;
+    return new DefaultInvestService();
   }
 
   /**
@@ -58,14 +53,8 @@ public class InvestServiceManager {
    * 
    * @return 返回服务名和服务支持的方向
    */
-  public Map<IInvestService, IInvestType[]> getServicesInfo() {
-    Map<IInvestService, IInvestType[]> serviceDetails =
-        new HashMap<IInvestService, IInvestType[]>();
-
-    for (IInvestService service : services) {
-      serviceDetails.put(service, service.getInvestType());
-    }
-    return serviceDetails;
+  public List<IInvestService> getServices() {
+    return services;
   }
 
   /**
@@ -74,11 +63,10 @@ public class InvestServiceManager {
    * @param instruction 具体的指令
    * @return
    */
-  public boolean commitInstruction(Instruction instruction) {
+  public void commitInstruction(Instruction instruction) {
 
     IInvestService service = this.getService(instruction.getInvestService());
     Assert.notNull(service);
-    return service.commitInstruction(instruction);
-
+    service.commitInstruction(instruction);
   }
 }

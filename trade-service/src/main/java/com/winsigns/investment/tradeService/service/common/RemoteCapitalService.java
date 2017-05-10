@@ -1,6 +1,6 @@
 package com.winsigns.investment.tradeService.service.common;
 
-import com.winsigns.investment.tradeService.constant.CurrencyCode;
+import com.winsigns.investment.framework.constant.CurrencyCode;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import com.winsigns.investment.framework.constant.CurrencyCode;
 import com.winsigns.investment.framework.i18n.i18nHelper;
 
 public enum ExternalCapitalAccountType {
