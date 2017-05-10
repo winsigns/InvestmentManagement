@@ -9,7 +9,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.util.Assert;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.winsigns.investment.framework.measure.MeasureHost;
 import com.winsigns.investment.framework.measure.MeasureHostType;
 import com.winsigns.investment.framework.measure.MeasureRepository;
@@ -38,14 +40,14 @@ public abstract class OperatorEntity extends AbstractEntity {
   @Getter
   String operatorSequence;
 
+  public void getSequence() {
+    operatorSequence = SpringManager.getApplicationContext()
+        .getBean(OperatorSequenceIntegration.class).getSequence();
+  }
+
   public void operator() {
 
     boolean success = false;
-
-    if (operatorSequence == null) {
-      operatorSequence = SpringManager.getApplicationContext()
-          .getBean(OperatorSequenceIntegration.class).getSequence();
-    }
 
     PlatformTransactionManager platformTransactionManager =
         SpringManager.getApplicationContext().getBean(PlatformTransactionManager.class);
@@ -90,6 +92,7 @@ public abstract class OperatorEntity extends AbstractEntity {
    * @author yimingjin
    * @since 0.0.3
    */
+  @JsonIgnore
   public abstract boolean isAffectedFloatMeasure();
 
   /**
@@ -100,10 +103,14 @@ public abstract class OperatorEntity extends AbstractEntity {
    * @author yimingjin
    * @since 0.0.3
    */
+  @JsonIgnore
   public abstract boolean isAffectedNomalMeasure();
 
   @SuppressWarnings("unchecked")
   private void send(List<MeasureHost> measureHosts) {
+
+    Assert.notNull(operatorSequence);
+
     if (measureHosts != null) {
       for (MeasureHost measureHost : measureHosts) {
 

@@ -3,6 +3,7 @@ package com.winsigns.investment.framework.i18n;
 import java.util.Locale;
 
 import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -24,8 +25,25 @@ public class i18nHelper {
   private i18nHelper() {}
 
   public static String i18n(String resourceKey) {
-    Locale locale = LocaleContextHolder.getLocale();
-    return messageSource.getMessage(resourceKey, null, locale);
+    return i18n(resourceKey, null);
+  }
+
+  /**
+   * 增加定制参数的国际化方法
+   * 
+   * @param resourceKey
+   * @param args
+   * @return
+   * 
+   * @since 0.0.4
+   */
+  public static String i18n(String resourceKey, Object[] args) {
+    try {
+      Locale locale = LocaleContextHolder.getLocale();
+      return messageSource.getMessage(resourceKey, args, locale);
+    } catch (NoSuchMessageException e) {
+      return "";
+    }
   }
 
   public static String i18n(Enum<?> literal) {
@@ -38,7 +56,9 @@ public class i18nHelper {
     @Bean
     public MessageSource messageSource() {
       ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-      messageSource.setBasename("i18n/message");
+      messageSource.setBasenames("i18n/message");
+      // 增加框架级别的国际化资源
+      messageSource.addBasenames("com.winsigns.investment.framework.i18n/message");
       messageSource.setDefaultEncoding("UTF-8");
       return messageSource;
     }

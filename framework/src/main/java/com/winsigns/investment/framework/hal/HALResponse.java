@@ -1,9 +1,12 @@
 package com.winsigns.investment.framework.hal;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.core.Relation;
+import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -47,5 +50,22 @@ public class HALResponse<T> extends Resource<T> {
 
   public void setEmbedded(Map<String, Object> embedded) {
     this.embedded = embedded;
+  }
+
+  /**
+   * 增加集合的Link
+   * 
+   * @param controllerClass 控制类
+   * @param resourceType 资源类
+   * 
+   * @since 0.0.3
+   */
+  public void addCollectionLink(Class<?> controllerClass, Class<?> resourceType) {
+
+    Assert.notNull(controllerClass);
+    Assert.notNull(resourceType);
+
+    this.add(linkTo((controllerClass))
+        .withRel(resourceType.getAnnotation(Relation.class).collectionRelation()));
   }
 }

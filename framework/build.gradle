@@ -19,7 +19,7 @@ apply plugin: 'maven'
 
 def MAVEN_LOCAL_PATH ='http://repo.winsigns-dev.com/artifactory/winsigns'  
 def BASE_NAME = 'investment-framework'  
-def VERSION_NAME = '0.0.3-SNAPSHOT'  
+def VERSION_NAME = '0.0.4-SNAPSHOT'  
 def GROUP_ID = 'com.winsigns' 
 
 jar {
@@ -58,6 +58,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile('org.springframework.boot:spring-boot-starter-data-redis')
 	compile('org.springframework.cloud:spring-cloud-starter-eureka')
+	compile("org.springframework.cloud:spring-cloud-starter-hystrix")
 	compile('org.apache.kafka:kafka-streams:0.10.0.0')
 	compile('org.springframework.kafka:spring-kafka')
 	compile('org.projectlombok:lombok')
